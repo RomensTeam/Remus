@@ -18,7 +18,7 @@ class MySQL {
     public  $error = FALSE;
     public  $errno = FALSE;
     public  $insert_id;
-    private $access_table;
+    public  $affected_rows;
     
     /**
      *  Инициализация класса
@@ -50,32 +50,41 @@ class MySQL {
      * 
      * @param array|string  $column Какие столбцы нужны
      * @param string        $table  Имя таблицы
-     * @param string|array  $colflt Description
-     * @param string|array  $sings  Символы
-     * @param array|string  $value  Значения
-     * SELECT * FROM  `romens_user_profile` WHERE  `id` = 1 AND  `login` LIKE  'Romens'
+     * @param string|array  $colflt Название столбцов для фильтра
+     * @param string|array  $signs  Символы для фильтра
+     * @param array|string  $value  Значения для фильтра
+     * @param mixed         $output Тип вывода
+     * 
+     * SELECT * FROM  `table` WHERE  `id` = 1 AND  `login` LIKE  'Romens'
      *        
      */
-    function select($column, $table, $colflt, $signs, $value){
+    function select($column, $table, $colflt, $signs, $value, $output){
         $sql = 'SELECT ';
-        if(empty($value) && empty($signs) && empty($colflt)){
-            if(is_array($column)){
-                $column = $this->filter(implode(',', $column));
+        $sql.= $this->_type($column);
+        
+        if(is_array($colflt) && is_array($signs) && is_array($value)){
+            if(count($colflt)=count($signs)=count($value)){
+                $result = '';
+                for ($x=0; $x<255; $x++) {
+                    if($x>0){
+                        $result .= 'AND';
+                    }
+                    $result .= '`'.$colflt[$x].'`'.$signs[$x].''.$this->_type($value[$x]);
+                }
             }
-            $sql .= $column.' ';
-            
-        }
-        if(is_array($column) && is_array($colflt) && is_array($signs) && is_array($value)){
-            if(count($column)=count($colflt)=count($signs)=count($value)){
-                
-            }
-            return FALSE;
+           return FALSE;
         }
         
-        if(is_string($column) && is_string($signs) && is_string($colflt) && is_string($value)){
-            
+        if(is_string($signs) && is_string($colflt) && is_string($value)){
+            $result .= '`'.$colflt.'`'.$signs.''.$this->_type($value);
         }
-        return FALSE;
+        
+        if((empty($value) && empty($signs) && empty($colflt)) || ($value==FALSE&&$signs==FALSE&&$colflt==FALSE) ){
+            $result = null;
+        }
+        
+        $sql .= $result;
+        return $this->query($sql,$output);
     }
     
     /**
@@ -88,11 +97,47 @@ class MySQL {
     /**
      *  Фильтр ввода
      */
-    function filter($str){
-        return htmlspecialchars(strip_tags(trim($str)));
+    private function filter($str){
+        return htmlspecialchars(trim($str));
     }
     
+    /**
+     *  Отправка запроса
+     */
+    private function query($query, $output='array_assoc'){
+        $result = mysql_query($query, $this->link);
+        $this->refresh_var();
+        if($result == FALSE && mysql_num_rows($result) == 0){
+            return FALSE;
+        }
+        switch($output){
+            case 'array_assoc': return mysql_fetch_assoc($result);  break;
+            case 'array':       return mysql_fetch_array($result);  break;
+            case 'object':      return mysql_fetch_object($result); break;
+            default:            return FALSE;                       break;
+        }
+        
+        
+    }
     
+    /**
+     *  Обновляем перемнные
+     */
+    private function refresh_var(){
+        $this->errno                =    mysql_errno($this->link);
+        $this->error                =    mysql_error($this->link);
+        $this->affected_rows        =    mysql_affected_rows($this->link);
+    }
+    
+    /**
+     *  Определяем тип переменой для запроса
+     */
+    private function _type($var){
+        if(is_string($var) || is_bool($var))     return "'".$var."'";
+        if(is_numeric($var))                     return $var;
+        if(is_array($var))                       return implode(',', $var);
+        return NULL;
+    } 
 }
 
 ?>

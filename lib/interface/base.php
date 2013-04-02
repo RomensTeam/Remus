@@ -5,12 +5,16 @@ interface Base {
      * 
      * @param array|string  $column Какие столбцы нужны
      * @param string        $table  Имя таблицы
-     * @param string|array  $colflt Description
-     * @param string|array  $sings  Символы
-     * @param array|string  $value  Значения
+     * @param string|array  $colflt Название столбцов для фильтра
+     * @param string|array  $signs  Символы для фильтра
+     * @param array|string  $value  Значения для фильтра
+     * @param mixed         $output Тип вывода
      * 
+     * SELECT * FROM  `table` WHERE  `id` = 1 AND  `login` LIKE  'Romens'
      *        
      */
-    public function select($column, $table, $colflt, $signs, $value); 
+    function select($column, $table, $colflt, $signs, $value, $output); 
+    
+    
 } 
 ?>
