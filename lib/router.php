@@ -18,7 +18,9 @@ class Router {
             $this->string=FALSE;
             $this->args=FALSE;
         }
-        if(){}
+        if(substr($router,-1) == '/'){
+            
+        }
     }
       
 
