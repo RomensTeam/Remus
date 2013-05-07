@@ -1,0 +1,26 @@
+# ЧПУ
+RewriteEngine On
+#RewriteRule ^style/(.*)$ app/style/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ ./index.php
+
+# PHP Настройки!
+php_value mysql.default_host localhost
+php_value mysql.default_user user32052_romens
+php_value mysql.default_password pasport2010
+php_value session.name romenssesion
+
+# Установка кодировки
+#adddefaultcharset OFF
+Options All -Indexes
+DirectoryIndex index.php
+
+# Легкое умное кэширование
+#ExpiresActive On
+#ExpiresByType image/gif "access plus 1 months"
+#ExpiresByType image/jpeg "access plus 1 months"
+#ExpiresByType image/png "access plus 1 months"
+#ExpiresByType text/css "access plus 1 months"
+#ExpiresByType text/javascript "access plus 1 months"
+#ExpiresByType application/javascript "access plus 1 months"

@@ -1,4 +1,4 @@
-<?php
+<?
 /**
  * Класс для доступа к базе данных через MySQL
  *
@@ -14,25 +14,21 @@
  */
 
 class MySQL {
-    protected   $link;
-    protected   $host;
-    protected   $login;
-    protected   $pass;
-    protected   $base;
-    public      $error          = FALSE;
-    public      $errno          = FALSE;
-    public      $insert_id      = FALSE;
-    public      $affected_rows  = FALSE;
-    public      $query_info     = FALSE;
-    public      $host_info      = FALSE;
-	
-	/* Константы Вывода */
-	const       OUT_ARRAY       = 'array';
-	const       OUT_ASSOC       = 'array_assoc';
-	const       OUT_OBJECT      = 'object';
+    protected   $link;                      // Подключение
+    protected   $host;                      // Адрес хоста
+    protected   $port;                      // Порт хоста
+    protected   $login;                     // Логин пользователя
+    protected   $pass;                      // Пароль пользователя
+    protected   $base;                      // База данных
+    public      $error          = FALSE;    // Описание ошибки
+    public      $errno          = FALSE;    // Номер ошибки
+    public      $insert_id      = FALSE;    // ID последней "вставки"
+    public      $affected_rows  = FALSE;    // Затронутые строки
+    public      $query_info     = FALSE;    // Информация о запросе
+    public      $host_info      = FALSE;    // Информация о хосте
     
     /**
-     *  Инициализация класса
+     * Инициализация класса
      * 
      * @param string $host Хост баз данных
      * @param string $login Логин пользователя базы данных
@@ -41,21 +37,20 @@ class MySQL {
      * @param string $prefix Префикс таблиц
      */
     function __construct( $host = 'localhost', $login = 'root', $pass = '', $base = 'base_number_1', $prefix = ''){
-        $link = mysql_connect($host,$login,$pass); // Создаём подключение
-		$db = mysql_select_db($base,$link);
-        if($link == FALSE && $db == FALSE){ // Если подключение не работает то...
-            $this->error = mysql_error($link); // ... запоминаем ошибку
-            $this->errno = mysql_errno($link); // ... запоминаем ошибку
+        /* Проверяем соединение и заполняем данные */
+        $link = mysql_connect($host,$login,$pass);
+	$db = mysql_select_db($base,$link);
+        if($link == FALSE && $db == FALSE){
+            $this->error = mysql_error($link);
+            $this->errno = mysql_errno($link);
             return FALSE;
         }
-        /* Сохраняем в классе все полученные данные */
         $this->link  =  $link;
         $this->host  =  $host;
         $this->login =  $login;
         $this->pass  =  $pass;
         $this->base  =  $base;
-        /* Реализуем текучий интерфейс */
-        return $this;
+        return TRUE;
     }
     
     /**
@@ -63,31 +58,28 @@ class MySQL {
      * 
      * @param array|string  $column Какие столбцы нужны
      * @param string        $table  Имя таблицы
-	 * @param mixed         $output Тип вывода
+     * @param mixed         $output Тип вывода
      * @param string|array  $colflt Название столбцов для фильтра
      * @param string|array  $signs  Символы для фильтра
      * @param array|string  $value  Значения для фильтра
-     * 
      *        
      */
     function select( $column, $table, $output='array_assoc', $colflt=false, $signs=false, $value=false){
-		if( $column != '*') {
-			$column = $this->_type($column, FALSE);
-		}
-		
-		$sql = 'SELECT '.$column.' FROM '.$this->_type($table);
-		$result = ' WHERE ';
+	if( $column != '*') {
+		if(is_string($column)){$column = explode(',',$column);}
+		if(is_array($column)){$column = $this->_type($column,TRUE,FALSE);}
+	}
+	$sql = 'SELECT '.$column.' FROM '.$this->_type($table);
+	$result = ' WHERE ';
         if(is_array( $colflt) && is_array( $signs) && is_array( $value) && ((count($signs)==count($value))==(count($colflt)==count($value)))){
-			for ($x=0; $x<count($colflt); $x++) {
-				if($x>0){
-					$result .= ' AND';
-				}
-				$result .= ' `'.$colflt[$x].'` '.$signs[$x].' '.$this->_type($value[$x],TRUE,TRUE);
-			}
+		for ($x=0; $x<count($colflt); $x++) {
+                    if($x>0){$result .= ' AND';}
+                    $result .= ' `'.$colflt[$x].'` '.$signs[$x].' '.$this->_type($value[$x],TRUE,TRUE);
+		}
         }
         
         if(is_string($signs) && is_string($colflt) && is_string($value)){
-            $result = '`'.$colflt.'`'.$signs.''.$this->_type($value);
+            $result .= ' `'.$colflt.'` '.$signs.' '.$this->_type($value,TRUE,TRUE);
         }
         
         if((empty($value) && empty($signs) && empty($colflt)) || ($value==FALSE&&$signs==FALSE&&$colflt==FALSE) ){$result = '';}
@@ -114,13 +106,16 @@ class MySQL {
     function insert($table, $column, $values, $output){
         $sql  = 'INSERT INTO ';
         $sql .= '`'.$table.'` (';
-        if(is_array($column) && is_array($values) && (count($values)==count($column))){ }
+        if(is_array($column) && is_array($values) && (count($values)==count($column))){ 
+            $column_s = $this->_type($column,TRUE,TRUE);
+            $values_s = $this->_type($values,TRUE,FALSE);
+        }
         if(is_string($column)&&  is_string($values)){
             $column_s = '`'.$column.'`';
             $values_s = '`'.$values.'`';
         }
-        
-        $sql .= ') VALUES (';
+        $sql .= $column_s.') VALUES ('.$values_s.')';
+        echo $sql;
     }
     
     /**
@@ -160,7 +155,6 @@ class MySQL {
      *  Отправка запроса
      */
     private function query($query, $output='array_assoc'){
-		echo '<b>'.$query.'</b>';
         $result = mysql_query($query, $this->link);
         $this->refresh_var();
         if($result == FALSE || mysql_num_rows($result) == 0){
@@ -172,8 +166,6 @@ class MySQL {
             case 'object':      return mysql_fetch_object($result); break;
             default:            return FALSE;                       break;
         }
-        
-        
     }
     
     /**
@@ -191,19 +183,17 @@ class MySQL {
     private function _type($var, $quote = TRUE,$special_quotes=FALSE){
 		if(is_numeric($var)){return $var;}
 		if(is_string($var)){
-			if($special_quotes){
-				return "'".$var."'";
-			}
-			return "`".$var."`";
+			if($special_quotes){return "'".trim($var)."'";}
+			return "`".trim($var)."`";
 		}
         if(is_array($var)){
 			if($quote){
 				$array = array();
-				if($special_quotes==FALSE){
-					foreach( $var as $key => $val){$array[$key] = ' ` '.$val.' ` ';}
+				if(!$special_quotes){
+					foreach( $var as $key => $val){$array[$key] = ' `'.trim($val).'` ';}
 				}
 				else{
-					foreach( $var as $key => $val){$array[$key] = " '".$val."' ";}
+					foreach( $var as $key => $val){$array[$key] = " '".trim($val)."' ";}
 				}
 				return implode(',' ,$array);
 			}
@@ -220,5 +210,8 @@ class MySQL {
         mysql_close($this->link); // Закрываем соединение
     }
 }
-
+/* Константы Вывода */
+    const       OUT_ARRAY       = 'array';
+    const       OUT_ASSOC       = 'array_assoc';
+    const       OUT_OBJECT      = 'object';
 ?>

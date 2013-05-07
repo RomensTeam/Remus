@@ -1,10 +1,4 @@
-<?php
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
+<?
 /*
  *  Определяет работоспособность фреймворка
  * 
@@ -12,7 +6,7 @@
  * Если значение TRUE  - фреймворк продолжает работу
  * 
  */
-const SITE_ENGINE = FALSE;
+const SITE_ENGINE = TRUE;
 /*
  *  Язык фреймворка
  * 
@@ -33,12 +27,31 @@ const LANG = 'ru';
 const BASE = 'MySQLI';
 
 /*
+ *  Доступ к базе с которым будет работать фреймворк
+ * 
+ *  Тип доступа:
+ *      <li>MySQL - не рекомендуется</li>
+ *      <li>MySQLI</li>
+ *      <li>PDO</li>
+ * 
+ */
+const TEST_MODE = TRUE;
+
+/*
  *  Кол-во баз с которой будет работать фреймворк
  * 
  * Укажите число баз с которыми вы будете работать
  * 
  */
 const BASE_NUMBER = 1;
+
+/*
+ *  Параметр быстрого сайта
+ * 
+ * Сжатие данных
+ * 
+ */
+const COMPRESS = FALSE;
 
 /*
  *  Параметры для доступа к базе данных
@@ -51,7 +64,7 @@ const BASE_NUMBER = 1;
  * 
  */
 $cfg['base']['host']   = 'localhost';
-$cfg['base']['user']   = 'root';
+$cfg['base']['login']  = 'root';
 $cfg['base']['pass']   = '';
 $cfg['base']['prefix'] = '';
 $cfg['base']['base']   = array(
@@ -59,4 +72,15 @@ $cfg['base']['base']   = array(
     'base_number_2'
 );
 
+/*
+ * <b>Здесь вы можете указать методы "роутинга" запросов к вашим приложениям</b>
+ * 
+ */
+/*$app = array(
+    '/index.php/'=>'index.php',
+	'/(.*)/'=>'index.php'
+);*/
+$app = array(
+    '/index/'=>'index.php'
+);
 ?>

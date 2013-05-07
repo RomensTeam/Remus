@@ -9,7 +9,7 @@
  * @todo CHECK  - проверка занчений из базы данных;
  */
 
-class PDO {
+class pdo {
     private $pdo;
     private $link;
     private $host;
@@ -18,8 +18,6 @@ class PDO {
     private $base;
     public  $error = FALSE;
     public  $insert_id;
-    
-    
 }
 
 ?>
