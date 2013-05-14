@@ -5,12 +5,6 @@
  * Реализован метод SELECT
  *
  * @author Romens
- * @todo INSERT   - вставку в базу данных; 
- * @todo DELETE   - удаление из базы данных;
- * @todo VALID    - проверка занчений из базы данных;
- * @todo NUM_ROWS - подсчёт строк
- * @todo ColToCol - подмена значения
- * @todo GetID    - вернуть ID
  */
 
 class MySQL {
@@ -24,8 +18,6 @@ class MySQL {
     public      $errno          = FALSE;    // Номер ошибки
     public      $insert_id      = FALSE;    // ID последней "вставки"
     public      $affected_rows  = FALSE;    // Затронутые строки
-    public      $query_info     = FALSE;    // Информация о запросе
-    public      $host_info      = FALSE;    // Информация о хосте
     
     /**
      * Инициализация класса
@@ -53,96 +45,6 @@ class MySQL {
         return TRUE;
     }
     
-    /**
-     *  SELECT - выборка из базы данных
-     * 
-     * @param array|string  $column Какие столбцы нужны
-     * @param string        $table  Имя таблицы
-     * @param mixed         $output Тип вывода
-     * @param string|array  $colflt Название столбцов для фильтра
-     * @param string|array  $signs  Символы для фильтра
-     * @param array|string  $value  Значения для фильтра
-     *        
-     */
-    function select( $column, $table, $output='array_assoc', $colflt=false, $signs=false, $value=false){
-	if( $column != '*') {
-		if(is_string($column)){$column = explode(',',$column);}
-		if(is_array($column)){$column = $this->_type($column,TRUE,FALSE);}
-	}
-	$sql = 'SELECT '.$column.' FROM '.$this->_type($table);
-	$result = ' WHERE ';
-        if(is_array( $colflt) && is_array( $signs) && is_array( $value) && ((count($signs)==count($value))==(count($colflt)==count($value)))){
-		for ($x=0; $x<count($colflt); $x++) {
-                    if($x>0){$result .= ' AND';}
-                    $result .= ' `'.$colflt[$x].'` '.$signs[$x].' '.$this->_type($value[$x],TRUE,TRUE);
-		}
-        }
-        
-        if(is_string($signs) && is_string($colflt) && is_string($value)){
-            $result .= ' `'.$colflt.'` '.$signs.' '.$this->_type($value,TRUE,TRUE);
-        }
-        
-        if((empty($value) && empty($signs) && empty($colflt)) || ($value==FALSE&&$signs==FALSE&&$colflt==FALSE) ){$result = '';}
-        
-        $sql .= $result;
-        return $this->query($sql,$output);
-    }
-    
-    /**
-     *  INSERT - вставка в базу данных
-     * 
-     * @param array|string  $column Какие столбцы нужны
-     * @param string        $table  Имя таблицы
-     * @param string|array  $colflt Название столбцов для фильтра
-     * @param string|array  $signs  Символы для фильтра
-     * @param array|string  $value  Значения для фильтра
-     * @param mixed         $output Тип вывода
-     * 
-     * INSERT INTO `table` (`id`, `datareg`, `brithbay`, `activation`, `real`) 
-     * VALUES (6, 'RomanTrutnev', 'ghh', 'fghgfh', 'FALSE', '1');
-
-     *        
-     */
-    function insert($table, $column, $values, $output){
-        $sql  = 'INSERT INTO ';
-        $sql .= '`'.$table.'` (';
-        if(is_array($column) && is_array($values) && (count($values)==count($column))){ 
-            $column_s = $this->_type($column,TRUE,TRUE);
-            $values_s = $this->_type($values,TRUE,FALSE);
-        }
-        if(is_string($column)&&  is_string($values)){
-            $column_s = '`'.$column.'`';
-            $values_s = '`'.$values.'`';
-        }
-        $sql .= $column_s.') VALUES ('.$values_s.')';
-        echo $sql;
-    }
-    
-    /**
-     *  UPDATE - обновление записи в базе данных
-     * 
-     * @param array|string  $column Какие столбцы нужны
-     * @param string        $table  Имя таблицы
-     * @param string|array  $colflt Название столбцов для фильтра
-     * @param string|array  $signs  Символы для фильтра
-     * @param array|string  $value  Значения для фильтра
-     * @param mixed         $output Тип вывода
-     * 
-     * UPDATE `phpmyadmin`.`pma__column_info` SET `id` = '358', `db_name` = 'addressbook324', `table_name` = 'tb_address_book32', `column_name` = 'Surname34', `comment` = '4', `mimetype` = '23', `transformation` = '_21', `transformation_options` = '3' WHERE `pma__column_info`.`id` = 3;
-
-     *        
-     */
-    function update($table, $column, $values, $output){
-        $sql  = 'INSERT INTO ';
-        $sql .= '`'.$table.'` (';
-        if(is_array($column) && is_array($values) && (count($values)==count($column))){}
-        if(is_string($column)&&  is_string($values)){
-            $column_s = '`'.$column.'`';
-            $values_s = '`'.$values.'`';
-        }
-        
-        $sql .= ') VALUES (';
-    }
     
     /**
      *  Фильтр ввода
@@ -175,34 +77,8 @@ class MySQL {
         $this->errno                =    mysql_errno($this->link);
         $this->error                =    mysql_error($this->link);
         $this->affected_rows        =    mysql_affected_rows($this->link);
-    }
-    
-    /**
-     *  Определяем тип переменой для запроса
-     */
-    private function _type($var, $quote = TRUE,$special_quotes=FALSE){
-		if(is_numeric($var)){return $var;}
-		if(is_string($var)){
-			if($special_quotes){return "'".trim($var)."'";}
-			return "`".trim($var)."`";
-		}
-        if(is_array($var)){
-			if($quote){
-				$array = array();
-				if(!$special_quotes){
-					foreach( $var as $key => $val){$array[$key] = ' `'.trim($val).'` ';}
-				}
-				else{
-					foreach( $var as $key => $val){$array[$key] = " '".trim($val)."' ";}
-				}
-				return implode(',' ,$array);
-			}
-			else{
-				return implode(',', $var);
-			}
-		}
-        return NULL;
-    } 
+        $this->affected_rows        = mysql_insert_id($this->link);
+    }  
     /**
      *  Разрушение класса
      */
@@ -210,8 +86,4 @@ class MySQL {
         mysql_close($this->link); // Закрываем соединение
     }
 }
-/* Константы Вывода */
-    const       OUT_ARRAY       = 'array';
-    const       OUT_ASSOC       = 'array_assoc';
-    const       OUT_OBJECT      = 'object';
 ?>
