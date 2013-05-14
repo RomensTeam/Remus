@@ -1,0 +1,10 @@
+{
+  "name": "Smile",
+  "version": "versionString",
+  "file":"smile.php",
+  "manifest_version": 1,
+
+  "description": "A plain text description",
+  "icon": "", 
+  "default_locale": "ru"
+}

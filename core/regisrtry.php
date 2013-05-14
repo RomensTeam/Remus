@@ -1,5 +1,5 @@
 <?php
-class Regisrtry implements ArrayAccess 
+class Regisrtry
 {
     protected $_container = array();
 
@@ -10,17 +10,17 @@ class Regisrtry implements ArrayAccess
         }
     }
 
-    public function offsetExists($offset)
+    public function check($offset)
     {
         return isset($this->_container[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function get($offset)
     {
-        return $this->offsetExists($offset) ? $this->_container[$offset] : null;
+        return $this->check($offset) ? $this->_container[$offset] : null;
     }
 
-    public function offsetSet($offset, $value)
+    public function set($offset, $value)
     {
         if (is_null($offset)) {
             $this->_container[] = $value;
@@ -29,7 +29,7 @@ class Regisrtry implements ArrayAccess
         }
     }
 
-    public function offsetUnset($offset)
+    public function destroy($offset)
     {
         unset($this->_container[$offset]);
     }
