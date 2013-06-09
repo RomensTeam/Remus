@@ -1,13 +1,9 @@
 <?
 class StingConverter {
-	public function Rus2Translite($st){
-    // Сначала заменяем "односимвольные" фонемы.
-    $st=strtr($st,"абвгдеёзийклмнопрстуфхъыэ_",
-    "abvgdeeziyklmnoprstufh'iei");
-    $st=strtr($st,"АБВГДЕЁЗИЙКЛМНОПРСТУФХЪЫЭ_",
-    "ABVGDEEZIYKLMNOPRSTUFH'IEI");
-    // Затем - "многосимвольные".
-    $st=strtr($st, 
+    public function Rus2Translite($st){
+        $st2=strtr($st,"абвгдеёзийклмнопрстуфхъыэ_","abvgdeeziyklmnoprstufh'iei");
+        $st3=strtr($st2,"АБВГДЕЁЗИЙКЛМНОПРСТУФХЪЫЭ_","ABVGDEEZIYKLMNOPRSTUFH'IEI");
+        $st4=strtr($st3, 
                     array(
                         "ж"=>"zh", "ц"=>"ts", "ч"=>"ch", "ш"=>"sh", 
                         "щ"=>"shch","ь"=>"", "ю"=>"yu", "я"=>"ya",
@@ -16,8 +12,7 @@ class StingConverter {
                         "ї"=>"i", "Ї"=>"Yi", "є"=>"ie", "Є"=>"Ye"
                         )
              );
-    // Возвращаем результат.
-    return $st;
-	}
+        return $st4;
+    }
 }
 ?>

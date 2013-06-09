@@ -9,6 +9,6 @@ include_once 'config.php';
 include_once 'core.php';
 if(TEST_MODE){
     $time_end = microtime(true);
-$time = $time_end - $time_start;
-printf($romens->lang['test_time_script'],$time);}
-?>
+    $time = $time_end - $time_start;
+    printf($romens->lang['test_time_script'],$time);
+}

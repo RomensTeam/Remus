@@ -1,10 +1,7 @@
-<?php
-/**
- * Description of class
- *
- * @author Romens
- */
+<?
 class HTTP {
-//put your code here
+    public function response($name,$value){
+        header($name.': '.$value);
+    }
 }
 ?>
