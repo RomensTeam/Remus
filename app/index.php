@@ -9,9 +9,10 @@ $romens->type_output(HTML);  // Тип вывода
     $site_meta['keywords']      = $lang['index_keywords'];
 $romens->start_html_app($site_meta);
 // Ваш код здесь!
+
 /*$romens->connect_base();
-$romens->change_base('user32052_romens_user');
-$query_to_base = 'SELECT * FROM  `romens_user_profile`'; 
+$romens->change_base('user');
+$query_to_base = 'SELECT * FROM  `profile`'; 
 $result = $romens->base->query($query_to_base, ASSOC);*/
 $array = array(
     'header'=>'Здесь шаблон HEADER'
