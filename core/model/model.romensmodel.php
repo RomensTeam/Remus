@@ -3,8 +3,6 @@
 if (!defined('DIR')) {
     exit();
 }
-define('HTML', TRUE);
-define('NONE', FALSE);
 /**
  *  Класс Romens - Базовый класс
  *
@@ -135,6 +133,9 @@ class RomensModel {
             $buffer = str_replace('{[' . $value . ']}', $array[strtolower($value) ], $buffer);
         }
         $this->buffer = $buffer;
+    }
+    public function pattern($name=null){
+        return VIEW_TAG_START.strtoupper($name).VIEW_TAG_END;
     }
     public function type_output($type) {
         if ($type) {
@@ -273,7 +274,4 @@ class RomensModel {
     public function __toString() {
         return 'Привет, я Romens-Engine!';
     }
-}
-if (defined('LOAD_ROMENS') && LOAD_ROMENS == TRUE) {
-    $romens = new RomensModel();
 }

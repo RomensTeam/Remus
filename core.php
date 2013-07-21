@@ -38,6 +38,18 @@ function CheckFlag($const = null) {
 include _filter(DIR_CORE . 'config_optimal.php');
 include _filter(DIR_CORE . 'htaccess.php');
 include _filter(DIR_CORE . 'regisrtry.php');
+/* MODEL */
+if (CheckFlag('APP_MODEL')) {
+    include DIR_MODEL . 'model.' . strtolower(APP_MODEL) . '.php';
+}
+if (defined('LOAD_ROMENS') && LOAD_ROMENS == TRUE) {
+    define('HTML', TRUE);
+    define('NONE', FALSE);
+    $romens = new RomensModel();
+}
+# print_var()
+if (CheckFlag('TEST_MODE')){include _filter(DIR_CORE . 'devlib' . _DS . 'print_var.php');}else{function print_var($var){}}
+
 /* VIEW */
 if (CheckFlag('APP_VIEW_HTML')) {
     include DIR_VIEW . 'view.' . strtolower(APP_VIEW_HTML) . '.php';
@@ -45,14 +57,7 @@ if (CheckFlag('APP_VIEW_HTML')) {
 if (CheckFlag('APP_VIEW_JSON')) {
     include DIR_VIEW . 'view.' . strtolower(APP_VIEW_JSON) . '.php';
 }
-/* MODEL */
-if (CheckFlag('APP_MODEL')) {
-    include DIR_MODEL . 'model.' . strtolower(APP_MODEL) . '.php';
-}
-if (CheckFlag('TEST_MODE')) {
-    include _filter(DIR_CORE . 'devlib' . _DS . 'print_var.php');
-}
-else{function print_var($var){}}
+
 # Start
 ob_start();
 $registr = array();
