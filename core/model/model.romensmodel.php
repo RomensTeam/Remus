@@ -248,6 +248,10 @@ class RomensModel {
             return FALSE;
         }
     }
+    public function getBlock($name) {
+        $block_path = _filter($this->registr['dir_theme'] . 'block' . _DS . strtolower($name) . '.tpl');
+        return file_get_contents($block_path);
+    }
     public function setLayout($layout_name) {
         $layout_path = $this->registr['dir_theme'] . $layout_name . '.tpl';
         if (is_file($layout_path) || !empty($layout_path)) {
