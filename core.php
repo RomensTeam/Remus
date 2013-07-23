@@ -67,4 +67,6 @@ if (CheckFlag('APP_VIEW_HTML')) {
 @include DIR_APP . '_start.php';
 include DIR_APP . 'config.php';
 include _filter(DIR_CORE . 'router.php');
-@include DIR_APP . '_end.php';
+if(!defined('NO_END_APP')){
+	@include DIR_APP . '_end.php';
+}
