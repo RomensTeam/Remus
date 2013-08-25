@@ -20,7 +20,7 @@ class RomensModel {
     public $base_list;
     /* Начало класса */
     public function __construct() {
-        /* Подключаем языковой пакет фреймворка */
+        // Подключаем языковой пакет фреймворка 
         $_LANG = '';
         include_once DIR_CORE . 'lang' . _DS . strtolower(LANG) . '.php';
         $this->lang = $_LANG;
@@ -113,7 +113,7 @@ class RomensModel {
                 array(
                     'head' => $this->view->head_string,
                     'end_area' => $this->view->end_string 
-                        )
+                )
                 );
         # Блоки
         preg_match_all('/{\[BLOCK_([A-Z0-9_]+)\]\}/', $buffer, $all); // Получаем все доступные в странице ключей
@@ -232,7 +232,7 @@ class RomensModel {
         }
     }
     public function addToHead($string) {
-        $this->head_string.= $string;
+        $this->view->head_string.= $string;
     }
     public function setTheme($theme_name) {
         $n = DIR_THEMES . $theme_name . _DS;
