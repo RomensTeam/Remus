@@ -1,6 +1,6 @@
 <?
 if(!defined('DIR')){exit();} // Защита
-$lang = $romens->app_lang('ru'); // Этот модуль включает в себя Многоязычность приложения
+$lang = $romens->app_lang('ru-RU'); // Этот модуль включает в себя Многоязычность приложения
 $romens->setLayout('index'); // Выбираем страницу INDEX из темы
 $romens->type_output(HTML);  // Тип вывода
     // Прописываем META
@@ -15,7 +15,7 @@ $romens->change_base('user');
 $query_to_base = 'SELECT * FROM  `profile`'; 
 $result = $romens->base->query($query_to_base, ASSOC);*/
 $array = array(
-    'header'=>'Здесь шаблон HEADER'
+    'header'=>'Поздравляю вас! Всё работает.'
 );
 $romens->var_app($array); // Добавление переменных
 $romens->render(); // Загрузка шаблона, рендеринг и отправка данных.

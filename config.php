@@ -8,11 +8,10 @@ if (!defined('VERSION')) {
 } # Защита
 # Настройки движка
 define('LANG', 'ru'); # Язык фреймворка ошибок
-define('TEST_MODE', FALSE); # Режим тестирования
-define('URL', 'http://' . $_SERVER['HTTP_HOST'] . '/'); # HTTP-адрес сайта
-define('WWW', FALSE); # Оставлять доступ к сайту через www.site.loc
+define('TEST_MODE', FALSE);
+define('WWW', FALSE); # Оставлять доступ к сайту через www.your_site.com
 define('LOAD_ROMENS', TRUE); # Создавать ли объект с классом Romens
-define('NOT_INDEX', TRUE); # Перенаправляет с INDEX.HTML и index.php
+define('NOT_INDEX', TRUE); # Перенаправляет с INDEX.HTML и index.php на URL
 # Настройки базы данных
 define('BASE_CONFIG_PHP', FALSE); # Если у вас настройки для подключения к базе данных прописаны в php.ini или в .htaccess то укажите этот параметр
 define('BASE', 'MySQL'); # Поддержка: MySQL, SQLite, PostgreSQL. Если этого параметра нет, то база использоваться не будет во всё приложении.
@@ -47,7 +46,9 @@ define('BASE_BASE', 'user32052_romens_user , base_number_2'); # Представ
  */
 define('ROUTER', 'DYNAMIC');
 # Роутинг
-$app = array('/index/' => 'index.php', # Укажите ПАТТЕРН => Исполняемый файл
-'/favicon.png/' => 'http://habrahabr.ru/favicon.ico'
-# Укажите ПАТТЕРН => Ссылка
+$app = array(
+    '/index/' => 'index.php', 
+    '/favicon.png/' => 'http://habrahabr.ru/favicon.ico'
+    # Укажите ПАТТЕРН => Исполняемый файл
+    # Укажите ПАТТЕРН => Ссылка
 );

@@ -1,7 +1,7 @@
 <?
 $flag = array(
-    'TEST_MODE'=>FALSE,
-    'URL'=>'http://' . $_SERVER['HTTP_HOST'] . '/',
+    'TEST_MODE'=>FALSE, # Режим тестирования
+    'URL'=>'http://' . $_SERVER['HTTP_HOST'] . '/', # HTTP-адрес сайта
     'WWW'=> TRUE,
     'LOAD_ROMENS'=> TRUE,
     'NOT_INDEX'=> TRUE,

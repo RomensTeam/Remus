@@ -28,38 +28,35 @@ class RomensModel {
     }
     /* Настройки языка */
     public function app_lang($lang = FALSE) {
-        if (defined('APP_LANG_METHOD')) {
-            if (defined('APP_LANG_FORMAT') && APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
-                $av_lang = array('status' => FALSE);
-                if ($handle = opendir(DIR_APP_LANG)) {
-                    while (false !== ($file = readdir($handle))) {
-                        if (preg_match('/\.(?:' . APP_LANG_EXT . ')/', $file)) {
-                            $av_lang[] = str_replace('.' . APP_LANG_EXT, '', $file);
+        if($lang==FALSE){
+            $lang = LANG;
+        }
+        // Стандартный метод - хранение в json-файлах
+        if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
+            if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
+                if(strlen($lang) === 5){
+                    if(substr($lang, 2,1) === '-' || substr($lang, 2,1)=='_'){
+                        $lang = str_replace('-', '_', $lang);
+                    }
+                }
+                $lang_file = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
+                if(is_file($lang_file)){
+                    $lang_json_data = (string) file_get_contents($lang_file);
+                    if(strlen($lang_json_data) > 0){
+                        $lang_data = json_decode($lang_json_data, TRUE);
+                        if(is_array($lang_data)){
+                            $this->app_lang = $lang_data;
+                            return $this->app_lang;
                         }
+                        echo 'У нас проблемы';
                     }
-                    closedir($handle);
-                }
-                foreach($av_lang as $value) {
-                    if ($lang == $value) {
-                        $av_lang = array('lang' => $lang, 'status' => TRUE);
-                        break;
-                    } else {
-                        $av_lang['status'] = FALSE;
+                    else {
+                        echo 'У нас проблемы';
                     }
-                }
-                if ($av_lang['status'] == FALSE || empty($lang)) {
-                    $lang = LANG;
-                }
-                $lang_file = file_get_contents(_filter(DIR_APP_LANG . $lang . '.json'));
-                if ($lang_file != FALSE) {
-                    unset($av_lang);
-                    $this->app_lang = json_decode($lang_file, TRUE);
-                    return $this->app_lang;
-                } else {
-                    exit($this->lang['not_app_lang']);
                 }
             }
         }
+        else{return 0;}
     }
     /* Управление приложением */
     public function start_html_app($meta) {
