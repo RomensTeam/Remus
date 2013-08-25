@@ -12,8 +12,9 @@ include 'config.php';
 
 include 'core.php';
 
-if(TEST_MODE){
-    if(defined(TEST_MODE_OFF)){
+if(TEST_MODE || defined(TEST_MODE_ON)){
+    
+    if(defined('TEST_MODE_OFF')){
         exit();
     }
     $time_end = microtime(true);

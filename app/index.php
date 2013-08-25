@@ -9,6 +9,9 @@ $romens->type_output(HTML);  // Тип вывода
     $site_meta['keywords']      = $lang['index_keywords'];
 $romens->start_html_app($site_meta);
 $romens->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
+if($_GET['status']==='test'){
+    TestModeOn();
+}
 // Ваш код здесь!
 
 /*$romens->connect_base();

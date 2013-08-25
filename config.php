@@ -18,6 +18,7 @@ define('BASE', 'MySQL'); # Поддержка: MySQL, SQLite, PostgreSQL. Есл
 define('BASE_DRIVER', 'MySQL'); # Желательно выбрать PDO, но если вы хотите работать с другим драйвером то укажите.
 define('BASE_NUMBER', 1); # Кол-во баз с которыми вы будете работать.
 define('ROMENSBASE', TRUE);
+define('NOT_ROUTING_FILE', '404.php');
 
 /** 
  * Настройки базы данных

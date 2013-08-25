@@ -18,8 +18,8 @@ define('DIR_MODEL', DIR_CORE . 'model' . _DS);
 define('DIR_VIEW', DIR_CORE . 'view' . _DS);
 define('DIR_LIB', DIR_CORE . 'lib' . _DS);
 define('DIR_INTERFACE', DIR_LIB . 'interface' . _DS);
-if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-    define('URLS', 'https://' . $_SERVER['HTTP_HOST'] . '/');
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && !defined('URLS')&& defined('URL')) {
+    define('URLS',  str_replace('http://', 'https://', URL));
 }
 /* Маленькие функции */
 function _filter($path) {
@@ -34,6 +34,9 @@ function __autoload($class) {
 }
 function CheckFlag($const = null) {
     return defined($const) && constant($const);
+}
+function TestModeOn() {
+    define('TEST_MODE_ON', TRUE);
 }
 include _filter(DIR_CORE . 'config_optimal.php');
 include _filter(DIR_CORE . 'htaccess.php');
@@ -64,9 +67,17 @@ $registr = array();
 if (CheckFlag('APP_VIEW_HTML')) {
     $site_meta = array();
 }
-@include DIR_APP . '_start.php';
-include DIR_APP . 'config.php';
-include _filter(DIR_CORE . 'router.php');
+if(is_file(DIR_APP.'_start.php')){
+    include DIR_APP.'_start.php';
+}
+if(is_file(DIR_APP.'config.php')){
+    include DIR_APP.'config.php';
+}
+if(is_file(DIR_CORE . 'router.php')){
+    include DIR_CORE . 'router.php';
+}
 if(!defined('NO_END_APP')){
-	@include DIR_APP . '_end.php';
+    if(is_file(DIR_APP.'_end.php')){
+        include DIR_APP.'_end.php';
+    }
 }
