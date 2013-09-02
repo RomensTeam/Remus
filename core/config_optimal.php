@@ -29,11 +29,18 @@ $flag = array(
     'APP_MODEL'=>'RomensModel',
     'SUPPORT_DEVELOPERS'=>TRUE,
     # Настройка обработчика View
-    'VIEW_TAG_PATTERN'=>'{\[(.*)\]\}',
+    'VIEW_TAG_PATTERN'=>'/{\[([A-Z0-9_]+)\]\}/',
+    'VIEW_BLOCK_TAG_PATTERN'=>'/{\[BLOCK_([A-Z0-9_]+)\]\}/',
+    'VIEW_BLOCK_TAG_NAME'=>'BLOCK_',
+    'VIEW_BLOCK_TAG_FOLDER'=>'block',
+    'VIEW_EXP_FILE'=>'tpl',
     'VIEW_TAG_START'=>'{[',
     'VIEW_TAG_END'=>']}',
     'LANG'=>'en'
 );
 foreach ($flag as $key => $value) {
-    if(!defined($key)){define($key,$value);}
+    $key = strtoupper($key);
+    if(!defined($key)){
+        define($key,$value);
+    }
 }

@@ -110,22 +110,22 @@ class RomensModel {
         $this->view->generateHead();
         $array = array_merge(
                 $this->app_lang, 
-                array(
-                    'head' => $this->view->head_string,
-                    'end_area' => $this->view->end_string 
-                )
+                    array(
+                        'head' => $this->view->head_string,
+                        'end_area' => $this->view->end_string 
+                    )
                 );
         # Блоки
-        preg_match_all('/{\[BLOCK_([A-Z0-9_]+)\]\}/', $buffer, $all); // Получаем все доступные в странице ключей
+        preg_match_all(VIEW_BLOCK_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
         foreach($all[1] as $value) {
-            $block_path = _filter($this->registr['dir_theme'] . 'block' . _DS . strtolower($value) . '.tpl');
+            $block_path = _filter($this->registr['dir_theme'] . VIEW_BLOCK_TAG_FOLDER . _DS . strtolower($value) . '.tpl');
             $block = @file_get_contents($block_path);
-            $buffer = str_replace('{[BLOCK_' . $value . ']}', $block, $buffer);
+            $buffer = str_replace(VIEW_TAG_START . VIEW_BLOCK_TAG_NAME . $value . VIEW_TAG_END , $block, $buffer);
         }
         # Ключи
-        preg_match_all('/{\[([A-Z0-9_]+)\]\}/', $buffer, $all); // Получаем все доступные в странице ключей
+        preg_match_all(VIEW_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
         foreach($all[1] as $value) {
-            $buffer = str_replace('{[' . $value . ']}', $array[strtolower($value) ], $buffer);
+            $buffer = str_replace(VIEW_TAG_START . $value . VIEW_TAG_END, $array[strtolower($value)], $buffer);
         }
         $this->buffer = $buffer;
     }
@@ -157,6 +157,9 @@ class RomensModel {
         }
     }
     public function addComponent($component) {
+        if(!TEST_MODE){
+            return 0;
+        }
         $component_path = DIR . 'component' . _DS . strtolower($component) . '.json';
         $component_data = file_get_contents($component_path);
         if ($component_data == FALSE) {
