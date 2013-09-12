@@ -16,6 +16,12 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
   php_value	max_execution_time          200
 </ifModule>
 
+Redirect /style /app/style
+
+<Files "\.(tpl|html)$">
+deny from all
+</Files>
+
 AddHandler application/x-httpd-php .api
 AddType application/x-javascript .js
 AddType text/css .css

@@ -9,6 +9,7 @@ class Error {
         405=>'Method Not Allowed',
         408=>'Request Timeout',
         414=>'Request-URL Too Long'
+        
     );
     public static function error( $number = 404, $redirect = FALSE){
         if(is_numeric($number)){
