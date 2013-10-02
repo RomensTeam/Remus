@@ -7,6 +7,8 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ ./index.php
+	#RewriteEngine on
+	#RewriteRule !^(favicon\.ico|favicon\.png|robots\.txt|humans\.txt|sitemap\.xml|sitemap\.xml\.tgz) index.php [L]
 </IfModule>
 # PHP Настройки!
 <ifModule mod_php.c>

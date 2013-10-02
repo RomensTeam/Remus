@@ -12,7 +12,7 @@ include 'config.php';
 
 include 'core.php';
 
-if(TEST_MODE || defined(TEST_MODE_ON)){
+if(TEST_MODE || defined('TEST_MODE_ON')){
     
     if(defined('TEST_MODE_OFF')){
         exit();
@@ -20,5 +20,8 @@ if(TEST_MODE || defined(TEST_MODE_ON)){
     $time_end = microtime(true);
     $time = $time_end - $time_start;
     printf($romens->lang['test_time_script'],$time);
+    echo DIR_CORE.'devlib'._DS.'print_var.php';
+    @include_once DIR_CORE.'devlib'._DS.'print_var.php';
+    
     print_var($_SERVER);
 }

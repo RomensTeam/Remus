@@ -26,7 +26,7 @@ class RomensViewHTML {
     public function var_replace($array = array()) {
         preg_match_all(VIEW_TAG_PATTERN, $this->model->buffer, $all); // Получаем все доступные в странице ключей
         foreach($all[1] as $value) {
-            $this->model->buffer = str_replace('{[' . $value . ']}', $array[strtolower($value) ], $buffer);
+            $this->model->buffer = str_replace(VIEW_TAG_START . $value . VIEW_TAG_END, $array[strtolower($value)], $buffer);
         }
     }
     public function generateHead() {

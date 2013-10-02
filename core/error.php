@@ -11,12 +11,10 @@ class Error {
         414=>'Request-URL Too Long'
     );
     public static function error( $number = 404, $redirect = FALSE){
-        if(is_numeric($number)){
-            $number = intval($number);
+            $number = (integer) $number;
             header('Status: '.$number.' '.$this->error[$number]);
             if($redirect!=FALSE){header('Location: '.$redirect);}
             exit();
-        }
     }
 }
 

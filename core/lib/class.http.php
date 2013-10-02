@@ -1,7 +1,10 @@
 <?
 class HTTP {
-    public function response($name,$value){
+    public function Response($name,$value){
         header($name.': '.$value);
+    }
+    static public function Info(){
+        echo '';
     }
 }
 ?>

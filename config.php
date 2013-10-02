@@ -8,7 +8,7 @@ if (!defined('VERSION')) {
 } # Защита
 # Настройки движка
 define('LANG', 'ru'); # Язык фреймворка ошибок
-define('TEST_MODE', FALSE);
+define('TEST_MODE', TRUE);
 define('WWW', FALSE); # Оставлять доступ к сайту через www.your_site.com
 define('LOAD_ROMENS', TRUE); # Создавать ли объект с классом Romens
 define('NOT_INDEX', TRUE); # Перенаправляет с INDEX.HTML и index.php на URL
