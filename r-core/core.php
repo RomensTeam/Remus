@@ -35,8 +35,6 @@ if (defined('LOAD_ROMENS') && LOAD_ROMENS) {
 # print_var()
 if (CheckFlag('TEST_MODE')){include _filter(DIR_CORE.'devlib'._DS.'print_var.php');}else{function print_var($var){}}
 
-print_var(get_defined_constants());
-
 /* VIEW */
 if (CheckFlag('APP_VIEW_HTML')) {
     include DIR_VIEW.'view.'.strtolower(APP_VIEW_HTML).'.php';
@@ -51,12 +49,12 @@ if (CheckFlag('APP_VIEW_HTML')) {
     $site_meta = array();
 }
 # Подключаем начальный файл приложения
-if(is_file(DIR_APP_PAGE.'_start.php')){
-    include DIR_APP_PAGE.'_start.php';
+if(is_file(DIR_APP.'_start.php')){
+    include DIR_APP.'_start.php';
 }
 # Подключаем настройки приложения
-if(is_file(DIR_APP_PAGE.'config.php')){
-    include DIR_APP_PAGE.'config.php';
+if(is_file(DIR_APP.'config.php')){
+    include DIR_APP.'config.php';
 }
 # Подключаем роутер
 if(is_file(DIR_CORE_MODULE.'router.php')){
@@ -64,7 +62,7 @@ if(is_file(DIR_CORE_MODULE.'router.php')){
 }
 # Подключаем конечный файл приложения
 if(!defined('NO_END_APP')){
-    if(is_file(DIR_APP_PAGE.'_end.php')){
-        include DIR_APP_PAGE.'_end.php';
+    if(is_file(DIR_APP.'_end.php')){
+        include DIR_APP.'_end.php';
     }
 }
