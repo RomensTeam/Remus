@@ -6,15 +6,15 @@ if (defined('TEST_MODE') && TEST_MODE){error_reporting(E_ALL);}else{error_report
 # Подключении модулей
     # Функции ядра
     include DIR_CORE_MODULE.'func.php';
+    # Подключаем настройки
+    include _filter(DIR_SETTINGS.'config.php');
     # Оптимизируем настройки
     include _filter(DIR_CORE_MODULE.'config_optimal.php');
     # HTACCESS-правки (см. докуоментацию)
     include _filter(DIR_CORE_MODULE.'htaccess.php');
     # Регистр
     include _filter(DIR_CORE_MODULE.'regisrtry.php');
-    # Подключаем настройки
-    include DIR_SETTINGS.'config.php';
-# Определяем 
+# Определяем
 if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'&&!defined('URLS')&&defined('URL')){
     define('URLS',  str_replace('http://', 'https://', URL));
 }
@@ -29,9 +29,7 @@ if (CheckFlag('LOAD_ROMENS')) {
 if (CheckFlag('TEST_MODE')){
     include _filter(DIR_CORE.'devlib'._DS.'print_var.php');
 }   else{
-    function print_var($var){
-        create_function($args, $code);
-    }
+    function print_var($var){}
 }
 
 /* VIEW */
