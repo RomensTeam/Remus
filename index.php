@@ -11,11 +11,17 @@ if (version_compare(phpversion(),'5.3.0','<')){
 }
 // Дерективы
 define('_DS',DIRECTORY_SEPARATOR);
-define('DIR',str_replace('\'','/',realpath(dirname(__FILE__)))._DS);
-define('DIR_CORE',DIR.'r-core' . _DS);
-define('DIR_SETTINGS',DIR_CORE.'config'._DS);
-define('DIR_CORE_MODULE',DIR_CORE.'core_module'._DS);
+define('DIR',realpath(dirname(__FILE__))._DS);
 
+include_once DIR.'directory.php';
+foreach ($directory as $key => $value) {
+    if(!defined($key)){
+        $value = realpath(DIR.$value)._DS;
+        if(is_dir($value)){
+            define($key, $value);
+        }
+    }
+}
 include DIR_CORE.'core.php';
 
 if(defined('TEST_MODE_ON') || TEST_MODE){

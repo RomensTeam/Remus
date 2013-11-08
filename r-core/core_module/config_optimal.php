@@ -20,6 +20,7 @@ $flag = array(
     'BASE_PORT'=> 3306,
     'BASE_BASE'=> 'mybase',
     'ROUTER'=>'DYNAMIC',
+    'NOT_ROUTING_FILE'=>'404.php',
     'APP_LANG_METHOD'=>'JSON_FILE',
     'APP_LANG_FORMAT'=>'JSON',
     'APP_LANG_PREFIX'=>'',

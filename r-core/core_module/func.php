@@ -17,11 +17,3 @@ function CheckFlag($const = null) {
 function TestModeOn() {
     define('TEST_MODE_ON', TRUE);
 }
-
-function framework_directory($directory){
-    foreach ($directory as $key => $value) {
-        if(!defined($key)){
-            define($key, _filter(DIR.$value._DS));
-        }
-    }
-}

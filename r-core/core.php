@@ -12,16 +12,12 @@ if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'&&!defined('URLS')&&defined(
 # Подключении модулей
     # Функции ядра
     include DIR_CORE_MODULE.'func.php';
-    # Директории фреймворка
-    include _filter(DIR_SETTINGS.'core_directory.php');
-    framework_directory($directory);
     # Оптимизируем настройки
     include _filter(DIR_CORE_MODULE.'config_optimal.php');
     # HTACCESS-правки (см. докуоментацию)
     include _filter(DIR_CORE_MODULE.'htaccess.php');
     # Регистр
     include _filter(DIR_CORE_MODULE.'regisrtry.php');
-    
     
 /* MODEL */
 if (CheckFlag('APP_MODEL')) {
@@ -62,6 +58,9 @@ if(is_file(DIR_APP.'config.php')){
 }
 # Подключаем роутер
 if(is_file(DIR_CORE_MODULE.'router.php')){
+    if(ROUTER === 'DYNAMIC'){
+        include_once DIR_SETTINGS.'routing.php';
+    }
     include DIR_CORE_MODULE.'router.php';
 }
 # Подключаем конечный файл приложения
