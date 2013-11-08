@@ -27,13 +27,17 @@ if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'&&!defined('URLS')&&defined(
 if (CheckFlag('APP_MODEL')) {
     include DIR_MODEL.'model.'.strtolower(APP_MODEL).'.php';
 }
-if (defined('LOAD_ROMENS') && LOAD_ROMENS) {
-    define('HTML',TRUE);
-    define('NONE',FALSE);
+if (CheckFlag('LOAD_ROMENS')) {
     $romens = new RomensModel();
 }
 # print_var()
-if (CheckFlag('TEST_MODE')){include _filter(DIR_CORE.'devlib'._DS.'print_var.php');}else{function print_var($var){}}
+if (CheckFlag('TEST_MODE')){
+    include _filter(DIR_CORE.'devlib'._DS.'print_var.php');
+}   else{
+    function print_var($var){
+        create_function($args, $code);
+    }
+}
 
 /* VIEW */
 if (CheckFlag('APP_VIEW_HTML')) {

@@ -13,7 +13,7 @@ if (version_compare(phpversion(),'5.3.0','<')){
 define('_DS',DIRECTORY_SEPARATOR);
 define('DIR',str_replace('\'','/',realpath(dirname(__FILE__)))._DS);
 define('DIR_CORE',DIR.'r-core' . _DS);
-define('DIR_SETTINGS',DIR_CORE.'settings'._DS);
+define('DIR_SETTINGS',DIR_CORE.'config'._DS);
 define('DIR_CORE_MODULE',DIR_CORE.'core_module'._DS);
 
 include DIR_CORE.'core.php';
