@@ -13,6 +13,7 @@ if (version_compare(phpversion(),'5.3.0','<')){
 define('_DS',DIRECTORY_SEPARATOR);
 define('DIR',realpath(dirname(__FILE__))._DS);
 
+# Определение дирректорий
 include_once DIR.'directory.php';
 foreach ($directory as $key => $value) {
     if(!defined($key)){

@@ -1,37 +1,17 @@
-<?php
-class Regisrtry
-{
-    protected $_container = array();
-
-    public function __construct($array = null)
-    {
-        if (!is_null($array)) {
-            $this->_container = $array;
-        }
+<?
+class Regisrtry {
+    protected $_data = array();
+    
+    public function __set($name, $value) {
+        return $this->_data[$name] = $value;
     }
-
-    public function check($offset)
-    {
-        return isset($this->_container[$offset]);
+    public function __get($value) {
+        return $this->_data[$value];
     }
-
-    public function get($offset)
-    {
-        return $this->check($offset) ? $this->_container[$offset] : null;
+    public function __isset($name) {
+        return isset($this->_data[$name]);
     }
-
-    public function set($offset, $value)
-    {
-        if (is_null($offset)) {
-            $this->_container[] = $value;
-        } else {
-            $this->_container[$offset] = $value;
-        }
-    }
-
-    public function destroy($offset)
-    {
-        unset($this->_container[$offset]);
+    public function __unset($param) {
+        unset($this->_data[$param]);
     }
 }
-?>

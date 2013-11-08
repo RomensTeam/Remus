@@ -3,12 +3,6 @@
 if (!defined('VERSION')){exit();}
 # Тестовый режим
 if (defined('TEST_MODE') && TEST_MODE){error_reporting(E_ALL);}else{error_reporting(0);}
-# Подключаем настройки
-include DIR_SETTINGS.'config.php';
-# Определяем 
-if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'&&!defined('URLS')&&defined('URL')){
-    define('URLS',  str_replace('http://', 'https://', URL));
-}
 # Подключении модулей
     # Функции ядра
     include DIR_CORE_MODULE.'func.php';
@@ -18,7 +12,12 @@ if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'&&!defined('URLS')&&defined(
     include _filter(DIR_CORE_MODULE.'htaccess.php');
     # Регистр
     include _filter(DIR_CORE_MODULE.'regisrtry.php');
-    
+    # Подключаем настройки
+    include DIR_SETTINGS.'config.php';
+# Определяем 
+if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'&&!defined('URLS')&&defined('URL')){
+    define('URLS',  str_replace('http://', 'https://', URL));
+}
 /* MODEL */
 if (CheckFlag('APP_MODEL')) {
     include DIR_MODEL.'model.'.strtolower(APP_MODEL).'.php';
