@@ -27,9 +27,5 @@ include DIR_CORE.'core.php';
 
 if(defined('TEST_MODE_ON') || TEST_MODE){
     if(defined('TEST_MODE_OFF')){exit();}
-    $time_end = microtime(true);
-    $time = $time_end-$time_start;
-    printf($romens->lang['test_time_script'],$time);
-    @include_once DIR_CORE.'devlib'._DS.'print_var.php';
-    print_var($_SERVER);
+    printf($romens->lang['test_time_script'],microtime(true)-$time_start);
 }

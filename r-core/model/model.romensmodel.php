@@ -9,6 +9,11 @@ if (!defined('DIR')) {
  * @author Romens <romantrutnev@gmail.com>
  * @version 1.1
  */
+
+# Необходимые директивы
+    define('HTML',TRUE);
+    define('NONE',FALSE);
+
 class RomensModel {
     public $registr;
     public $lang; // Фразы фреймворка

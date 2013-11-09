@@ -14,16 +14,25 @@ if (defined('TEST_MODE') && TEST_MODE){error_reporting(E_ALL);}else{error_report
     include _filter(DIR_CORE_MODULE.'htaccess.php');
     # Регистр
     include _filter(DIR_CORE_MODULE.'regisrtry.php');
+    # Контроллёр
+    include _filter(DIR_CORE_MODULE.'controller.php');
+
+$controller = new Controller();
+# Подключение библиотек
+include_once DIR_SETTINGS.'library.php';
+$controller->library($library_list);
+
 # Определяем
 if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'&&!defined('URLS')&&defined('URL')){
     define('URLS',  str_replace('http://', 'https://', URL));
 }
 /* MODEL */
 if (CheckFlag('APP_MODEL')) {
-    include DIR_MODEL.'model.'.strtolower(APP_MODEL).'.php';
-}
-if (CheckFlag('LOAD_ROMENS')) {
-    $romens = new RomensModel();
+    $controller->load_model(APP_MODEL);
+    if (CheckFlag('LOAD_MODEL')) {
+        $model = APP_MODEL;
+        $romens = new $model();
+    }
 }
 # print_var()
 if (CheckFlag('TEST_MODE')){
@@ -33,11 +42,11 @@ if (CheckFlag('TEST_MODE')){
 }
 
 /* VIEW */
-if (CheckFlag('APP_VIEW_HTML')) {
-    include DIR_VIEW.'view.'.strtolower(APP_VIEW_HTML).'.php';
-}
 if (CheckFlag('APP_VIEW_JSON')) {
-    include DIR_VIEW.'view.'.strtolower(APP_VIEW_JSON).'.php';
+    $controller->load_view(APP_VIEW_JSON);
+}
+if (CheckFlag('APP_VIEW_HTML')) {
+    $controller->load_view(APP_VIEW_HTML);
 }
 
 # Start
@@ -46,13 +55,9 @@ if (CheckFlag('APP_VIEW_HTML')) {
     $site_meta = array();
 }
 # Подключаем начальный файл приложения
-if(is_file(DIR_APP.'_start.php')){
-    include DIR_APP.'_start.php';
-}
+include DIR_APP.'_start.php';
 # Подключаем настройки приложения
-if(is_file(DIR_APP.'config.php')){
-    include DIR_APP.'config.php';
-}
+include DIR_APP.'config.php';
 # Подключаем роутер
 if(is_file(DIR_CORE_MODULE.'router.php')){
     if(ROUTER === 'DYNAMIC'){
