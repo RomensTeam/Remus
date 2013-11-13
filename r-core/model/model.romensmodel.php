@@ -7,7 +7,7 @@ if (!defined('DIR')) {
  *  Класс Romens - Базовый класс
  *
  * @author Romens <romantrutnev@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 
 # Необходимые директивы
