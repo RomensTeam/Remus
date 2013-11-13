@@ -126,11 +126,6 @@ class RomensModel {
     public function pattern($name=null){
         return VIEW_TAG_START.strtoupper($name).VIEW_TAG_END;
     }
-    public function type_output($type){
-        if($type){
-            
-        }
-    }
     public function var_app($var = array()){
         $this->app_lang = array_merge($this->app_lang, $var);
     }
@@ -148,84 +143,7 @@ class RomensModel {
             $this->view->css_link[] = $style;
         }
     }
-    public function addComponent($component){
-        if(!TEST_MODE){
-            return 0;
-        }
-        $component_path = DIR . 'component' . _DS . strtolower($component) . '.json';
-        $component_data = file_get_contents($component_path);
-        if ($component_data == FALSE) {
-            return FALSE;
-        }
-        $component_data = json_decode($component_data, TRUE);
-        if ($component_data == FALSE) {
-            return FALSE;
-        }
-        $comp_a = array();
-        foreach($component_data as $key => $value) {
-            switch (strtolower($key)) {
-                case 'type':
-                    $value = (string)strtolower($value);
-                    if ($value == 'js' || $value == 'javascript' || $value == 'text/javascript') {
-                        $comp_a['type'] = 'js';
-                    } else if ($value == 'css' || $value == 'text/css') {
-                        $comp_a['type'] = 'css';
-                    } else {
-                        return FALSE;
-                    }
-                    break;
-                case 'link':
-                    if ($value) {
-                        $comp_a['link'] = true;
-                    } else {
-                        $comp_a['link'] = false;
-                    }
-                    break;
-                case 'flag':
-                    if (defined(strtoupper($value))) {
-                        $comp_a['flag'] = $value;
-                    } else {
-                        $comp_a['flag'] = FALSE;
-                    }
-                    break;
-                case 'flag_src':
-                    if ($comp_a['flag'] != false) {
-                        $src = str_replace('*' . strtolower($comp_a['flag']) . '*', constant($comp_a['flag']), $value);
-                        $comp_a['src'] = $src;
-                    }
-                    break;
-                case 'noflag_src':
-                    if(!isset($comp_a['flag'])){
-                        $comp_a['flag'] = FALSE;
-                    }
-                    if ($comp_a['flag'] == FALSE && $comp_a['link']==true) {
-                        $comp_a['src'] = $value;
-                    }
-                    break;
-                case 'data':
-                    if ($comp_a['link'] == false) {
-                        $comp_a['data'] = $value;
-                    }
-                    break;
-                }
-        }
-        if ($comp_a['type'] == 'css') {
-            if ($comp_a['link']) {
-                $this->addStyle($comp_a['src'], TRUE);
-            } else {
-                $this->addStyle($comp_a['data']);
-            }
-        }
-        if ($comp_a['type'] == 'js') {
-            if ($comp_a['link']) {
-                $this->addScript($comp_a['src'], TRUE);
-                #$this->view->js_link_end[] = $comp_a['src'];
-            } else {
-                $this->addScript($comp_a['data'], FALSE);
-                #$this->view->js_end[] = $comp_a['data'];
-            }
-        }
-    }
+    public function addComponent($component){return 0;}
     public function addToHead($string){
         $this->view->head_string.= $string;
     }
