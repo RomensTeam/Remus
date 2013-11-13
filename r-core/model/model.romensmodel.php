@@ -17,7 +17,7 @@ if (!defined('DIR')) {
 class RomensModel {
     public $registr;
     public $lang; // Фразы фреймворка
-    public $app_lang; // Фразы приложения
+    public $app_lang = array();
     public $view;
     public $base;
     public $buffer; // Буффер
@@ -29,32 +29,30 @@ class RomensModel {
         $_LANG = '';
         include_once DIR_CORE.'lang'._DS.strtolower(LANG).'.php';
         $this->lang = $_LANG;
-        unset($_LANG);
     }
     /* Настройки языка */
-    public function app_lang($lang = FALSE){
-        if($lang==FALSE){
-            $lang = LANG;
-        }
-        # Стандартный метод - хранение в json-файлах
+    public function app_lang($lang = FALSE,$library = FALSE){
+	$lang = ($lang==FALSE)? 'LANG': $lang;
         if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
             if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
-                // Форматируем "ru-RU" в "ru_RU"
-                $lang = str_replace('-','_',$lang);
-                // Получение локализации
-                $lang_file = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
-                if(is_file($lang_file)){
-                    $lang_json_data = (string) file_get_contents($lang_file);
-                    if(strlen($lang_json_data) > 0){
-                        $lang_data = json_decode($lang_json_data, TRUE);
-                        if(is_array($lang_data)){
-                            $this->app_lang = $lang_data;
-                            return $this->app_lang;
-                        }
+                if($library=FALSE){
+                    $path = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
+                    $this->app_lang = $this->open_json($path);
+                }
+                else{
+                    if(is_string($library)){
+                        $library = explode(',', $library);
                     }
+                    foreach ($library as $lib) {
+                        $path = DIR_APP_LANG.$lang._DS.APP_LANG_PREFIX.$lib.'.'.APP_LANG_EXT;
+                        $app_lang = $this->open_json($path);
+                        $this->app_lang = array_merge($this->app_lang,$app_lang);
+                    }
+            
                 }
             }
-        }else{return 0;}
+        }
+        return $this->app_lang;
     }
     /* Управление приложением */
     public function start_html_app($meta){
@@ -254,6 +252,19 @@ class RomensModel {
             return FALSE;
         }
     }
+	/* Приватные функции */
+	private function open_json($path){
+            if(is_file($path)){
+                $lang_json_data = (string) file_get_contents($path);
+                if(strlen($lang_json_data) > 0){
+                    $lang_data = json_decode($lang_json_data, TRUE);
+                    if(is_array($lang_data)){
+                        return $lang_data;
+                    }
+                }
+            }
+        }
+	
     /* Пасхалки */
     public function __invoke($var){
         if (is_int($var)) {
