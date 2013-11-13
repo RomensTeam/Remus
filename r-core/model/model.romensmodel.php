@@ -40,11 +40,7 @@ class RomensModel {
         if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
             if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
                 // Форматируем "ru-RU" в "ru_RU"
-                if(strlen($lang)===5){
-                    if(substr($lang, 2,1)==='-' || substr($lang, 2,1)=='_'){
-                        $lang = str_replace('-','_',$lang);
-                    }
-                }
+                $lang = str_replace('-','_',$lang);
                 // Получение локализации
                 $lang_file = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
                 if(is_file($lang_file)){
