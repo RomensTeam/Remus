@@ -10,9 +10,6 @@ if (!defined('DIR')) {
  * @version 1.2
  */
 
-# Необходимые директивы
-    define('HTML',TRUE);
-    define('NONE',FALSE);
 
 class RomensModel {
     public $registr;
@@ -58,7 +55,7 @@ class RomensModel {
     public function start_html_app($meta){
         if(defined('CHARSET')){
                 header('Content-Type: text/html; charset=' . strtolower(CHARSET));
-            }
+        }
         $this->view = new RomensViewHTML($this);
         $this->view->head = array_merge($this->view->head, $meta);
     }
