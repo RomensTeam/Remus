@@ -110,11 +110,15 @@ class RomensModel {
         $buffer = $this->view->render();
         $array = $this->app_lang;
         # Блоки
-        preg_match_all(VIEW_BLOCK_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
-        foreach($all[1] as $value) {
-            $block_path = _filter($this->registr['dir_theme'] . VIEW_BLOCK_TAG_FOLDER . _DS . strtolower($value) . '.tpl');
-            $block = @file_get_contents($block_path);
-            $buffer = str_replace(VIEW_TAG_START . VIEW_BLOCK_TAG_NAME . $value . VIEW_TAG_END , $block, $buffer);
+        while(true){
+            preg_match_all(VIEW_BLOCK_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
+            if(count($all[1])>0){
+                foreach($all[1] as $value) {
+                    $block_path = _filter($this->registr['dir_theme'] . VIEW_BLOCK_TAG_FOLDER . _DS . $value . '.tpl');
+                    $block = @file_get_contents($block_path);
+                    $buffer = str_replace(VIEW_TAG_START . VIEW_BLOCK_TAG_NAME . $value . VIEW_TAG_END , $block, $buffer);
+                }
+            }else{break;}
         }
         # Ключи
         preg_match_all(VIEW_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
