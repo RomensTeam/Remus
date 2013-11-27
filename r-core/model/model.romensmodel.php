@@ -32,7 +32,8 @@ class RomensModel {
 	$lang = ($lang==FALSE)? 'LANG': $lang;
         if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
             if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
-                if($library=FALSE){
+                $lang = str_replace('-', '_', $lang);
+                if($library == FALSE){
                     $path = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
                     $this->app_lang = $this->open_json($path);
                 }
@@ -107,24 +108,27 @@ class RomensModel {
         $buffer = $this->view->render();
         $array = $this->app_lang;
         # Блоки
-        while(true){
+        while (true){
             preg_match_all(VIEW_BLOCK_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
+               if(count($all[1])>0){
+                    foreach($all[1] as $value) {
+                        $block_path = _filter($this->registr['dir_theme'] . VIEW_BLOCK_TAG_FOLDER . _DS . strtolower($value) . '.tpl');
+                        $block = @file_get_contents($block_path);
+                        $buffer = str_replace(VIEW_TAG_START . VIEW_BLOCK_TAG_NAME . $value . VIEW_TAG_END , $block, $buffer);
+                    }
+               }else{break;}
+                }
+            
+        # Ключи
+        while(true){
+            preg_match_all(VIEW_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
             if(count($all[1])>0){
                 foreach($all[1] as $value) {
-                    $block_path = _filter($this->registr['dir_theme'] . VIEW_BLOCK_TAG_FOLDER . _DS . $value . '.tpl');
-                    $block = @file_get_contents($block_path);
-                    $buffer = str_replace(VIEW_TAG_START . VIEW_BLOCK_TAG_NAME . $value . VIEW_TAG_END , $block, $buffer);
+                    $buffer = str_replace(VIEW_TAG_START . $value . VIEW_TAG_END, $array[strtolower($value)], $buffer);
                 }
+                echo 'Perfect<br>';
             }else{break;}
-        }
-        # Ключи
-        for ($i = 0; $i < 3; $i++) {
-            preg_match_all(VIEW_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
-            if(count($all[1])>0){break;}
-            foreach($all[1] as $value) {
-                $buffer = str_replace(VIEW_TAG_START . $value . VIEW_TAG_END, $array[strtolower($value)], $buffer);
             }
-        }
         $this->buffer = $buffer;
     }
     public function pattern($name=null){
