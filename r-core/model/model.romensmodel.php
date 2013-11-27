@@ -126,7 +126,6 @@ class RomensModel {
                 foreach($all[1] as $value) {
                     $buffer = str_replace(VIEW_TAG_START . $value . VIEW_TAG_END, $array[strtolower($value)], $buffer);
                 }
-                echo 'Perfect<br>';
             }else{break;}
             }
         $this->buffer = $buffer;
