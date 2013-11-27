@@ -118,9 +118,12 @@ class RomensModel {
             }else{break;}
         }
         # Ключи
-        preg_match_all(VIEW_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
-        foreach($all[1] as $value) {
-            $buffer = str_replace(VIEW_TAG_START . $value . VIEW_TAG_END, $array[strtolower($value)], $buffer);
+        for ($i = 0; $i < 3; $i++) {
+            preg_match_all(VIEW_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
+            if(count($all[1])>0){break;}
+            foreach($all[1] as $value) {
+                $buffer = str_replace(VIEW_TAG_START . $value . VIEW_TAG_END, $array[strtolower($value)], $buffer);
+            }
         }
         $this->buffer = $buffer;
     }
