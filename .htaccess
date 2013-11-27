@@ -1,4 +1,7 @@
 Options All -ExecCGI -Indexes -Includes +FollowSymLinks
+
+Redirect /style /r-app/r-style
+
 # ЧПУ
 <IfModule mod_rewrite.c>
     RewriteEngine on
@@ -16,8 +19,6 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
   php_value     session.name                romens_engine_session
   php_value	max_execution_time          200
 </ifModule>
-
-Redirect /style /r-app/r-style
 
 <Files "\.(tpl|html)$">
 deny from all
