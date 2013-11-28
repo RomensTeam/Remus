@@ -1,6 +1,6 @@
 <?
 if(!defined('DIR')){exit();} // Защита
-$romens->app_lang('ru-RU'); // Этот модуль включает в себя Многоязычность приложения
+$lang = $romens->app_lang('ru-RU'); // Этот модуль включает в себя Многоязычность приложения
 $romens->setLayout('index2'); // Выбираем страницу INDEX из темы
     // Прописываем META
     $site_meta['title']         = $lang['index_title'];

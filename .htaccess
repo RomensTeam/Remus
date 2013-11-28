@@ -3,10 +3,10 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 <IfModule mod_rewrite.c>
     RewriteEngine on
     RewriteBase /
-	RewriteRule ^style(.*)$ /r-app/r-style$1
+    RewriteRule ^style(.*)$ /r-app/r-style$1
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ ./index.php
+    RewriteRule ^(.*)$ ./index.php [L]
 	#RewriteEngine on
 	#RewriteRule !^(favicon\.ico|favicon\.png|robots\.txt|humans\.txt|sitemap\.xml|sitemap\.xml\.tgz) index.php [L]
 </IfModule>
@@ -17,6 +17,8 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
   php_value     session.name                romens_engine_session
   php_value	max_execution_time          200
 </ifModule>
+
+Redirect /style /r-app/r-style
 
 <Files "\.(tpl|html)$">
 deny from all
