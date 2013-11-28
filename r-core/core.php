@@ -47,6 +47,8 @@ if (CheckFlag('APP_VIEW_JSON')) {
 }
 if (CheckFlag('APP_VIEW_HTML')) {
     $controller->load_view(APP_VIEW_HTML);
+    $view = APP_VIEW_HTML;
+    $romens->view = new $view($romens);
 }
 
 # Start
@@ -61,7 +63,7 @@ include DIR_APP.'config.php';
 # Подключаем роутер
 if(is_file(DIR_CORE_MODULE.'router.php')){
     if(ROUTER === 'DYNAMIC'){
-        include_once DIR_SETTINGS.'routing.php';
+        include_once DIR_SETTINGS.'router.php';
     }
     include DIR_CORE_MODULE.'router.php';
 }

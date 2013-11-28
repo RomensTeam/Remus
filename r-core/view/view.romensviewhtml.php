@@ -68,7 +68,13 @@ class RomensViewHTML {
     }
     public function render(){
         $this->generateHead();
-        $melinda = '<!doctype html><html><head>'.$this->head_string.'</head><body>'.file_get_contents($this->model->registr['layout']).'</body>'.$this->end_string.'</html>';
+        $melinda = 
+                '<!doctype html><html><head>'.
+                $this->head_string.'</head><body>'.
+                file_get_contents($this->model->registr['layout']).
+                '</body>'.
+                $this->end_string.
+                '</html>';
         return $melinda;
     }
 }

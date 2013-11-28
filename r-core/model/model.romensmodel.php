@@ -30,6 +30,9 @@ class RomensModel {
     /* Настройки языка */
     public function app_lang($lang = FALSE,$library = FALSE){
 	$lang = ($lang==FALSE)? 'LANG': $lang;
+        $this->var_app(array(
+            'lang'=>$lang
+        ));
         if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
             if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
                 $lang = str_replace('-', '_', $lang);
@@ -57,7 +60,6 @@ class RomensModel {
         if(defined('CHARSET')){
                 header('Content-Type: text/html; charset=' . strtolower(CHARSET));
         }
-        $this->view = new RomensViewHTML($this);
         $this->view->head = array_merge($this->view->head, $meta);
     }
     public function end_html_app(){
@@ -137,22 +139,49 @@ class RomensModel {
         $this->app_lang = array_merge($this->app_lang, $var);
     }
     public function addScript($script, $link = FALSE){
+        if(is_array($script)){
+            if ($link == FALSE) {
+                $this->view->js[] = array_merge($this->view->js,$script);
+            } else {
+                $this->view->js_link[] = array_merge($this->view->js_link,$script);
+            }
+        }
         if ($link == FALSE) {
             $this->view->js[] = $script;
         } else {
             $this->view->js_link[] = $script;
         }
+        return $this;
     }
     public function addStyle($style, $link = FALSE){
+        if(is_array($style)){
+            if ($link == FALSE) {
+                $this->view->css = array_merge($this->view->css,$style);
+            } else {
+                $this->view->css_link = array_merge($this->view->css,$style);
+            }
+        }
         if ($link == FALSE) {
             $this->view->css[] = $style;
         } else {
             $this->view->css_link[] = $style;
         }
+        return $this;
     }
     public function addComponent($component){return 0;}
     public function addToHead($string){
+        if(is_array($string)){
+            $string = implode('', $string);
+        }
         $this->view->head_string.= $string;
+        return $this;
+    }
+    public function addToEnd($string){
+        if(is_array($string)){
+            $string = implode('', $string);
+        }
+        $this->view->end_string.= $string;
+        return $this;
     }
     public function setTheme($theme_name){
         $n = DIR_THEMES . $theme_name . _DS;
