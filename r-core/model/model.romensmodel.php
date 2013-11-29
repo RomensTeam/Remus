@@ -15,8 +15,10 @@ class RomensModel {
     public $registr;
     public $lang; // Фразы фреймворка
     public $app_lang = array();
+    public $var_app = array();
     public $view;
     public $base;
+    public $routing_matches;
     public $buffer; // Буффер
     public $layout;
     public $base_list;
@@ -108,7 +110,7 @@ class RomensModel {
     /* Взаимодействие с View */
     public function render(){
         $buffer = $this->view->render();
-        $array = $this->app_lang;
+        $array = array_merge($this->app_lang,$this->var_app);
         # Блоки
         while (true){
             preg_match_all(VIEW_BLOCK_TAG_PATTERN, $buffer, $all); // Получаем все доступные в странице ключей
@@ -136,7 +138,7 @@ class RomensModel {
         return VIEW_TAG_START.strtoupper($name).VIEW_TAG_END;
     }
     public function var_app($var = array()){
-        $this->app_lang = array_merge($this->app_lang, $var);
+        $this->var_app = array_merge($this->var_app, $var);
     }
     public function addScript($script, $link = FALSE){
         if(is_array($script)){
