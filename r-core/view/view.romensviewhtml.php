@@ -71,9 +71,9 @@ class RomensViewHTML {
         $melinda = 
                 '<!doctype html><html><head>'.
                 $this->head_string.'</head><body>'.
-                file_get_contents($this->model->registr['layout']).
-                '</body>'.
+                file_get_contents($this->model->registr['layout_file']).
                 $this->end_string.
+                '</body>'.
                 '</html>';
         return $melinda;
     }
