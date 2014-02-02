@@ -1,19 +1,20 @@
 <?
 /* Делаем роутинг */
 if(defined('ROUTER') && (ROUTER === 'DYNAMIC' || ROUTER === 'STATIC')){
-    $uri = str_replace('?'.$_SERVER['QUERY_STRING'],'', $_SERVER['REQUEST_URI']);
+    define('URI', str_replace('?'.$_SERVER['QUERY_STRING'],'', $_SERVER['REQUEST_URI']));
     if(ROUTER == 'DYNAMIC'){
         # Когда URI равен '/' то это значит что это index'ная страница
-        if($uri == '/'){
+        if(URI == '/'){
             define('ROUTING_STATUS',TRUE);
             $router_file = DIR_APP_PAGE.'index.php';
             include _filter($router_file);
         }
         else{
-            if(isset($uri)){
+            if(URI){
                 define('REDIRECT_URL',substr($uri,1));
-                foreach ($app as $key => $value){
-                    if(preg_match($key,REDIRECT_URL)){
+                print_var($routing_rules,'Правила роутинга');
+                foreach ($routing_rules as $key => $value){
+                    if(preg_match($key,REDIRECT_URL,$romens->routing_matches)){
                         $router_file = DIR_APP_PAGE.$value;
                         $regexp_url = '/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i';
                         # Отправка по ссылке

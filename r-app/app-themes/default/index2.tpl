@@ -26,7 +26,7 @@
       <div class="jumbotron">
         <h1 class="text-center">Hello, INTERNET!</h1>
         <p class="text-center">Engine&nbsp;<span style="line-height: 1.4; color: inherit;">Version:{[VERSION]}</span></p>
-        <p></p>
+        <p>{[MY_TEXT]}</p>
       </div>
     </div>
     <div class="container">
@@ -51,7 +51,7 @@
       </div>
       <hr>
       <footer>
-        <p>&copy; Company 2013</p>
+        <p>&copy; Company {[COPYRIGHT]}</p>
       </footer>
     </div>
     <!-- /container -->

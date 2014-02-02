@@ -1,16 +1,33 @@
 <?
 if(!defined('DIR')){exit();} // Защита
-$lang = $romens->app_lang('ru-RU'); // Этот модуль включает в себя Многоязычность приложения
-$romens->setLayout('index2'); // Выбираем страницу INDEX из темы
-    // Прописываем META
-    $site_meta['title']         = $lang['index_title'];
-    $site_meta['description']   = $lang['index_description'];
-    $site_meta['keywords']      = $lang['index_keywords'];
-$romens->start_html_app($site_meta);
-$romens->addToHead('<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">');
-$romens->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
-$array = array(
-    'version'=>VERSION
-);
-$romens->var_app($array); // Добавление переменных
-$romens->render(); // Загрузка шаблона, рендеринг и отправка данных.
+
+class IndexController extends AppController {
+    
+    public function Start(){
+        $this->model->app_lang('ru-RU');
+        $this->model->setLayout('index2');
+        $this->StartApp();
+        $this->addStyles();
+        $array = array(
+            'version'=>VERSION,
+            'copyright'=>'2013 - '.$this->model->pattern('this_year')
+        );
+        if(TEST_MODE){
+            $array['copyright'] .= ' <span class="label label-info">Запущщено в безопасном режиме</span>';
+        }
+        $this->model->var_app($array);
+        $this->model->render();
+    }
+    
+    public function StartApp() {
+        $site_meta['title']         = $this->model->app_lang['index_title'];
+        $site_meta['description']   = $this->model->app_lang['index_description'];
+        $site_meta['keywords']      = $this->model->app_lang['index_keywords'];
+        $this->model->start_html_app($site_meta);
+    }
+    
+    public function addStyles() {
+        $this->model->addToHead('<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">');
+        $this->model->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
+    }
+}

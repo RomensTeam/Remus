@@ -26,6 +26,7 @@ foreach ($directory as $key => $value) {
 include DIR_CORE.'core.php';
 
 if(defined('TEST_MODE_ON') || TEST_MODE){
-    if(defined('TEST_MODE_OFF')){exit();}
-    print_var(sprintf($romens->lang['test_time_script'],microtime(true)-$time_start));
+    if(!defined('TEST_MODE_OFF')){
+        print_var(sprintf($romens->lang['test_time_script'],microtime(true)-$time_start),$romens->lang['test_time_name']);
+    }
 }

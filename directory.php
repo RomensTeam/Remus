@@ -13,5 +13,6 @@ $directory = array(
     'DIR_APP_PAGE'      =>  'r-app/app-page',
     'DIR_THEMES'        =>  'r-app/app-themes',
     'DIR_CORE_MODULE'   =>  'r-core/core_module',
-    'DIR_INTERFACE'     =>  'r-app/lib/interface'
+    'DIR_INTERFACE'     =>  'r-app/lib/interface',
+    'DIR_DEFAULT'       =>  'r-core/core_module/def_set',
 );
