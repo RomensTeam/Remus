@@ -5,7 +5,7 @@ if(defined('ROUTER') && ROUTER == 'DYNAMIC2'){
     define('NO_INDEX',  FALSE);
     define('INDEX',     TRUE);
     
-    // Подключаем AppController и правила роутингаф
+    // Подключаем AppController и правила роутинга
     require_once DIR_LIB.'appcontroller.php';
     include _filter(DIR_SETTINGS.'routing.php');
     
@@ -16,6 +16,7 @@ if(defined('ROUTER') && ROUTER == 'DYNAMIC2'){
             foreach ($Settings as $num => $value) {
                 if(preg_match($value, URI,$controller->routing_matches)){
                     $controller->run_app($AppController,NO_INDEX);
+					break;
                 }
             }
         }

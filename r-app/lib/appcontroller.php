@@ -7,7 +7,7 @@ class AppController extends Regisrtry {
     public function __construct($controller,$model,$view) {
         $this->view = $view;
         $this->model = $model;
-        $this->controller = $model;
+        $this->controller = $controller;
     }
 }
 ?>

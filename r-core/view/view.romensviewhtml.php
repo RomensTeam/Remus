@@ -10,7 +10,8 @@ if (!defined('DIR')) {
  * @todo Доделать компоненты
  */
 class RomensViewHTML {
-    public $model; # Model
+    public $controller;
+    public $model;
     public $css_link = array(); # Ссылки к CSS файлам
     public $css = array(); # CSS код
     public $js = array(); # Добавляющийся в шапку JavaScript код
@@ -21,9 +22,6 @@ class RomensViewHTML {
     public $head_string;
     public $end_string;
     public $all_key; # все доступные в странице ключей
-    public function __construct($model) {
-        $this->model = $model;
-    }
     public function generateHead(){
         foreach($this->head as $key => $value) {
             if ($key == 'keywords' || $key == 'description' || $key == 'author' || $key == 'robots' || $key == 'url') {

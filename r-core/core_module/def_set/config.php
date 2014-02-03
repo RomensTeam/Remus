@@ -45,3 +45,9 @@ foreach ($flag as $key => $value) {
         define($key,$value);
     }
 }
+
+# Определяем защищённые
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && !defined('URLS') && defined('URL')){
+    define('URLS',  str_replace('http://', 'https://', URL));
+    define('HTTPS', TRUE);
+}

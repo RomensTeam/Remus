@@ -16,13 +16,13 @@ class RomensModel {
     public $lang; // Фразы фреймворка
     public $app_lang = array();
     public $var_app = array();
-    public $view;
     public $base;
-    public $routing_matches;
     public $buffer; // Буффер
     public $layout;
     public $pfc_status;
     public $base_list;
+    public $view;
+    public $controller;
     /* Начало класса */
     public function __construct(){
         # Подключаем языковой пакет фреймворка 
@@ -34,28 +34,29 @@ class RomensModel {
 	$lang = ($lang==FALSE)? 'LANG': $lang;
         $lang = str_replace('-', '_', $lang);
         $this->registr['lang'] = $lang;
-        $this->app_lang = array_merge($this->app_lang,array(
+        $this->var_app(array(
             'lang'=>$lang
         ));
         if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
             if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
-                if($library == FALSE){
-                    $path = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
-                    $this->registr['app_lang_date'][] = filemtime($path);
-                    $app_lang = $this->open_json($path);
-                    $this->app_lang = array_merge($this->app_lang,$app_lang);
+                
+                # По умолчанию
+                $path = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
+                if(is_file($path)){
+                    $this->app_lang = $this->open_json($path);
                 }
-                else{
+                
+                if($library <> FALSE){
                     if(is_string($library)){
                         $library = explode(',', $library);
                     }
-                    foreach ($library as $lib) {
+                    foreach ($library as $lib){
                         $path = DIR_APP_LANG.$lang._DS.APP_LANG_PREFIX.$lib.'.'.APP_LANG_EXT;
-                        $this->registr['app_lang_date'][] = filemtime($path);
-                        $app_lang = $this->open_json($path);
-                        $this->app_lang = array_merge($this->app_lang,$app_lang);
+                        if(is_file($path)){
+                            $app_lang = $this->open_json($path);
+                            $this->app_lang = array_merge($this->app_lang,$app_lang);
+                        }
                     }
-            
                 }
             }
         }
@@ -63,6 +64,7 @@ class RomensModel {
     }
     /* Управление приложением */
     public function start_html_app($meta,$pfc_keyword = null){
+        
         if(defined('CHARSET')){
                 header('Content-Type: text/html; charset=' . strtolower(CHARSET));
         }
@@ -323,15 +325,7 @@ class RomensModel {
         
 	
     /* Пасхалки */
-    public function __invoke($var){
-        if (is_int($var)) {
-            return 'Через ' . $var . ' минут я взорву твой компьютер! :-)';
-        }
-        if (is_string($var)) {
-            return ':-)';
-        }
-    }
     public function __toString(){
-        return 'Привет, я Romens-Engine!';
+        return 'RomensEngine.'.VERSION;
     }
 }

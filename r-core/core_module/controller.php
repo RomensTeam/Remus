@@ -1,55 +1,77 @@
 <?
 /**
- * Controller - главный контроллер
+ * Controller - РіР»Р°РІРЅС‹Р№ РєРѕРЅС‚СЂРѕР»Р»РµСЂ
  */
 
 class Controller extends Regisrtry {
-    # POST и GET данные
+    # POST Рё GET РґР°РЅРЅС‹Рµ
     public $input_data_get = array();
     public $input_data_post = array();
-    # MODEL и VIEW
+    # MODEL Рё VIEW
     public $model = NULL;
     public $view  = NULL;
-    # ERROR и Exception
+    #
+    public $routing_matches = NULL;
+    # ERROR Рё Exception
     public $message = array();
     
-    # Начало класса
+    # РќР°С‡Р°Р»Рѕ РєР»Р°СЃСЃР°
     public function __construct() {
-        # Определение POST и GET
+        # РћРїСЂРµРґРµР»РµРЅРёРµ POST Рё GET
         $this->input_data_get  = $_GET;
         $this->input_data_post = $_POST;
         
         return $this;
     }
-    # Управление приложением
+    # РЈРїСЂР°РІР»РµРЅРёРµ РїСЂРёР»РѕР¶РµРЅРёРµРј
     public function run_app($name_module){
         define('ROUTING_STATUS',TRUE);
-        $this->connect_file($name_module, DIR_APP_PAGE);
+        if(ROUTER == 'DYNAMIC2'){
+            $app = $this->get_app_info($name_module);
+            include _filter(DIR_APP_PAGE.$app['file']);
+            $Controller = $app['module'];
+            $AppController = new $Controller($this,$this->model,$this->view);
+            $AppController->$app['method']();
+        }
         return $this;
     }
-    # Управление MODEL и VIEW
-    public function load_model($model_name) {
-        $this->connect_file('model.'.strtolower($model_name).'.php', DIR_MODEL);
+    public function get_app_info($name_module){
+        include DIR_SETTINGS.'routing.php';
+        include DIR_DEFAULT.'ParentController.php';
+        $app = $routing_rules[$name_module];
+        if(!isset($app['module'])){
+            $app['module'] = $name_module;
+        }
+        return array_merge($ParrentController,$app);
+    }
+    # РЈРїСЂР°РІР»РµРЅРёРµ MODEL Рё VIEW
+    public function load_model($model_name){
+        $this->connect_file('model.'.strtolower($model_name), DIR_MODEL);
+		$this->model = new $model_name();
         return $this;
     }
     public function load_view($view_name) {
-        $this->connect_file('view.'.strtolower($view_name).'.php', DIR_VIEW);
+        $this->connect_file('view.'.strtolower($view_name), DIR_VIEW);
+            $this->view = new $view_name();
         return $this;
     }
-    # Подключение библиотек
+    # РџРѕРґРєР»СЋС‡РµРЅРёРµ Р±РёР±Р»РёРѕС‚РµРє
     public function library($library_list) {
         return $this->connect_list_file($library_list, DIR_LIB);
     }
     public function devlib($devlibrary_list) {
         return $this->connect_list_file($devlibrary_list, DIR_CORE.'devlib'._DS);
     }
-    # Управление ошибками и исключениями
+    # РЈРїСЂР°РІР»РµРЅРёРµ РѕС€РёР±РєР°РјРё Рё РёСЃРєР»СЋС‡РµРЅРёСЏРјРё
     public function message() {
         return array_shift($this->message);
     }
-    # Мини функции
+    # РњРёРЅРё С„СѓРЅРєС†РёРё
     public function connect_file($value,$dir){
         $connect_file = $dir.$value;
+		if(substr($connect_file, -4) != '.php'){
+			$connect_file .= '.php';
+		}
         include_once _filter($connect_file);
         return $this;
     }

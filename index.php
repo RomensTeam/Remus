@@ -26,11 +26,11 @@
     }
 
 # Подключаем основу
-include DIR_CORE.'core.php';
+    include DIR_CORE.'core.php';
 
 # Конец работы фреймворка
-if(defined('TEST_MODE_ON') || TEST_MODE){
-    if(!defined('TEST_MODE_OFF')){
-        print_var(sprintf($romens->lang['test_time_script'],microtime(true)-$time_start),$romens->lang['test_time_name']);
+    if(defined('TEST_MODE_ON') || TEST_MODE){
+        if(!defined('TEST_MODE_OFF')){
+            print_var(sprintf($romens->lang['test_time_script'],microtime(true)-$time_start),$romens->lang['test_time_name']);
+        }
     }
-}
