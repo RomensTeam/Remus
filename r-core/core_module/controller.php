@@ -1,78 +1,63 @@
-NT ID="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
-  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../index-all.html"><FONT ID="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
-  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help-doc.html"><FONT ID="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
-  </TR>
-</TABLE>
-</TD>
-<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
-1.60.0</EM>
-</TD>
-</TR>
+<?
+/**
+ * Controller - главный контроллер
+ */
 
-<TR>
-<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../interbase/interclient/LockConflictException.html"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../interbase/interclient/ParameterConversionException.html"><B>NEXT CLASS</B></A></FONT></TD>
-<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-  <A HREF="../../index.html" TARGET="_top"><B>FRAMES</B></A>  &nbsp;
-&nbsp;<A HREF="OutOfMemoryException.html" TARGET="_top"><B>NO FRAMES</B></A></FONT></TD>
-</TR>
-<TR>
-<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY: &nbsp;INNER&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#methods_inherited_from_class_java.sql.SQLException">METHOD</A></FONT></TD>
-<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-DETAIL: &nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;METHOD</FONT></TD>
-</TR>
-</TABLE>
-<!-- =========== END OF NAVBAR =========== -->
-
-<HR>
-<!-- ======== START OF CLASS DATA ======== -->
-<H2>
-<FONT SIZE="-1">
-interbase.interclient</FONT>
-<BR>
-Class  OutOfMemoryException</H2>
-<PRE>
-<A HREF="http://java.sun.com/products/jdk/1.2/docs/api/java/lang/Object.html">java.lang.Object</A>
-  |
-  +--<A HREF="http://java.sun.com/products/jdk/1.2/docs/api/java/lang/Throwable.html">java.lang.Throwable</A>
-        |
-        +--<A HREF="http://java.sun.com/products/jdk/1.2/docs/api/java/lang/Exception.html">java.lang.Exception</A>
-              |
-              +--<A HREF="http://java.sun.com/products/jdk/1.2/docs/api/java/sql/SQLException.html">java.sql.SQLException</A>
-                    |
-                    +--interbase.interclient.SQLException
-                          |
-                          +--<B>interbase.interclient.OutOfMemoryException</B>
-</PRE>
-<HR>
-<DL>
-<DT>public final class <B>OutOfMemoryException</B><DT>extends interbase.interclient.SQLException</DL>
-
-<P>
-InterBase or InterServer host memory has been exhausted.
- <p>
- The error codes associated with this exception are
- <A HREF="../../interbase/interclient/ErrorCodes.html#outOfMemory"><CODE>ErrorCodes.outOfMemory</CODE></A> for driver generated bug checks,
- or isc_bufexh, isc_virmemexh from the ibase.h file for 
- an InterBase generated license error.
-<P>
-<DL>
-<DT><B>Since: </B><DD><font color=red>Extension, since InterClient 1.0</font></DD>
-<DT><B>See Also: </B><DD><A HREF="../../serialized-form.html#interbase.interclient.OutOfMemoryException">Serialized Form</A></DL>
-<HR>
-
-<P>
-<!-- ======== INNER CLASS SUMMARY ======== -->
-
-
-<!-- =========== FIELD SUMMARY =========== -->
-
-
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-
-
-<!-- ========== METHOD SUMMARY =========== -->
-
-<
+class Controller extends Regisrtry {
+    # POST и GET данные
+    public $input_data_get = array();
+    public $input_data_post = array();
+    # MODEL и VIEW
+    public $model = NULL;
+    public $view  = NULL;
+    # ERROR и Exception
+    public $message = array();
+    
+    # Начало класса
+    public function __construct() {
+        # Определение POST и GET
+        $this->input_data_get  = $_GET;
+        $this->input_data_post = $_POST;
+        
+        return $this;
+    }
+    # Управление приложением
+    public function run_app($name_module){
+        define('ROUTING_STATUS',TRUE);
+        $this->connect_file($name_module, DIR_APP_PAGE);
+        return $this;
+    }
+    # Управление MODEL и VIEW
+    public function load_model($model_name) {
+        $this->connect_file('model.'.strtolower($model_name).'.php', DIR_MODEL);
+        return $this;
+    }
+    public function load_view($view_name) {
+        $this->connect_file('view.'.strtolower($view_name).'.php', DIR_VIEW);
+        return $this;
+    }
+    # Подключение библиотек
+    public function library($library_list) {
+        return $this->connect_list_file($library_list, DIR_LIB);
+    }
+    public function devlib($devlibrary_list) {
+        return $this->connect_list_file($devlibrary_list, DIR_CORE.'devlib'._DS);
+    }
+    # Управление ошибками и исключениями
+    public function message() {
+        return array_shift($this->message);
+    }
+    # Мини функции
+    public function connect_file($value,$dir){
+        $connect_file = $dir.$value;
+        include_once _filter($connect_file);
+        return $this;
+    }
+    protected function connect_list_file($list,$dir) {
+        $list = (array) $list;
+        foreach ($list as $name) {
+            $this->connect_file($name, $dir);
+        }
+        return $this;
+    }
+}
