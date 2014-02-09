@@ -1,6 +1,6 @@
 <?
 $ParrentController = array(
     'module' => 'MyController',
-    'method' => 'run',
+    'method' => 'Start',
     'file'   => 'index.php'
 );

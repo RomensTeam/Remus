@@ -2,7 +2,7 @@
 if(!defined('DIR')){exit();}
 
 function _filter($path) {
-    $path = realpath(strtolower(str_replace('/', _DS, $path)));
+    $path = strtolower(str_replace('/', _DS, $path));
     if(is_file($path) || is_dir($path)){
         return (string) $path;
     }

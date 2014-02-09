@@ -27,6 +27,7 @@ if(defined('ROUTER') && ROUTER == 'DYNAMIC2'){
             foreach ($regexp as $value) {
                 if(preg_match($value, URI, $controller->routing_matches)){
                     $controller->run_app($AppController,INDEX);
+					break;
                 }
             }
             

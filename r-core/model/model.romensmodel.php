@@ -22,6 +22,7 @@ class RomensModel {
     public $pfc_status;
     public $base_list;
     public $view;
+    public $site_meta;
     public $controller;
     /* Начало класса */
     public function __construct(){
@@ -39,25 +40,7 @@ class RomensModel {
         ));
         if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
             if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
-                
-                # По умолчанию
-                $path = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
-                if(is_file($path)){
-                    $this->app_lang = $this->open_json($path);
-                }
-                
-                if($library <> FALSE){
-                    if(is_string($library)){
-                        $library = explode(',', $library);
-                    }
-                    foreach ($library as $lib){
-                        $path = DIR_APP_LANG.$lang._DS.APP_LANG_PREFIX.$lib.'.'.APP_LANG_EXT;
-                        if(is_file($path)){
-                            $app_lang = $this->open_json($path);
-                            $this->app_lang = array_merge($this->app_lang,$app_lang);
-                        }
-                    }
-                }
+                include DIR_CORE_MODULE.'lang_format'._DS.'json.php';
             }
         }
         return $this->app_lang;
@@ -270,7 +253,7 @@ class RomensModel {
             return FALSE;
         }
     }
-    public function setLayout($layout_name){
+    public function setLayout($layout_name,$theme = null){
         $layout_path = $this->registr['dir_theme'] . $layout_name . '.tpl';
         if (is_file($layout_path) || !empty($layout_path)) {
             $this->registr['layout_file'] = $layout_path;

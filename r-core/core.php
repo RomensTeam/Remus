@@ -3,6 +3,7 @@
 if (!defined('VERSION')){exit();}
 # Тестовый режим
 error_reporting(E_ALL);
+
 if(defined('TEST_MODE')){
     if(!TEST_MODE){
         error_reporting(0);
@@ -19,6 +20,8 @@ if(defined('TEST_MODE')){
     include DIR_CORE_MODULE.'htaccess.php';
     # Регистр
     include DIR_CORE_MODULE.'regisrtry.php';
+    # Определение клиента
+    include DIR_CORE_MODULE.'identclient.php';
     # Контроллёр
     include DIR_CORE_MODULE.'controller.php';
 
@@ -70,13 +73,18 @@ include DIR_APP.'_start.php';
 include DIR_APP.'config.php';
 
 # Определяем парметр вызова
-$uri = str_replace('?'.filter_input(INPUT_SERVER, 'QUERY_STRING'),'', filter_input(INPUT_SERVER, 'REQUEST_URI'));
+if($_SERVER['REQUEST_URI']){
+	$uri = str_replace('?'.$_SERVER['QUERY_STRING'],'', $_SERVER['REQUEST_URI']);
+} else {
+	$uri = $_SERVER['REDIRECT_URL'];
+}
+
 @define('URI', substr($uri,1));
 
 $router = DIR_CORE_MODULE.'router/'.ROUTER.'.php';
 
 if(is_file($router)){
-    include _filter($router);
+    include $router;
     
     if(defined('ROUTING_STATUS') != TRUE){
         if(defined('NOT_ROUTING_FILE')){
