@@ -8,5 +8,4 @@ $site_meta = array(
     'favicon'=>URL.'favicon.ico',
     'preview-image'=>URL.'preview_image.png'
 );
-//$romens->addComponent('jquery');
-$romens->setTheme('default'); // Выбираем тему
+Controller::Model()->setTheme('default'); // Выбираем тему

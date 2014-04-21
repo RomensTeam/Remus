@@ -3,13 +3,15 @@
  * Controller - главный контроллер
  */
 
-class Controller extends Regisrtry {
+class Controller {
     # POST и GET данные
     public $input_data_get = array();
     public $input_data_post = array();
     # MODEL и VIEW
-    public $model = NULL;
-    public $view  = NULL;
+    private static $model = NULL;
+    private static $view  = NULL;
+    private static $controller  = NULL;
+    private static $registr  = NULL;
     #
     public $routing_matches = NULL;
     # ERROR и Exception
@@ -21,17 +23,43 @@ class Controller extends Regisrtry {
         $this->input_data_get  = $_GET;
         $this->input_data_post = $_POST;
         
+        self::$registr = new Regisrtry;
+        
         return $this;
+    }
+    # Реализация одиночки
+    public static function View() {
+        if ( empty(self::$view) ) {
+            self::$view = new View();
+        }
+        return self::$view;
+    }
+    public static function Model() {
+        if ( empty(self::$model) ) {
+            self::$model = new Model();
+        }
+        return self::$model;
+    }
+    
+    public static function Controller() {    // Возвращает единственный экземпляр класса. @return Singleton
+        if ( empty(self::$controller) ) {
+            self::$controller = new self();
+        }
+        return self::$controller;
     }
     # Управление приложением
     public function run_app($name_module){
         define('ROUTING_STATUS',TRUE);
         if(ROUTER == 'DYNAMIC2'){
             $app = $this->get_app_info($name_module);
-            include _filter(DIR_APP_PAGE.$app['file']);
-            $Controller = $app['module'];
-            $AppController = new $Controller($this,$this->model,$this->view);
-            $AppController->$app['method']();
+            include  _filter(DIR_APP_PAGE.$app['file']);
+            try {
+                $Controller = $app['module'];
+                $AppController = new $Controller();
+                $AppController->$app['method']();
+            } catch (Exception $exc) {
+                echo $exc->getTraceAsString();
+            }
         }
         return $this;
     }
@@ -46,14 +74,13 @@ class Controller extends Regisrtry {
     }
     # Управление MODEL и VIEW
     public function load_model($model_name){
-        $this->connect_file('model.'.strtolower($model_name), DIR_MODEL);
-		$this->model = new $model_name();
-        return $this;
+        $model = 'model.'.strtolower($model_name);
+        $this->connect_file($model, DIR_MODEL);
+            self::$model = new $model_name();
     }
     public function load_view($view_name) {
         $this->connect_file('view.'.strtolower($view_name), DIR_VIEW);
-            $this->view = new $view_name();
-        return $this;
+            self::$view = new $view_name();
     }
     # Подключение библиотек
     public function library($library_list) {
@@ -72,7 +99,7 @@ class Controller extends Regisrtry {
 		if(substr($connect_file, -4) != '.php'){
 			$connect_file .= '.php';
 		}
-        include_once _filter($connect_file);
+        include_once $connect_file;
         return $this;
     }
     protected function connect_list_file($list,$dir) {
@@ -81,5 +108,11 @@ class Controller extends Regisrtry {
             $this->connect_file($name, $dir);
         }
         return $this;
+    }
+    public static function __callStatic($name, $arguments = NULL){
+        if ( empty(self::$registr[$name]) ) {
+            self::$registr[$name] = new $name();
+        }
+        self::$registr[$name];
     }
 }

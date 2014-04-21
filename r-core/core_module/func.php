@@ -9,10 +9,10 @@ function _filter($path) {
 }
 function __autoload($class) {
     $file = DIR_LIB . strtolower($class) . '.php';
-    if (file_exists($file)) {
+    if (!file_exists($file)) {
         return false;
     }
-    include _filter($file);
+    include $file;
 }
 function CheckFlag($const = null) {
     return defined($const) && constant($const);

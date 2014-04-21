@@ -9,7 +9,7 @@ if (!defined('DIR')) {
  * @version 1.1
  * @todo Доделать компоненты
  */
-class RomensViewHTML {
+class View {
     public $controller;
     public $model;
     public $css_link = array(); # Ссылки к CSS файлам
@@ -72,7 +72,7 @@ class RomensViewHTML {
                 . '<head>'.
                 $this->head_string.
                 '</head><body>'.
-                file_get_contents($this->model->registr['layout_file']).
+                file_get_contents(Controller::Model()->registr['layout_file']).
                 '</body>'.
                 $this->end_string.
                 '</html>';

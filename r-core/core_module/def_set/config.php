@@ -26,8 +26,8 @@ $flag = array(
     'APP_LANG_PREFIX'=>'',
     'APP_LANG_PATTERN'=>'',
     'APP_LANG_EXT'=>'json',
-    'APP_VIEW_HTML'=>'RomensViewHTML',
-    'APP_MODEL'=>'RomensModel',
+    'APP_VIEW_HTML'=>'View',
+    'APP_MODEL'=>'Model',
     'SUPPORT_DEVELOPERS'=>TRUE,
     # Настройка обработчика View
     'VIEW_TAG_PATTERN'=>'/{\[([A-Z0-9_]+)\]\}/',

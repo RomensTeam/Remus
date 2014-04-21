@@ -11,7 +11,7 @@ if (!defined('DIR')) {
  */
 
 
-class RomensModel {
+class Model {
     public $registr;
     public $lang; // Фразы фреймворка
     public $app_lang = array();
@@ -51,7 +51,7 @@ class RomensModel {
         if(defined('CHARSET')){
                 header('Content-Type: text/html; charset=' . strtolower(CHARSET));
         }
-        $this->view->head = array_merge($this->view->head, $meta);
+        Controller::View()->head = array_merge(Controller::View()->head, $meta);
         if(CheckFlag('PRERENDER')){
             $this->registr['prerender_path'] = DIR_THEMES.'_'.$this->registr['theme_name']._DS;
             mkdir($this->registr['prerender_path']);
@@ -192,30 +192,30 @@ class RomensModel {
     public function addScript($script, $link = FALSE){
         if(is_array($script)){
             if ($link == FALSE) {
-                $this->view->js[] = array_merge($this->view->js,$script);
+                Controller::View()->js[] = array_merge(Controller::View()->js,$script);
             } else {
-                $this->view->js_link[] = array_merge($this->view->js_link,$script);
+                Controller::View()->js_link[] = array_merge(Controller::View()->js_link,$script);
             }
         }
         if ($link == FALSE) {
-            $this->view->js[] = $script;
+            Controller::View()->js[] = $script;
         } else {
-            $this->view->js_link[] = $script;
+            Controller::View()->js_link[] = $script;
         }
         return $this;
     }
     public function addStyle($style, $link = FALSE){
         if(is_array($style)){
             if ($link == FALSE) {
-                $this->view->css = array_merge($this->view->css,$style);
+                Controller::View()->css = array_merge(Controller::View()->css,$style);
             } else {
-                $this->view->css_link = array_merge($this->view->css,$style);
+                Controller::View()->css_link = array_merge(Controller::View()->css,$style);
             }
         }
         if ($link == FALSE) {
-            $this->view->css[] = $style;
+            Controller::View()->css[] = $style;
         } else {
-            $this->view->css_link[] = $style;
+            Controller::View()->css_link[] = $style;
         }
         return $this;
     }
@@ -224,14 +224,14 @@ class RomensModel {
         if(is_array($string)){
             $string = implode('', $string);
         }
-        $this->view->head_string.= $string;
+        Controller::View()->head_string.= $string;
         return $this;
     }
     public function addToEnd($string){
         if(is_array($string)){
             $string = implode('', $string);
         }
-        $this->view->end_string.= $string;
+        Controller::View()->end_string.= $string;
         return $this;
     }
     public function setTheme($theme_name){
@@ -267,7 +267,7 @@ class RomensModel {
     
     public function prerender() {
         if(TEST_MODE){echo 'Выполнен Пререндер';}
-            $buffer = $this->view->render();
+            $buffer = Controller::View()->render();
             $array = $this->app_lang;
             foreach ($array as $key => $value) {
                     $buffer = str_replace(VIEW_TAG_START.strtoupper($key).VIEW_TAG_END,$value, $buffer);
@@ -297,7 +297,7 @@ class RomensModel {
                 $path = $this->registr['cashe_file'];
                 $this->buffer = @file_get_contents($path);
             }else{
-                $this->buffer = $this->view->render();
+                $this->buffer = Controller::View()->render();
             }
         }
         

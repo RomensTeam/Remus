@@ -1,6 +1,8 @@
 <?
 # Защита
 if (!defined('VERSION')){exit();}
+# Start
+ob_start();
 # Тестовый режим
 error_reporting(E_ALL);
 
@@ -9,7 +11,7 @@ if(defined('TEST_MODE')){
         error_reporting(0);
     }
 }
-# Подключение модулей
+# Подключениеф модулей
     # Функции ядра
     include DIR_CORE_MODULE.'func.php';
     # Подключаем настройки
@@ -25,15 +27,12 @@ if(defined('TEST_MODE')){
     # Контроллёр
     include DIR_CORE_MODULE.'controller.php';
 
-# Включаем возможность краткого обращения
-define('R', 'romens',TRUE);   
-
 # Запускаем контроллер
-$controller = new Controller();
+new Controller();
 
 # Подключение библиотек с помощью Контроллера
 include_once DIR_SETTINGS.'library.php';
-$controller->library($library_list);
+Controller::Controller()->library($library_list);
 
 # print_var()
 if (CheckFlag('TEST_MODE')){
@@ -44,27 +43,12 @@ if (CheckFlag('TEST_MODE')){
 
 # MODEL
 if (CheckFlag('APP_MODEL')) {
-    $controller->load_model(APP_MODEL);
-    
-    if(CheckFlag('LOAD_MODEL')) {
-        $romens = $controller->model;
-    }
+    Controller::Controller()->load_model(APP_MODEL);
 }
-
 # VIEW
-if (CheckFlag('APP_VIEW_JSON')) {
-    $controller->load_view(APP_VIEW_JSON);
-}
 if (CheckFlag('APP_VIEW_HTML')) {
-    $controller->load_view(APP_VIEW_HTML);
+    Controller::Controller()->load_view(APP_VIEW_HTML);
 }
-
-# Start
-ob_start();
-
-#
-$controller->view->model = $controller->model;
-$controller->model->view = $controller->view;
 
 # Подключаем начальный файл приложения
 include DIR_APP.'_start.php';
