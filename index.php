@@ -35,9 +35,11 @@
     foreach ($directory as $key => $value) {
         if(!defined($key)){
             $value = realpath(DIR.$value)._DS;
-            if(is_dir($value)){
-		$key = 'DIR_'.strtoupper(str_replace(' ','_',$key));
-                @define($key, $value);
+            if($value != '\\'){
+                if(is_dir($value)){
+                    $key = 'DIR_'.strtoupper(str_replace(' ','_',$key));
+                    @define($key, $value);
+                }
             }
         }
     }
@@ -46,8 +48,8 @@
     include DIR_CORE.'core.php';
 
 # Конец работы фреймворка
-    if(defined('TEST_MODE_ON') || TEST_MODE){
-        if(!defined('TEST_MODE_OFF')){
-            print_var(sprintf(Controller::Model()->lang['test_time_script'],microtime(true)-$time_start),Controller::Model()->lang['test_time_name']);
-        }
+if(defined('TEST_MODE_ON') || TEST_MODE){
+    if(!defined('TEST_MODE_OFF')){
+        print_var(sprintf(Controller::Model()->lang['test_time_script'],microtime(true)-$time_start),Controller::Model()->lang['test_time_name']);
     }
+}

@@ -15,6 +15,7 @@ function __autoload($class) {
     include $file;
 }
 function CheckFlag($const = null) {
+    $const = strtoupper($const);
     return defined($const) && constant($const);
 }
 function TestModeOn() {

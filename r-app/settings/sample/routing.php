@@ -30,9 +30,9 @@ $routing_rules = array(
     /* 
      *  С обозначением индексов 
     */
-     'Login' => array(
+     'Index' => array(
         'regxp' => array(                   # Перечисление регулярных выражений в массиве
-            '/^(login)$/'
+            '/^(index)$/'
         ),
         'regexp'     => '/^(login)$/',      # Регулярное выражение в строке
         'module'    => 'LoginController',   # Класс-Контроллер

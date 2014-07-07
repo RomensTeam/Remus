@@ -11,24 +11,21 @@ if(defined('TEST_MODE')){
         error_reporting(0);
     }
 }
-# Подключениеф модулей
-    # Функции ядра
-    include DIR_CORE_MODULE.'func.php';
-    # Подключаем настройки
-    include DIR_SETTINGS.'config.php';
-    # Оптимизируем настройки
-    include DIR_DEFAULT.'config.php';
-    # HTACCESS-правки (см. докуоментацию)
-    include DIR_CORE_MODULE.'htaccess.php';
-    # Регистр
-    include DIR_CORE_MODULE.'regisrtry.php';
-    # Определение клиента
-    include DIR_CORE_MODULE.'identclient.php';
-    # Контроллёр
-    include DIR_CORE_MODULE.'controller.php';
+# Подключение модулей
+    include DIR_CORE_MODULE.'func.php';         # Функции ядра
+    include DIR_SETTINGS.'config.php';          # Подключаем настройки
+    include DIR_DEFAULT.'config.php';           # Оптимизируем настройки
+    include DIR_CORE_MODULE.'htaccess.php';     # HTACCESS-правки (см. докуоментацию)
+    include DIR_CORE_MODULE.'regisrtry.php';    # Регистр
+    include DIR_CORE_MODULE.'identclient.php';  # Определение клиента
+    include DIR_CORE_MODULE.'controller.php';   # Контроллёр
+
+# Включаем возможность краткого обращения
+define('R', 'romens', TRUE);   
 
 # Запускаем контроллер
 new Controller();
+
 
 # Подключение библиотек с помощью Контроллера
 include_once DIR_SETTINGS.'library.php';
@@ -45,9 +42,17 @@ if (CheckFlag('TEST_MODE')){
 if (CheckFlag('APP_MODEL')) {
     Controller::Controller()->load_model(APP_MODEL);
 }
+
 # VIEW
+if (CheckFlag('APP_VIEW_JSON')) {
+    Controller::Controller()->load_view(APP_VIEW_JSON);
+}
 if (CheckFlag('APP_VIEW_HTML')) {
     Controller::Controller()->load_view(APP_VIEW_HTML);
+}
+
+if(CheckFlag('FUNC_FUNNY')){
+    include DIR_CORE_MODULE.'funkfunny.php';
 }
 
 # Подключаем начальный файл приложения

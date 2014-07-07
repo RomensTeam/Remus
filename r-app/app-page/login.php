@@ -1,6 +1,6 @@
 <?
 
-class LoginController extends AppController {
+class LoginController{
     public function Start(){
         echo 'Hello_World';
     }

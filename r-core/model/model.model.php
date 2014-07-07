@@ -47,24 +47,10 @@ class Model {
     }
     /* Управление приложением */
     public function start_html_app($meta,$pfc_keyword = null){
-        
-        if(defined('CHARSET')){
-                header('Content-Type: text/html; charset=' . strtolower(CHARSET));
-        }
-        Controller::View()->head = array_merge(Controller::View()->head, $meta);
+        if(defined('CHARSET')){header('Content-Type: text/html; charset='.strtolower(CHARSET));}
+        Controller::View()->head($meta);
         if(CheckFlag('PRERENDER')){
-            $this->registr['prerender_path'] = DIR_THEMES.'_'.$this->registr['theme_name']._DS;
-            mkdir($this->registr['prerender_path']);
-            $this->registr['cashe_file'] = $this->registr['prerender_path'].$this->registr['layout'].'.'.$this->registr['lang'].'.html';
-
-            $cashe_time = filemtime($this->registr['cashe_file']);
-            if(!empty($this->registr['app_lang_date'])){
-                foreach ($this->registr['app_lang_date'] as $value) {
-                    if($cashe_time<$value){
-                        $this->prerender(); break;
-                    }
-                }
-            }      
+            $this->detect_prerender();
         }
         if(defined('PFC') && PFC && $pfc_keyword != null){
             $path = DIR_LIB.'phpfastcache'._DS.'phpfastcache.php';
@@ -103,45 +89,6 @@ class Model {
         return $this;
     }
     /* Работа с базой данных */
-    public function connect_base($base = NULL){
-        switch (strtolower(BASE_DRIVER)) {
-            case 'mysql':
-                $this->base = new RomensMYSQL($base);
-            break;
-            default:
-                exit($this->lang['error_base_driver']);
-            break;
-        }
-    }
-    public function change_base($base = NULL){
-        if (defined('BASE_BASE')) {
-            if (is_numeric($base)) {
-                $base = intval($base);
-                $n = explode(',', BASE_BASE);
-                if ($base == NULL) {
-                    if (count($n) == 1) {
-                        $base = $n[0];
-                        $this->base_list = $n[0];
-                    }
-                    if (count($n) > 1) {
-                        $base = $n[0];
-                        $this->base_list = $n;
-                    }
-                } else {
-                    if (count($n) == 1) {
-                        $base = $n[0];
-                        $this->base_list = $n[0];
-                    }
-                    if (count($n) > 1) {
-                        $base = $base - 1;
-                        $base = $n[$base];
-                        $this->base_list = $n;
-                    }
-                }
-            }
-        }
-        return $this->base->change_base($base);
-    }
     /* Взаимодействие с View */
     public function block_replace($buffer,$array) {
         for($io = 0; $io < 3; $io++){
@@ -267,13 +214,12 @@ class Model {
     
     public function prerender() {
         if(TEST_MODE){echo 'Выполнен Пререндер';}
-            $buffer = Controller::View()->render();
-            $array = $this->app_lang;
-            foreach ($array as $key => $value) {
-                    $buffer = str_replace(VIEW_TAG_START.strtoupper($key).VIEW_TAG_END,$value, $buffer);
-            }
-            $this->buffer = $buffer;
-        //$this->render(TRUE);
+        $buffer = Controller::View()->render();
+        $array = $this->app_lang;
+        foreach ($array as $key => $value) {
+                $buffer = str_replace(VIEW_TAG_START.strtoupper($key).VIEW_TAG_END,$value, $buffer);
+        }
+        $this->buffer = $buffer;
         $file = fopen($this->registr['cashe_file'], 'c');
         fwrite($file, $this->buffer);fclose($file);
         $this->buffer = null;
@@ -304,6 +250,20 @@ class Model {
         private function delAllKey() {
             preg_match_all(VIEW_TAG_PATTERN, $this->buffer, $all);
             foreach ($all[0] as $all){$this->buffer = str_replace($all, '', $this->buffer);}
+        }
+        
+        private function detect_prerender() {
+            $this->registr['prerender_path'] = DIR_THEMES.'_'.$this->registr['theme_name']._DS;
+            mkdir($this->registr['prerender_path']);
+            $this->registr['cashe_file'] = $this->registr['prerender_path'].$this->registr['layout'].'.'.$this->registr['lang'].'.html';
+            $cashe_time = filemtime($this->registr['cashe_file']);
+            if(!empty($this->registr['app_lang_date'])){
+                foreach ($this->registr['app_lang_date'] as $value) {
+                    if($cashe_time < $value){
+                        $this->prerender(); break;
+                    }
+                }
+            } 
         }
         
 	

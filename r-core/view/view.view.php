@@ -64,6 +64,9 @@ class View {
         }
         return TRUE;
     }
+    public function head($meta) {
+        $this->head = array_merge($this->head, $meta);
+    }
     public function render(){
         $this->generateHead();
         $melinda = 
