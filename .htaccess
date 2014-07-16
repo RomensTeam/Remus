@@ -1,12 +1,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine on
     RewriteBase /
-    RewriteRule ^style(.*)$ /r-app/r-style$1
+    RewriteRule ^style(.*)$ /r-app/app-style$1
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ ./index.php [L]
 </IfModule>
-Redirect /style /r-app/r-style
+Redirect /style /r-app/app-style
 
 AddDefaultCharset utf-8
 
