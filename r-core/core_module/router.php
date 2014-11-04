@@ -14,11 +14,11 @@ if(defined('ROUTER') && (ROUTER === 'DYNAMIC' || ROUTER === 'STATIC')){
                 define('REDIRECT_URL',substr($uri,1));
                 print_var($routing_rules,'Правила роутинга');
                 foreach ($routing_rules as $key => $value){
-                    if(preg_match($key,REDIRECT_URL,$romens->routing_matches)){
+                    if(preg_match($key,REDIRECT_URL,$remus->routing_matches)){
                         $router_file = DIR_APP_PAGE.$value;
                         $regexp_url = '/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i';
                         # Отправка по ссылке
-                        if(preg_match($regexp_url, $value,$romens->routing_matches)){
+                        if(preg_match($regexp_url, $value,$remus->routing_matches)){
                             header('Location: '.$value);
                             exit();
                         }

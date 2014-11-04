@@ -3,7 +3,7 @@ if (!defined('DIR')) {
     exit();
 }
 /**
- * Description of RomensView
+ * Description of View
  *
  * @author Romens
  * @version 1.1
@@ -38,7 +38,7 @@ class View {
             }
         }
         if(defined('SUPPORT_DEVELOPERS') && SUPPORT_DEVELOPERS == TRUE ){
-            $this->head_string.='<meta name="generator" content="Romens Engine PHP">';
+            $this->head_string.='<meta name="generator" content="Remus">';
         }
         foreach($this->css_link as $value){
             $this->head_string.='<link href="'.$value.'" rel="stylesheet" type="text/css">';

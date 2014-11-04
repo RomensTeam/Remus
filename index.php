@@ -28,7 +28,6 @@ $directory = array(
 foreach ($directory as $key => $value) {
 	if(!defined($key)){
 		$value = realpath(DIR.$value)._DS;
-		echo '<p>'.$value.'</p>';
 		if($value != '\\'){
 			if(is_dir($value)){
 				$key = 'DIR_'.strtoupper(str_replace(' ','_',$key));
@@ -38,12 +37,14 @@ foreach ($directory as $key => $value) {
 	}
 }
 
-# Подключаем основу
+# Подключаем ядро
     include DIR_CORE.'core.php';
 
 # Конец работы фреймворка
 if(defined('TEST_MODE_ON') || TEST_MODE){
     if(!defined('TEST_MODE_OFF')){
-        print_var(sprintf(Controller::Model()->lang['test_time_script'],microtime(true)-$time_start),Controller::Model()->lang['test_time_name']);
+		$string = sprintf(Controller::Model()->lang['test_time_script'],microtime(true)-$time_start);
+		$title = Controller::Model()->lang['test_time_name'];
+        print_var($string,$title);
     }
 }

@@ -5,11 +5,12 @@ class IndexController {
     
     public function Start(){
         Controller::Model()->app_lang('ru-RU');
-        Controller::Model()->setLayout('index2');
+        Controller::Model()->setLayout('index');
         $this->StartApp();
         $this->addStyles();
         $array = array(
             'version'=>VERSION,
+			'my_text'=>'Пользуйтесь на здоровье!',
             'copyright'=>'2013 - '.Controller::Model()->pattern('this_year')
         );
         if(TEST_MODE){

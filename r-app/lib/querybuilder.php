@@ -1,70 +1,287 @@
 <?
-
 /**
- * Description of querybuilder
- *
+ * QueryBuilder - Постройка запроса
+ * 
  * @author Romens
  */
-class SQLQueryBuilder {
+class QueryBuilder {
+    public $PDO;
+    public $SQL;
+    public $SET;
+    public $registr = array(
+        'column' => array(),
+        'set' => array(),
+        'param'  => array()
+    );
+    public $table;
+    public $column;
+    public $where;
+    public $limit;
+    public $count;
+    public $bind;
+    public $result;
+    public static $show = false;
+    public $operation = array(null);
+    public static $affected_rows;
+    public static $lastInsertID;
+
+    public function __construct(PDO $PDO = null) {
+        if($PDO == NULL){
+            $PDO = Controller::Model()->registr['PDO'];
+        }
+        $this->PDO = $PDO;
+    }
+    
+    public function from($nameTable) {
+        $this->table = $nameTable;
+        return $this;
+    }
+    public function where($string) {
+        if($this->where == NULL){
+            $this->where = 'WHERE '.$string.' ';
+        } else{
+            $this->where .= $string.' ';
+        }
+        return $this;
+    }
+    public function bind($mask,$value = null) {
+        if($value=== null and is_array($mask)){
+            $this->bind = array();
+            foreach ($mask as $key => $val) {
+                $this->bind[$key] = $val;  
+            }
+        } elseif ((is_string($mask) or is_numeric($mask)) and $value == null){
+            if(count($this->bind) < 1){
+                $this->bind[1] = $mask;
+            }
+            else {
+                $this->bind[] = $mask;
+            }
+        }
+        else{
+            $this->bind[$mask] = $value;
+        }
+        return $this;
+    }
+    public function limit($start,$number = null) {
+        $this->limit = 'LIMIT '.(int) $start;
         
-        /**
-         * SQL_Operators - операторы SQL
+        if($number != NULL){
+            $this->limit .= ' , '.(int) $number;
+        }
+        return $this;
+    }
+    public function select($column = '*') {
+        $this->reset();
+        $this->operation[0] = 'select';
+        $this->column($column);
+        $this->SQL = 'SELECT ';
+        return $this;
+    }
+    public function delete() {
+        /*
+         * DELETE FROM `Base`.`Projects` WHERE `projects`.`id` = 25
          */
-        public $SQL_Operators = array(
-            'SELECT',
-            'INSERT',
-            'DELETE',
-            'FROM',
-            'AS',
-            'DESC',
-            'ORDER BY',
-            'JOIN',
-            'INNER JOIN'
-        );
-        
-        public $SQL_Array;
-        
-        public $SQL_Table;
-        
-        public $SQL_TableNum;
-
-
-        public $SQL_Result;
-
-
-        public function select($table, $column = '*') {
-            $this->SQL_Result = 'SELECT '.$this->ArrayAsString($column).' FROM '.$this->Quotes($table);
-            return $this;
-        }
-        
-        public function where($parametr) {
-            $this->SQL_Result .= 'WHERE ';
-        }
-        
-        public function update() {
-            
-        }
-        
-        public function limit() {
-            
-        }
-        
-	private function ArrayAsString($array) {
-            if(is_array($array)){
-                $array = '`'.implode('`, `', $array).'`';
+        $this->reset();
+        $this->operation[0] = 'delete';
+        $this->SQL = 'DELETE ';
+        return $this;
+    }
+    
+    public function update($set_array) {
+        /*
+         * UPDATE  `Base`.`Projects` SET  `Status` =  '3' WHERE  `projects`.`id` =38;
+         */
+        $this->reset();
+        $this->operation[0] = 'update';
+        $this->SQL = 'UPDATE ';
+        $this->registr['set'] = $set_array;
+        return $this;
+    }
+    
+    public function SafeQuot($array) {
+        if(is_array($array)){
+            foreach ($array as $key => $value) {
+                $exit = $key.'`.`'.$value;
+                break;
             }
-            return $array;
         }
-        
-        private function Quotes($item) {
-            return '`'.$item.'`';
-        }
-		
-        
-        public function __toString() {
-            foreach ($this->SQL_Operators as $value) {
-                $this->sql = str_replace(strtolower($value), strtoupper($value), $this->sql);
+        if(is_string($array)){
+            $string = str_replace('.', '', $array);
+            if($array === $string){
+                $exit = $string;
+            } else {
+                $array = explode('.', $array);
+                if(count($array) == 2){
+                    $array = array($array[0]=>$array[1]);
+                } else{
+                    $exit = implode('`.`', $array);
+                }
             }
-            return $this->sql;
+        }
+        if(!isset($exit)){
+            foreach ($array as $key => $value) {
+                $exit = $key.'`.`'.$value;
+            }
+        }
+        return _quote($exit);
+    }
+    
+    private function column($column) {
+        if($column === '*') {
+            $this->column = $column;
+        }
+        else{
+            if(is_string($column)){
+                $column = explode(',',$column);
+            }
+            if(is_array($column)){
+                foreach ($column as $key => $value) {
+                    if(is_array($value)){
+                        $mors = array();
+                        foreach ($value as $col) {
+                            $mors[] = $key._quote().'.'._quote().$col;
+                        }
+                        $value = $mors;
+                    }
+                    $this->column = $value;
+                }
+            }
         }
     }
+    public function GetLastID() {
+        return $this->PDO->lastInsertId();
+    }
+    public function insert($record) {
+        $this->reset('insert');
+        $this->operation = array('insert'); 
+        $this->SQL = 'INSERT INTO ';
+        foreach ($record as $key => $value) {
+            $this->registr['column'][] = $key;
+            $this->registr['param'][]  = $value;
+        }
+        return $this;
+    }
+    public function reset($operation = NULL) {
+        if($operation <> NULL){
+            $this->operation = array($operation);
+        }
+        
+        $this->SQL      = NULL;
+        $this->table    = NULL;
+        $this->where    = NULL;
+        $this->limit    = NULL;
+        $this->count    = NULL;
+        $this->bind     = NULL;
+        $this->result   = NULL;
+        $this->registr['column']  = array();
+        $this->registr['param'] = array();
+        $this->registr['set'] = array();
+        $this->result   = NULL;
+        self::$affected_rows = NULL;
+        self::$lastInsertID = NULL;
+    }
+    private function getColumn(){
+        if(is_array($this->column)){
+            $this->column = array_map('_quote', $this->column);
+            $this->column = implode(',', $this->column);
+        }
+        if(is_string($this->column)){
+            return $this->column;
+        }
+    }
+    public function prepare(){
+        if($this->operation[0] == NULL){
+            $this->operation[0] = '';
+        }
+        switch ($this->operation[0]) {
+            case 'select':
+                $this->SQL.=
+                         $this->getColumn()
+                         .' FROM '._quote($this->table)
+                         .$this->where
+                         .$this->limit; break;
+
+            case 'delete':
+                $this->table = $this->SafeQuot($this->table);
+                $this->SQL.=
+                         ' FROM '.$this->table
+                         .$this->where; break;
+
+            case 'update':
+                $this->table = $this->SafeQuot($this->table);
+                $this->SQL.=   $this->table.' SET ';
+                $array = array();
+                foreach ($this->registr['set'] as $key => $value) {
+                    if(is_numeric($value)){
+                        $value = (int) $value;
+                    } else {
+                        $value = "'".(string) $value."'";
+                    }
+                    $array[] = $this->SafeQuot($key).' = '.$value;
+                }
+                $this->SQL.=   implode(', ',$array).' '.$this->where; break;
+                     
+            case 'insert':
+                $this->table = $this->SafeQuot($this->table);
+                $this->SQL .= ' '.$this->table.' '
+                         .'('.implode(',', array_map("_quote", $this->registr['column'])).')'
+                         .' VALUES '
+                         .'('.implode(',', array_map("_quoter", $this->registr['param'])).');'; break;
+        }
+        if(self::$show === true){
+            print_var($this->SQL,'SQL Code');
+        }
+        return $this;
+    }
+    public function execute() {
+        
+        $time = microtime(true);
+        $STH = $this->PDO->prepare($this->SQL);
+        
+        try {
+            if($this->operation[0] == 'select'){
+                if($this->bind <> null){
+                    foreach ($this->bind as $key => $value) {
+                        $STH->bindParam($key, $value);
+                    }
+                }
+                $STH->execute();
+                $STH->setFetchMode(PDO::FETCH_ASSOC);
+                $this->result = $STH->fetchAll();
+            } elseif (array_shift($this->operation) == NULL) {
+                $STH->execute();
+                $STH->setFetchMode(PDO::FETCH_ASSOC);
+                $this->result = $STH->fetchAll();
+            } else{
+                if($this->bind <> null){
+                    $STH->execute($this->bind);
+                } else{
+                    $STH->execute();
+                }
+                $this->result = $STH->rowCount();
+            }
+        } catch (PDOException $exc) {
+            echo $exc->getTraceAsString();
+        }
+        $time-Controller::Model()->registr['db_time'] += microtime(true)-$time;
+    }
+    
+    public function sql($sql) {
+        if($this->SQL != NULL){
+           $this->SQL .= $sql;
+        } else {
+            $this->SQL = $sql;
+        }
+    }
+        
+    public function result(){
+        $this->prepare();
+        $this->execute();
+        return $this->result;
+    }
+
+    public function __toString() {
+        return (string) $this->SQL;
+    }
+}

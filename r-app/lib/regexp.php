@@ -12,7 +12,7 @@ class RegExp {
         'email'=>'/^([0-9a-zA-Z]([-.w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-w]*[0-9a-zA-Z].)+[a-zA-Z]{2,9})$/si', // Email. Example: <i@phpmaster.com>
         'time'=>'/^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/si', // Time. Example: <24:03>
         'login'=>'/^([0-9a-zA-Z]([-.w]*[0-9a-zA-Z])$/', // Login. Example: <Romens>
-        'login_lower'=>'/^([0-9a-z]([-.w]*[0-9a-z])$/', // Login Lower. Example: <Romens>
+        'login_lower'=>'/^([0-9a-z]([-.w]*[0-9a-z])$/', // Login Lower. Example: <romens>
         'ip_address'=>'/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', // . <>
         'full_domen_name'=>'/^(http|https|ftp)://([A-Z0-9][A-Z0-9_-]*(?:.[A-Z0-9][A-Z0-9_-]*)+):?(d+)?/?/i' // Full Domen Name. Example: <http://romens.ru/>
     );

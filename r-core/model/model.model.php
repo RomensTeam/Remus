@@ -4,7 +4,7 @@ if (!defined('DIR')) {
     exit();
 }
 /**
- *  Класс Romens - Базовый класс
+ *  Класс Model - логика приложения
  *
  * @author Romens <romantrutnev@gmail.com>
  * @version 1.2
@@ -13,17 +13,29 @@ if (!defined('DIR')) {
 
 class Model {
     public $registr;
+	
     public $lang; // Фразы фреймворка
+	
     public $app_lang = array();
+	
     public $var_app = array();
+	
     public $base;
+	
     public $buffer; // Буффер
+	
     public $layout;
+	
     public $pfc_status;
+	
     public $base_list;
+	
     public $view;
+	
     public $site_meta;
+	
     public $controller;
+	
     /* Начало класса */
     public function __construct(){
         # Подключаем языковой пакет фреймворка 
@@ -56,7 +68,8 @@ class Model {
             $path = DIR_LIB.'phpfastcache'._DS.'phpfastcache.php';
             include_once _filter(DIR_LIB.'phpfastcache'._DS.'phpfastcache.php');
             $this->registr['pfc'] = new phpFastCache();
-            # Настройка
+            
+			# Настройка
             phpFastCache::setup('storage', PFC_STORAGE);
             phpFastCache::setup('path', PFC_PATH);
             phpFastCache::setup('key', PFC_KEY);
@@ -103,6 +116,7 @@ class Model {
         }
         return $buffer;
     }
+	
     public function render(){
         include _filter(DIR_DEFAULT.'var_app.php');
         $array = array_merge($default_settings,$this->app_lang,$this->var_app);
@@ -133,9 +147,11 @@ class Model {
     public function pattern($name=null){
         return VIEW_TAG_START.strtoupper($name).VIEW_TAG_END;
     }
+	
     public function var_app($var = array()){
         $this->var_app = array_merge($this->var_app, $var);
     }
+	
     public function addScript($script, $link = FALSE){
         if(is_array($script)){
             if ($link == FALSE) {
@@ -151,6 +167,7 @@ class Model {
         }
         return $this;
     }
+	
     public function addStyle($style, $link = FALSE){
         if(is_array($style)){
             if ($link == FALSE) {
@@ -166,7 +183,7 @@ class Model {
         }
         return $this;
     }
-    public function addComponent($component){return 0;}
+	
     public function addToHead($string){
         if(is_array($string)){
             $string = implode('', $string);
@@ -174,6 +191,7 @@ class Model {
         Controller::View()->head_string.= $string;
         return $this;
     }
+	
     public function addToEnd($string){
         if(is_array($string)){
             $string = implode('', $string);
@@ -181,6 +199,7 @@ class Model {
         Controller::View()->end_string.= $string;
         return $this;
     }
+	
     public function setTheme($theme_name){
         $n = DIR_THEMES . $theme_name . _DS;
         if (is_dir($n)) {
@@ -191,6 +210,7 @@ class Model {
             return FALSE;
         }
     }
+	
     public function getBlock($name){
         $block_path = _filter($this->registr['dir_theme'] . 'block' . _DS . strtolower($name) . '.tpl');
         if(is_file($block_path)){
@@ -200,15 +220,17 @@ class Model {
             return FALSE;
         }
     }
+	
     public function setLayout($layout_name,$theme = null){
         $layout_path = $this->registr['dir_theme'] . $layout_name . '.tpl';
-        if (is_file($layout_path) || !empty($layout_path)) {
+		
+        if (is_file($layout_path) and !empty($layout_path)) {
             $this->registr['layout_file'] = $layout_path;
             $this->registr['app_lang_date'][] = filemtime($layout_path);
             $this->registr['layout'] = $layout_name;
             return TRUE;
         } else {
-            return FALSE;
+			return FALSE;
         }
     }
     
@@ -269,6 +291,6 @@ class Model {
 	
     /* Пасхалки */
     public function __toString(){
-        return 'RomensEngine.'.VERSION;
+        return 'Remus.'.VERSION;
     }
 }

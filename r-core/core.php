@@ -15,13 +15,13 @@ if(defined('TEST_MODE')){
     include DIR_CORE_MODULE.'func.php';         # Функции ядра
     include DIR_SETTINGS.'config.php';          # Подключаем настройки
     include DIR_DEFAULT.'config.php';           # Оптимизируем настройки
-    include DIR_CORE_MODULE.'htaccess.php';     # HTACCESS-правки (см. докуоментацию)
-    include DIR_CORE_MODULE.'regisrtry.php';    # Регистр
+    include DIR_CORE_MODULE.'htaccess.php';     # HTACCESS-правки (см. документацию)
+    include DIR_CORE_MODULE.'Regisrtry.php';    # Регистр
     include DIR_CORE_MODULE.'identclient.php';  # Определение клиента
     include DIR_CORE_MODULE.'controller.php';   # Контроллёр
 
 # Включаем возможность краткого обращения
-define('R', 'romens', TRUE);   
+define('R', 'remus', TRUE);   
 
 # Запускаем контроллер
 new Controller();
