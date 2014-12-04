@@ -34,13 +34,16 @@ class Controller {
         }
         return self::$view;
     }
+    /**
+     * 
+     * @return Model Romens Model
+     */
     public static function Model() {
         if ( empty(self::$model) ) {
             self::$model = new Model();
         }
         return self::$model;
     }
-    
     public static function Controller() {    // Возвращает единственный экземпляр класса. @return Singleton
         if ( empty(self::$controller) ) {
             self::$controller = new self();
@@ -49,7 +52,7 @@ class Controller {
     }
     # Управление приложением
     public function run_app($name_module){
-        define('ROUTING_STATUS',TRUE);
+        @define('ROUTING_STATUS',TRUE);
         if(ROUTER == 'DYNAMIC2'){
             $app = $this->get_app_info($name_module);
             include  _filter(DIR_APP_PAGE.$app['file']);
@@ -63,6 +66,7 @@ class Controller {
         }
         return $this;
     }
+
     public function get_app_info($name_module){
         include DIR_SETTINGS.'routing.php';
         include DIR_DEFAULT.'ParentController.php';
@@ -74,9 +78,8 @@ class Controller {
     }
     # Управление MODEL и VIEW
     public function load_model($model_name){
-        $model = 'model.'.strtolower($model_name);
-        $this->connect_file($model, DIR_MODEL);
-            self::$model = new $model_name();
+        $this->connect_file('model.'.strtolower($model_name), DIR_MODEL);
+        self::$model = new $model_name();
     }
     public function load_view($view_name) {
         $this->connect_file('view.'.strtolower($view_name), DIR_VIEW);
@@ -84,6 +87,7 @@ class Controller {
     }
     # Подключение библиотек
     public function library($library_list) {
+        if($library_list === LIBRARY){include_once DIR_SETTINGS.'library.php';}
         return $this->connect_list_file($library_list, DIR_LIB);
     }
     public function devlib($devlibrary_list) {
@@ -99,7 +103,7 @@ class Controller {
 		if(substr($connect_file, -4) != '.php'){
 			$connect_file .= '.php';
 		}
-        include_once $connect_file;
+        include_once _filter($connect_file);
         return $this;
     }
     protected function connect_list_file($list,$dir) {

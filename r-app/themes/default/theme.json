@@ -1,0 +1,20 @@
+{
+    "name": "default",
+    "author": "Romens",
+    "version": 1.0,
+    "r_min_version": 0.2,
+    
+    "import_styles": true,
+    
+    "addToEndScriptLink": [
+        "http://code.jquery.com/jquery-2.0.3.min.js",
+        "https://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"
+    ],
+    "addStyleLink": [
+        "https://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/flatly/bootstrap.min.css",
+        "http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css"
+    ],
+    "addStyleLocal": [
+        "style.css"
+    ]
+}

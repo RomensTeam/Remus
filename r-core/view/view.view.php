@@ -3,15 +3,13 @@ if (!defined('DIR')) {
     exit();
 }
 /**
- * Description of View
+ * Description of RomensView
  *
  * @author Romens
  * @version 1.1
  * @todo Доделать компоненты
  */
 class View {
-    public $controller;
-    public $model;
     public $css_link = array(); # Ссылки к CSS файлам
     public $css = array(); # CSS код
     public $js = array(); # Добавляющийся в шапку JavaScript код
@@ -38,10 +36,12 @@ class View {
             }
         }
         if(defined('SUPPORT_DEVELOPERS') && SUPPORT_DEVELOPERS == TRUE ){
-            $this->head_string.='<meta name="generator" content="Remus">';
+            $this->head_string.='<meta name="generator" content="Romens Engine PHP">';
         }
         foreach($this->css_link as $value){
-            $this->head_string.='<link href="'.$value.'" rel="stylesheet" type="text/css">';
+            if(is_string($value)){
+               $this->head_string.='<link href="'.$value.'" rel="stylesheet" type="text/css">';
+            }
         }
         foreach($this->js_link as $value){
             $this->head_string.='<script type="text/javascript" src="'.$value.'"></script>';

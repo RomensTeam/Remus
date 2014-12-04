@@ -1,35 +1,32 @@
 <?
 # Защита
 if (!defined('VERSION')){exit();}
-# Start
+
 ob_start();
-# Тестовый режим
+
+# Активируем отладку 
 error_reporting(E_ALL);
 
-if(defined('TEST_MODE')){
-    if(!TEST_MODE){
-        error_reporting(0);
-    }
-}
+if(defined('TEST_MODE') && !TEST_MODE) error_reporting(0);
+
+
 # Подключение модулей
     include DIR_CORE_MODULE.'func.php';         # Функции ядра
     include DIR_SETTINGS.'config.php';          # Подключаем настройки
     include DIR_DEFAULT.'config.php';           # Оптимизируем настройки
-    include DIR_CORE_MODULE.'htaccess.php';     # HTACCESS-правки (см. документацию)
-    include DIR_CORE_MODULE.'Regisrtry.php';    # Регистр
+    include DIR_CORE_MODULE.'htaccess.php';     # HTACCESS-правки (см. докуоментацию)
+    include DIR_CORE_MODULE.'regisrtry.php';    # Регистр
     include DIR_CORE_MODULE.'identclient.php';  # Определение клиента
     include DIR_CORE_MODULE.'controller.php';   # Контроллёр
 
 # Включаем возможность краткого обращения
-define('R', 'remus', TRUE);   
+define('R', 'romens', TRUE);   
 
 # Запускаем контроллер
 new Controller();
 
-
 # Подключение библиотек с помощью Контроллера
-include_once DIR_SETTINGS.'library.php';
-Controller::Controller()->library($library_list);
+Controller::Controller()->library(LIBRARY);
 
 # print_var()
 if (CheckFlag('TEST_MODE')){
@@ -75,14 +72,11 @@ $router = DIR_CORE_MODULE.'router/'.ROUTER.'.php';
 if(is_file($router)){
     include $router;
     
-    if(defined('ROUTING_STATUS') != TRUE){
-        if(defined('NOT_ROUTING_FILE')){
-            include _filter(DIR_APP_PAGE.NOT_ROUTING_FILE);
-        }
-    }
+if( defined('ROUTING_STATUS') != TRUE && defined('NOT_ROUTING_FILE') ) include _filter(DIR_APP_PAGE.NOT_ROUTING_FILE);
+    
 }
 
-# Подключаем конечный файл приложения
+# Подключаем конечный файл приложения при необходимости
 if(!defined('NO_END_APP')){
     include _filter(DIR_APP.'_end.php');
 }

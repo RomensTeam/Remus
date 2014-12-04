@@ -24,7 +24,13 @@ class QueryBuilder {
     public $operation = array(null);
     public static $affected_rows;
     public static $lastInsertID;
-
+	
+	/**
+	 *
+	 *
+	 * @param PDO $PDO
+	 * @return PDO
+	 */
     public function __construct(PDO $PDO = null) {
         if($PDO == NULL){
             $PDO = Controller::Model()->registr['PDO'];

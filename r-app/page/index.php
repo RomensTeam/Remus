@@ -4,17 +4,17 @@ if(!defined('DIR')){exit();} // Защита
 class IndexController {
     
     public function Start(){
-        Controller::Model()->app_lang('ru-RU');
-        Controller::Model()->setLayout('index');
+        M()->app_lang('ru-RU');
+        M()->setLayout('index2');
         $this->StartApp();
         $this->addStyles();
+
         $array = array(
             'version'=>VERSION,
-			'my_text'=>'Пользуйтесь на здоровье!',
-            'copyright'=>'2013 - '.Controller::Model()->pattern('this_year')
+            'copyright'=>'2013 - '.pattern('this_year')
         );
         if(TEST_MODE){
-            $array['copyright'] .= ' <span class="label label-info">Запущщено в безопасном режиме</span>';
+            $array['copyright'] .= ' <span class="label label-info">Запущено в безопасном режиме</span>';
         }
         Controller::Model()->var_app($array);
         Controller::Model()->render();

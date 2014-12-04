@@ -8,7 +8,7 @@
  * @author Roman Trutnev <romantrutnev@gmail.com>
  */
 class RegExp {
-    public $RegExp = array(
+    public static $RegExp = array(
         'email'=>'/^([0-9a-zA-Z]([-.w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-w]*[0-9a-zA-Z].)+[a-zA-Z]{2,9})$/si', // Email. Example: <i@phpmaster.com>
         'time'=>'/^([0-1][0-9]|[2][0-3]):([0-5][0-9])$/si', // Time. Example: <24:03>
         'login'=>'/^([0-9a-zA-Z]([-.w]*[0-9a-zA-Z])$/', // Login. Example: <Romens>
@@ -17,27 +17,27 @@ class RegExp {
         'full_domen_name'=>'/^(http|https|ftp)://([A-Z0-9][A-Z0-9_-]*(?:.[A-Z0-9][A-Z0-9_-]*)+):?(d+)?/?/i' // Full Domen Name. Example: <http://romens.ru/>
     );
     
-    public function __construct($regexp) {
-        $this->RegExp = $regexp;
+    public function __construct($regexp = NULL) {
+        if(!is_null($regexp))self::$RegExp = $regexp;
     }
     
-    public function addRegExp($regexp){
+    public static function addRegExp($regexp){
         if(is_array($regexp)){
-            $this->RegExp = array_merge($this->RegExp, $regexp);
+            self::$RegExp = array_merge(self::$RegExp, $regexp);
         }
         if(is_string($regexp)){
-            $this->RegExp[] = $regexp;
+            self::$RegExp[] = $regexp;
         }
     }
 
-    public function check($subject,$pattern){
-        return preg_match($this->RegExp[$pattern],$subject);
+    public static function check($subject,$pattern){
+        return preg_match(self::$RegExp[$pattern],$subject);
     }
-    public function replace($pattern, $replacement,$subject){
-        return preg_replace($this->RegExp[$pattern], $replacement, $subject);
+    public static function replace($pattern, $replacement,$subject){
+        return preg_replace(self::$RegExp[$pattern], $replacement, $subject);
     }
-    public function match_all($pattern, $subject, $matches = NULL){
-        return preg_match_all($this->RegExp[$pattern], $subject, $matches);
+    public static function match_all($pattern, $subject, $matches = NULL){
+        return preg_match_all(self::$RegExp[$pattern], $subject, $matches);
     }
 }
 ?>

@@ -13,7 +13,7 @@ $flag = array(
     'COMPRESS'=> FALSE,
     'CHARSET'=> 'UTF-8',
     'BASE_HOST'=>'localhost',
-    'BASE_PATH'=>'app/base/mybase.php',
+    'BASE_PATH'=>'r-app/base/mybase.php',
     'BASE_LOGIN'=> 'root',
     'BASE_PASS'=> '',
     'BASE_PREFIX'=> '',
@@ -28,10 +28,20 @@ $flag = array(
     'APP_LANG_EXT'=>'json',
     'APP_VIEW_HTML'=>'View',
     'APP_MODEL'=>'Model',
+    'LAYOUT_FOLDER'=>'page',
+    'THEME_FILE'=>'theme.json',
     'SUPPORT_DEVELOPERS'=>TRUE,
+    
+    # Предопределенные константы
+    'LIBRARY' => 2,
+    
     # Настройка обработчика View
     'VIEW_TAG_PATTERN'=>'/{\[([A-Z0-9_]+)\]\}/',
     'VIEW_BLOCK_TAG_PATTERN'=>'/{\[BLOCK_([A-Z0-9_]+)\]\}/',
+    
+    'FILL_TAG_PATTERN'=>'/\{\[(.*)\]\|\[([A-Z0-9_]+)\]\}/',
+    'FILL_ALTER_TAG_PATTERN'=>'???',
+    
     'VIEW_BLOCK_TAG_NAME'=>'BLOCK_',
     'VIEW_BLOCK_TAG_FOLDER'=>'block',
     'VIEW_EXP_FILE'=>'tpl',

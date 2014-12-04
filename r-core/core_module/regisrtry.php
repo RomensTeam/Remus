@@ -6,7 +6,10 @@ class Regisrtry {
         return $this->_data[$name] = $value;
     }
     public function __get($value) {
+        if(isset($this->_data[$value])){
         return $this->_data[$value];
+    }
+        return NULL;
     }
     public function __isset($name) {
         return isset($this->_data[$name]);
