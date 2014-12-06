@@ -62,3 +62,6 @@ function _quoter($string) {
     }
     return " '".$string."' ";
 }
+function pattern($name){
+	return Controller::Model()->pattern($name);
+}
