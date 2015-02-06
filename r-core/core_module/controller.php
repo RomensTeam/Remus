@@ -1,21 +1,53 @@
 <?
+
 /**
  * Controller - главный контроллер
+ * 
+ * @package RemusStandart
+ * @version 0.3
+ * @author Romens <romantrutnev@gmail.com>
  */
-
 class Controller {
-    # POST и GET данные
+    
+    /**
+     * @var array GET
+     */
     public $input_data_get = array();
+    
+    /**
+     * @var array POST
+     */
     public $input_data_post = array();
-    # MODEL и VIEW
+    
+    /**
+     * @var Model Модель
+     */
     private static $model = NULL;
+    
+    /**
+     * @var View Отоброжение
+     */
     private static $view  = NULL;
+    
+    /**
+     * @var Controller Контроллер
+     */
     private static $controller  = NULL;
-    private static $registr  = NULL;
-    #
+    
+    /**
+     * @var array Совпадения с регулярным выражением
+     */
     public $routing_matches = NULL;
-    # ERROR и Exception
-    public $message = array();
+    
+    /**
+     * @var array Маршрутизатор
+     */
+    public $routing = array();
+    
+    /**
+     * @var array Языковой пакет фреймворка
+     */
+    public $lang = array();
     
     # Начало класса
     public function __construct() {
@@ -23,11 +55,19 @@ class Controller {
         $this->input_data_get  = $_GET;
         $this->input_data_post = $_POST;
         
-        self::$registr = new Regisrtry;
+        # Подключаем языковой пакет фреймворка 
+        $lang = _filter(DIR_CORE.'lang'._DS.  substr(strtolower(LANG),0,2).'.php');
+        if(!empty($lang)){
+            include $lang;
+            $this->lang = $_LANG;
+        }
         
         return $this;
     }
-    # Реализация одиночки
+    
+    /**
+     * @return View
+     */
     public static function View() {
         if ( empty(self::$view) ) {
             self::$view = new View();
@@ -35,8 +75,7 @@ class Controller {
         return self::$view;
     }
     /**
-     * 
-     * @return Model Romens Model
+     * @return Model
      */
     public static function Model() {
         if ( empty(self::$model) ) {
@@ -44,6 +83,9 @@ class Controller {
         }
         return self::$model;
     }
+    /**
+     * @return Controller
+     */
     public static function Controller() {    // Возвращает единственный экземпляр класса. @return Singleton
         if ( empty(self::$controller) ) {
             self::$controller = new self();
@@ -52,29 +94,45 @@ class Controller {
     }
     # Управление приложением
     public function run_app($name_module){
-        @define('ROUTING_STATUS',TRUE);
+        @define('ROUTING_STATUS', TRUE);
         if(ROUTER == 'DYNAMIC2'){
             $app = $this->get_app_info($name_module);
+            
             include  _filter(DIR_APP_PAGE.$app['file']);
-            try {
-                $Controller = $app['module'];
-                $AppController = new $Controller();
-                $AppController->$app['method']();
-            } catch (Exception $exc) {
-                echo $exc->getTraceAsString();
+            
+            $Controller = $app['module'];
+            
+            if (class_exists($Controller, true)) {
+                $AppController  = new $Controller($name_module);
+            } else {
+                throw new RemusException('Not Controller app');
             }
+            
+            $AppController  = new $Controller($name_module);
+            
+            if(isset($app['method']) and  method_exists($AppController, $app['method'])){
+                $AppController->$app['method']();
+            }
+            
+            $AppController = null;
         }
         return $this;
     }
 
     public function get_app_info($name_module){
-        include DIR_SETTINGS.'routing.php';
-        include DIR_DEFAULT.'ParentController.php';
-        $app = $routing_rules[$name_module];
+        $app = Controller::Controller()->routing[$name_module];
         if(!isset($app['module'])){
             $app['module'] = $name_module;
         }
-        return array_merge($ParrentController,$app);
+        if(!isset($app['file'])){
+            
+            if(file_exists(DIR_APP_PAGE.$name_module.'.php')){
+                $app['file'] = $name_module.'.php';
+            } else {
+                $app['file'] = strtolower($name_module).'.php';
+            }
+        }
+        return $app;
     }
     # Управление MODEL и VIEW
     public function load_model($model_name){
@@ -98,7 +156,7 @@ class Controller {
         return array_shift($this->message);
     }
     # Мини функции
-    public function connect_file($value,$dir){
+    public function connect_file($value,$dir = DIR){
         $connect_file = $dir.$value;
 		if(substr($connect_file, -4) != '.php'){
 			$connect_file .= '.php';

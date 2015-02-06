@@ -1,20 +1,25 @@
 <?
 class Regisrtry {
-    protected $_data = array();
+    protected static $_data = array();
     
-    public function __set($name, $value) {
-        return $this->_data[$name] = $value;
+    public static function setVar($name, $value) {
+        return self::$_data[$name] = $value;
     }
-    public function __get($value) {
-        if(isset($this->_data[$value])){
-        return $this->_data[$value];
-    }
+    public static function getVar($value = null) {
+        if(!is_null($value)){
+            if(isset(self::$_data[$value])){
+                return self::$_data[$value];
+            }
+        } else {
+            return self::$_data;
+        }
+        
         return NULL;
     }
-    public function __isset($name) {
-        return isset($this->_data[$name]);
+    public static function issetVar($name) {
+        return isset(self::$_data[$name]);
     }
-    public function __unset($param) {
-        unset($this->_data[$param]);
+    public static function unsetVar($param) {
+        unset(self::$_data[$param]);
     }
 }

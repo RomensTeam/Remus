@@ -1,16 +1,15 @@
 <IfModule mod_rewrite.c>
     RewriteEngine on
-    RewriteBase /
-    RewriteRule ^style(.*)$ /r-app/app-style$1
+    RewriteBase   /
+    RewriteRule ^style\/(.*)$ /r-app/style\/$1 [L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ ./index.php [L]
 </IfModule>
-Redirect /style /r-app/app-style
 
 AddDefaultCharset utf-8
 
 <ifModule mod_php.c>
-  php_value	upload_max_filesize	32M
-  php_value     session.auto_start      1
+  php_value		upload_max_filesize	 32M
+  php_value     session.auto_start   1
 </ifModule>

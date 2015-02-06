@@ -7,23 +7,30 @@ ob_start();
 # Активируем отладку 
 error_reporting(E_ALL);
 
-if(defined('TEST_MODE') && !TEST_MODE) error_reporting(0);
+if(defined('TEST_MODE') && !TEST_MODE) {error_reporting(0);}
 
 
 # Подключение модулей
-    include DIR_CORE_MODULE.'func.php';         # Функции ядра
-    include DIR_SETTINGS.'config.php';          # Подключаем настройки
-    include DIR_DEFAULT.'config.php';           # Оптимизируем настройки
-    include DIR_CORE_MODULE.'htaccess.php';     # HTACCESS-правки (см. докуоментацию)
-    include DIR_CORE_MODULE.'regisrtry.php';    # Регистр
-    include DIR_CORE_MODULE.'identclient.php';  # Определение клиента
-    include DIR_CORE_MODULE.'controller.php';   # Контроллёр
+    @include DIR_CORE_MODULE.'func.php';        # Функции ядра
+    @include DIR_SETTINGS.'config.php';         # Подключаем настройки
+    @include DIR_DEFAULT.'config.php';          # Оптимизируем настройки
+    @include DIR_CORE_MODULE.'htaccess.php';    # HTACCESS-правки (см. докуоментацию)
+    @include DIR_CORE_MODULE.'regisrtry.php';   # Регистр
+    @include DIR_CORE_MODULE.'identclient.php'; # Определение клиента
+    @include DIR_CORE_MODULE.'controller.php';  # Контроллёр
+    @include DIR_CORE_MODULE.'Exception.php';   # Исключения
+    @include DIR_CORE_MODULE.'theme.php';   	# Класс Тем
+    @include DIR_CORE_MODULE.'route.php';   	# Роутер
 
-# Включаем возможность краткого обращения
-define('R', 'romens', TRUE);   
+/**
+ * Включаем возможность краткого обращения
+ * 
+ * Example: ${R}
+ */
+define('R', 'remus', TRUE);   
 
 # Запускаем контроллер
-new Controller();
+${R} = new Controller();
 
 # Подключение библиотек с помощью Контроллера
 Controller::Controller()->library(LIBRARY);
@@ -32,7 +39,7 @@ Controller::Controller()->library(LIBRARY);
 if (CheckFlag('TEST_MODE')){
     include _filter(DIR_CORE.'devlib/print_var.php');
 }   else{
-    function print_var($var){}
+    function print_var($var = null,$var2= null){}
 }
 
 # MODEL
@@ -41,15 +48,12 @@ if (CheckFlag('APP_MODEL')) {
 }
 
 # VIEW
-if (CheckFlag('APP_VIEW_JSON')) {
-    Controller::Controller()->load_view(APP_VIEW_JSON);
-}
 if (CheckFlag('APP_VIEW_HTML')) {
     Controller::Controller()->load_view(APP_VIEW_HTML);
 }
 
 if(CheckFlag('FUNC_FUNNY')){
-    include DIR_CORE_MODULE.'funkfunny.php';
+    include DIR_CORE_MODULE.'funcfunny.php';
 }
 
 # Подключаем начальный файл приложения
@@ -72,11 +76,25 @@ $router = DIR_CORE_MODULE.'router/'.ROUTER.'.php';
 if(is_file($router)){
     include $router;
     
-if( defined('ROUTING_STATUS') != TRUE && defined('NOT_ROUTING_FILE') ) include _filter(DIR_APP_PAGE.NOT_ROUTING_FILE);
-    
+    if( defined('ROUTING_STATUS') != TRUE && defined('NOT_ROUTING_FILE') ) 
+    {
+        include _filter(DIR_APP_PAGE.NOT_ROUTING_FILE);
+    }
 }
 
 # Подключаем конечный файл приложения при необходимости
 if(!defined('NO_END_APP')){
     include _filter(DIR_APP.'_end.php');
+}
+
+# Конец работы фреймворка
+if(defined('TEST_MODE_ON') || TEST_MODE){
+    if(!defined('TEST_MODE_OFF')){
+        
+        $time   = sprintf(lang('test_time_script'), microtime(true)-$time_start);
+        $memory = sprintf(lang('memory_time_script'), memory_get_usage());
+        
+        print_var(array($time,$memory), lang('test_time_name'));
+        
+    }
 }

@@ -9,7 +9,7 @@ if(defined('ROUTER') && ROUTER == 'DYNAMIC'){
                 $router_file = DIR_APP_PAGE.$value;
                 $regexp_url = '/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i';
                 # Отправка по ссылке
-                if(preg_match($regexp_url, $value,$romens->routing_matches)){
+                if(preg_match($regexp_url, $value,${R}->routing_matches)){
                     header('Location: '.$value);
                     exit;
                 }

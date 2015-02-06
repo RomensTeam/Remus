@@ -1,0 +1,33 @@
+{
+    "name": "romensteam/remus",
+    "version": "0.3.0",
+    "description": "Simple PHP framework",
+    "keywords": ["framework"],
+    "homepage":"http://romensteam.github.io/remus/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name"     : "Roman Trutnev",
+            "email"    : "romantrutnev@gmail.com",
+            "homepage" : "http://romens.ru/",
+            "role"     : "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "r-app/lib/"
+        },
+        "psr-0": {
+            "": "r-app/lib/"
+        }
+    },
+    "support": {
+        "email"  : "romantrutnev@gmail.com",
+        "issues" : "https://github.com/RomensTeam/Remus/issues",
+        "wiki" 	 : "https://github.com/RomensTeam/Remus/wiki"
+    },
+    "minimum-stability": "stable"
+}

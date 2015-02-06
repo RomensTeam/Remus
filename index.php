@@ -3,7 +3,7 @@
     $time_start = microtime(true);
 
 # Определение версии
-    define('VERSION', '0.2');
+    define('VERSION', '0.3');
 
 # Определение версии PHP
     if (version_compare(phpversion(),'5.3.0','<')){
@@ -21,13 +21,13 @@
         'APP'           =>  'r-app',
         'CORE'          =>  'r-core',
         'LIB'           =>  'r-app/lib',
+        'APP_LANG'      =>  'r-app/lang',
+        'APP_PAGE'      =>  'r-app/page',
         'VIEW'          =>  'r-core/view',
         'THEMES'        =>  'r-app/themes',
         'MODEL'         =>  'r-core/model',
+        'DEV_LIB'       =>  'r-core/devlib',
         'SETTINGS'      =>  'r-app/settings',
-        'APP_LANG'      =>  'r-app/lang',
-        'APP_PAGE'      =>  'r-app/page',
-        'THEMES'        =>  'r-app/themes',
         'CORE_MODULE'   =>  'r-core/core_module',
         'INTERFACE'     =>  'r-app/lib/interface',
         'DEFAULT'       =>  'r-core/core_module/def_set',
@@ -47,10 +47,3 @@
 
 # Подключаем основу
     include DIR_CORE.'core.php';
-
-# Конец работы фреймворка
-if(defined('TEST_MODE_ON') || TEST_MODE){
-    if(!defined('TEST_MODE_OFF')){
-        print_var(sprintf(Controller::Model()->lang['test_time_script'],microtime(true)-$time_start),Controller::Model()->lang['test_time_name']);
-    }
-}

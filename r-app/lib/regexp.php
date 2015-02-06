@@ -3,7 +3,7 @@
  * RegExp - библиотека регулярных выражений
  * 
  * @category Library
- * @package RomensEngineStandartLibrary
+ * @package RemusStandartLibrary
  * @version 1.0 Mini
  * @author Roman Trutnev <romantrutnev@gmail.com>
  */
