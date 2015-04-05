@@ -1,4 +1,4 @@
-<?
+<?php
 if(!defined('DIR')){exit();} // Защита
 
 class Index {
@@ -25,6 +25,7 @@ class Index {
                 array('SECRET' => 'Remus?')
             );
         }
+        
         
         M()->var_app($array);
         M()->render();

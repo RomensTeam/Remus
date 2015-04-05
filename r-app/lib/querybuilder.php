@@ -270,7 +270,9 @@ class QueryBuilder {
         } catch (PDOException $exc) {
             echo $exc->getTraceAsString();
         }
-        $time-Controller::Model()->registr['db_time'] += microtime(true)-$time;
+        if(isset(Controller::Model()->registr['db_time'])){
+            Controller::Model()->registr['db_time'] += microtime(true)-$time;
+        }
     }
     
     public function sql($sql) {
