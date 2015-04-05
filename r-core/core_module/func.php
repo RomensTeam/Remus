@@ -103,15 +103,15 @@ function _quoter($string) {
  * Преобразовыввает строку в шаблон 
  */
 function pattern($name=null, $block = false){
-    return Controller::Model()->pattern($name, $block);
+    return Remus::Model()->pattern($name, $block);
 }
 
 /**
  * Короткий доступ к фразам фреймворка
  */
 function lang($name){
-    if(isset(Controller::Controller()->lang[$name])){
-        return Controller::Controller()->lang[$name];
+    if(isset(Remus()->lang[$name])){
+        return Remus()->lang[$name];
     }
     return NULL;
 }
@@ -120,8 +120,8 @@ function lang($name){
  * Короткий доступ к фразам приложения
  */
 function app_lang($name){
-    if(isset(Controller::Model()->app_lang[$name])){
-        return Controller::Model()->app_lang[$name];
+    if(isset(Remus::Model()->app_lang[$name])){
+        return Remus::Model()->app_lang[$name];
     }
     return NULL;
 }
@@ -130,6 +130,6 @@ function app_lang($name){
  * Короткий доступ к переменным приложения
  */
 function var_app($var = NULL, $value = NULL){
-    return Controller::Model()->var_app($var, $value);
+    return Remus::Model()->var_app($var, $value);
 }
 

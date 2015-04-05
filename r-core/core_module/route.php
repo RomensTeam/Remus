@@ -41,12 +41,12 @@ class Route {
             }
         }
         
-        Controller::Controller()->routing[$name] = $router;
+        Remus()->routing[$name] = $router;
         return true;
     }
     
     public static function addFullRule($name, $array) {
-        Controller::Controller()->routing[$name] = $array;
+        Remus()->routing[$name] = $array;
         return true;
     }
 }

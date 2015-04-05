@@ -17,7 +17,7 @@ if(defined('TEST_MODE') && !TEST_MODE) {error_reporting(0);}
     @include DIR_CORE_MODULE.'htaccess.php';    # HTACCESS-правки (см. докуоментацию)
     @include DIR_CORE_MODULE.'regisrtry.php';   # Регистр
     @include DIR_CORE_MODULE.'identclient.php'; # Определение клиента
-    @include DIR_CORE_MODULE.'controller.php';  # Контроллёр
+    @include DIR_CORE_MODULE.'remus.php';       # Контроллер
     @include DIR_CORE_MODULE.'Exception.php';   # Исключения
     @include DIR_CORE_MODULE.'theme.php';   	# Класс Тем
     @include DIR_CORE_MODULE.'route.php';   	# Роутер
@@ -30,10 +30,10 @@ if(defined('TEST_MODE') && !TEST_MODE) {error_reporting(0);}
 define('R', 'remus', TRUE);   
 
 # Запускаем контроллер
-${R} = new Controller();
+${R} = new Remus();
 
 # Подключение библиотек с помощью Контроллера
-Controller::Controller()->library(LIBRARY);
+${R}->library(LIBRARY);
 
 # print_var()
 if (CheckFlag('TEST_MODE')){
@@ -44,12 +44,12 @@ if (CheckFlag('TEST_MODE')){
 
 # MODEL
 if (CheckFlag('APP_MODEL')) {
-    Controller::Controller()->load_model(APP_MODEL);
+    ${R}->load_model(APP_MODEL);
 }
 
 # VIEW
 if (CheckFlag('APP_VIEW_HTML')) {
-    Controller::Controller()->load_view(APP_VIEW_HTML);
+    ${R}->load_view(APP_VIEW_HTML);
 }
 
 if(CheckFlag('FUNC_FUNNY')){

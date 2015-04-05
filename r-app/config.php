@@ -8,5 +8,5 @@ $site_meta = array(
     'favicon'       => URL.'favicon.ico',
     'preview-image' => URL.'preview_image.png'
 );
-Controller::View()->head($site_meta);
-Controller::Model()->setTheme('default'); // Выбираем тему
+Remus::View()->head($site_meta);
+Remus::Model()->setTheme('default'); // Выбираем тему

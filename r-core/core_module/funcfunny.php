@@ -6,12 +6,12 @@
 function M($param = NULL,$value = NULL){
     if($param != null){
         if($value != NULL){
-            return Controller::Model()->{$param} = $value;
+            return Remus::Model()->{$param} = $value;
         }else{
-            return Controller::Model()->{$param};
+            return Remus::Model()->{$param};
         }
     }
-    return Controller::Model();
+    return Remus::Model();
 }
 
 /**
@@ -20,12 +20,12 @@ function M($param = NULL,$value = NULL){
 function V($param = NULL,$value = NULL){
     if($param != null){
         if($value != NULL){
-            return Controller::View()->{$param} = $value;
+            return Remus::View()->{$param} = $value;
         }else{
-            return Controller::View()->{$param};
+            return Remus::View()->{$param};
         }
     }
-    return Controller::View();
+    return Remus::View();
 }
 
 /**
@@ -34,10 +34,10 @@ function V($param = NULL,$value = NULL){
 function C($param = NULL,$value = NULL){
     if($param != null){
         if($value != NULL){
-            return Controller::Controller()->{$param} = $value;
+            return Remus()->{$param} = $value;
         }else{
-            return Controller::Controller()->{$param};
+            return Remus()->{$param};
         }
     }
-    return Controller::Controller();
+    return Remus();
 }

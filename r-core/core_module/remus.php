@@ -7,7 +7,7 @@
  * @version 0.3
  * @author Romens <romantrutnev@gmail.com>
  */
-class Controller {
+class Remus {
     
     /**
      * @var array GET
@@ -30,7 +30,7 @@ class Controller {
     private static $view  = NULL;
     
     /**
-     * @var Controller Контроллер
+     * @var Remus Контроллер
      */
     private static $controller  = NULL;
     
@@ -84,9 +84,9 @@ class Controller {
         return self::$model;
     }
     /**
-     * @return Controller
+     * @return Remus
      */
-    public static function Controller() {    // Возвращает единственный экземпляр класса. @return Singleton
+    public static function Remus() {    // Возвращает единственный экземпляр класса. @return Singleton
         if ( empty(self::$controller) ) {
             self::$controller = new self();
         }
@@ -118,7 +118,7 @@ class Controller {
     }
 
     public function get_app_info($name_module){
-        $app = Controller::Controller()->routing[$name_module];
+        $app = Remus()->routing[$name_module];
         if(!isset($app['module'])){
             $app['module'] = $name_module;
         }
@@ -169,10 +169,8 @@ class Controller {
         }
         return $this;
     }
-    public static function __callStatic($name, $arguments = NULL){
-        if ( empty(self::$registr[$name]) ) {
-            self::$registr[$name] = new $name();
-        }
-        self::$registr[$name];
-    }
+}
+
+function Remus() {
+    return Remus::Remus();
 }

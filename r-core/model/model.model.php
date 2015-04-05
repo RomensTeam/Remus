@@ -40,7 +40,7 @@ class Model {
         if(defined('CHARSET')){
                 header('Content-Type: text/html; charset=' . strtolower(CHARSET));
         }
-        Controller::View()->meta = array_merge(Controller::View()->meta,$meta);
+        Remus::View()->meta = array_merge(Remus::View()->meta,$meta);
         return $this;
     }
     public function end_html_app($keyword = null,$time = null){
@@ -61,9 +61,9 @@ class Model {
         $array = array_merge($default_settings,$this->app_lang,$this->var_app);
         $array = array_change_key_case($array, CASE_LOWER);
 
-        Controller::View()->setData($array);
+        Remus::View()->setData($array);
 
-        $this->buffer = Controller::View()->render();
+        $this->buffer = Remus::View()->render();
     }
 
     public function pattern($name=null, $block = false){
@@ -82,30 +82,30 @@ class Model {
     public function addScript($script, $link = FALSE){
         if(is_array($script)){
             if ($link == FALSE) {
-                Controller::View()->js[] = array_merge(Controller::View()->js,$script);
+                Remus::View()->js[] = array_merge(Remus::View()->js,$script);
             } else {
-                Controller::View()->js_link[] = array_merge(Controller::View()->js_link,$script);
+                Remus::View()->js_link[] = array_merge(Remus::View()->js_link,$script);
             }
         }
         if ($link == FALSE) {
-            Controller::View()->js[] = $script;
+            Remus::View()->js[] = $script;
         } else {
-            Controller::View()->js_link[] = $script;
+            Remus::View()->js_link[] = $script;
         }
         return $this;
     }
     public function addStyle($style, $link = FALSE){
         if(is_array($style)){
             if ($link == FALSE) {
-                Controller::View()->css = array_merge(Controller::View()->css,$style);
+                Remus::View()->css = array_merge(Remus::View()->css,$style);
             } else {
-                Controller::View()->css_link = array_merge(Controller::View()->css,$style);
+                Remus::View()->css_link = array_merge(Remus::View()->css,$style);
             }
         }
         if ($link == FALSE) {
-            Controller::View()->css[] = $style;
+            Remus::View()->css[] = $style;
         } else {
-            Controller::View()->css_link[] = $style;
+            Remus::View()->css_link[] = $style;
         }
         return $this;
     }
@@ -113,18 +113,18 @@ class Model {
         if(is_array($string)){
             $string = implode('', $string);
         }
-        Controller::View()->head_string.= $string;
+        Remus::View()->head_string.= $string;
         return $this;
     }
     public function addToEnd($string){
         if(is_array($string)){
             $string = implode('', $string);
         }
-        Controller::View()->end_string.= $string;
+        Remus::View()->end_string.= $string;
         return $this;
     }
     public function setTheme($theme_name){
-        return Controller::View()->setTheme($theme_name);
+        return Remus::View()->setTheme($theme_name);
     }
     public function getBlock($name){
         $block_path = _filter(RE_Theme::$dir_theme . 'block' . _DS . strtolower($name) . '.tpl');
@@ -136,7 +136,7 @@ class Model {
         }
     }
     public function setLayout($layout_name,$theme = null){
-      return Controller::View()->setLayout($layout_name,$theme);
+      return Remus::View()->setLayout($layout_name,$theme);
     }
     public function connect(){
         

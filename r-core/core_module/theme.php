@@ -42,18 +42,18 @@ class RE_Theme {
                 case 'addStyleLocal':
                     foreach ($value as $values) {
                         $url = URL.'style/'.$values;
-                        Controller::Model()->addStyle($url,true);
+                        Remus::Model()->addStyle($url,true);
                     }
                     break;
                 case 'addStyleLink':
                     foreach ($value as $values) {
-                        Controller::Model()->addStyle($values,true);
+                        Remus::Model()->addStyle($values,true);
                     }
                     break;    
 
                 case 'addToEndScriptLink':
                     foreach ($value as $values) {
-                        Controller::Model()->addToEnd('<script src="'.$values.'" type="text/javascript"></script>');
+                        Remus::Model()->addToEnd('<script src="'.$values.'" type="text/javascript"></script>');
                     }
                     break;
             }
