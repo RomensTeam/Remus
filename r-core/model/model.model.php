@@ -15,10 +15,11 @@ class Model {
     public $var_app = array();
     public $pfc_status;
     public $base_list;
-    
+    public static $PDO = NULL;
+
     /* Настройки языка */
-    public function app_lang($lang = FALSE,$library = FALSE){
-	$lang = ($lang==FALSE)? 'LANG': $lang;
+    public function app_lang($lang = FALSE,$library = FALSE) {
+	     $lang = ($lang==FALSE)? 'LANG': $lang;
         $lang = str_replace('-', '_', $lang);
         $this->registr['lang'] = $lang;
         $this->var_app(array(
@@ -46,25 +47,25 @@ class Model {
         if(isset($this->registr['end_html_app'])){
             return $this;
         }
-        
+
         if(!empty($this->buffer)){
             echo $this->buffer;
         }
-        
+
         $this->registr['end_html_app'] = TRUE;
     }
     /* Взаимодействие с View */
-    
+
     public function render(){
         include _filter(DIR_DEFAULT.'var_app.php');
         $array = array_merge($default_settings,$this->app_lang,$this->var_app);
         $array = array_change_key_case($array, CASE_LOWER);
-        
+
         Controller::View()->setData($array);
-        
+
         $this->buffer = Controller::View()->render();
     }
-    
+
     public function pattern($name=null, $block = false){
         if($block === TRUE){
             return VIEW_TAG_START.strtoupper(VIEW_BLOCK_TAG_NAME.$name).VIEW_TAG_END;
@@ -135,9 +136,25 @@ class Model {
         }
     }
     public function setLayout($layout_name,$theme = null){
-        return Controller::View()->setLayout($layout_name,$theme);
+      return Controller::View()->setLayout($layout_name,$theme);
     }
-    
+    public function connect(){
+        
+        $settings = array_change_key_case($this->load_settings(DIR_SETTINGS.BASE_SETTINGS_FILE));
+        
+        if( isset($settings['base'][strtolower(ENV)]) ){
+            $settings = $settings['base'][strtolower(ENV)]['access'];
+        } else {
+            throw new RemusException('Don\'t settings of base for '.ENV);
+        }
+        
+        extract($settings);
+        
+        self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass);
+        
+        return self::$PDO;
+    }
+
 	private function open_json($path){
             if(is_file($path)){
                 $lang_json_data = (string) file_get_contents($path);
@@ -149,7 +166,23 @@ class Model {
                 }
             }
         }
-	
+        
+    private function load_settings($path) {
+        if(file_exists($path)){
+            
+            $ext = explode('.', $path);
+            $ext = strtolower(array_pop($ext));
+            
+            if($ext == 'json'){
+                return $this->open_json($path);
+            } else {
+                include $path;
+            }
+        }
+        return NULL;
+    }
+        
+
     /* Пасхалки */
     public function __toString(){
         return 'Remus.'.VERSION;

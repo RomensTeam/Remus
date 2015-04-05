@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * Controller - главный контроллер
@@ -107,8 +107,6 @@ class Controller {
             } else {
                 throw new RemusException('Not Controller app');
             }
-            
-            $AppController  = new $Controller($name_module);
             
             if(isset($app['method']) and  method_exists($AppController, $app['method'])){
                 $AppController->$app['method']();

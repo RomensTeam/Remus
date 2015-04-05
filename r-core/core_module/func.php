@@ -1,4 +1,4 @@
-<?
+<?php
 # Защита
 if(!defined('DIR')){exit();}
 
@@ -102,11 +102,8 @@ function _quoter($string) {
 /**
  * Преобразовыввает строку в шаблон 
  */
-function pattern($name){
-    if(Controller::Model()){
-	return Controller::Model()->pattern($name);
-    }
-    return NULL;
+function pattern($name=null, $block = false){
+    return Controller::Model()->pattern($name, $block);
 }
 
 /**
@@ -128,3 +125,11 @@ function app_lang($name){
     }
     return NULL;
 }
+
+/**
+ * Короткий доступ к переменным приложения
+ */
+function var_app($var = NULL, $value = NULL){
+    return Controller::Model()->var_app($var, $value);
+}
+

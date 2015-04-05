@@ -1,4 +1,4 @@
-<?
+<?php
 /* Делаем роутинг */
 if(defined('ROUTER') && ROUTER == 'DYNAMIC2'){
     
