@@ -1,7 +1,7 @@
-Документация Remus
+[Документация Remus](https://github.com/RomensTeam/Remus/blob/documentation/documentation/index.md)
 ================
 
-База > Настройка
+[База](https://github.com/RomensTeam/Remus/blob/documentation/documentation/index.md#i-%D0%91%D0%B0%D0%B7%D0%B0) > Настройка
 ----
 
 Обязательных настроек в **Remus** не предусмотрено. **Remus** оптимизирует настройки и устанавливает недостающие.

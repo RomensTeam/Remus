@@ -1,7 +1,7 @@
-Документация Remus
+[Документация Remus](https://github.com/RomensTeam/Remus/blob/documentation/documentation/index.md)
 ================
 
-База > Структура и директории
+[База](https://github.com/RomensTeam/Remus/blob/documentation/documentation/index.md#i-%D0%91%D0%B0%D0%B7%D0%B0) > Структура и директории
 ----
 
 ## Структура ##
