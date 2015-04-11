@@ -1,4 +1,4 @@
-<?
+<?php
 # Убираем WWW
 if(defined('WWW')){
     if(WWW == FALSE){

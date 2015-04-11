@@ -1,4 +1,4 @@
-<?
+<?php
 # Время работы скрипта
     $time_start = microtime(true);
 

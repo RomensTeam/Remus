@@ -1,4 +1,4 @@
-<?
+<?php
 if(!defined('DIR')){exit();} // Защита
 // Настройки сайта по умолчанию
 $site_meta = array(

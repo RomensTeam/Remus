@@ -1,4 +1,4 @@
-<?
+<?php
 $path = DIR_APP_LANG.APP_LANG_PREFIX.$lang.'.'.APP_LANG_EXT;
 if(is_file($path)){
     $this->app_lang = $this->open_json($path);

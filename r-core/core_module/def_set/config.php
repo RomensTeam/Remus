@@ -1,4 +1,4 @@
-<?
+<?php
 $flag = array(
     'TEST_MODE'             => FALSE,
     'URL'                   => 'http://' . $_SERVER['HTTP_HOST'] . '/',

@@ -1,4 +1,4 @@
-<?
+<?php
 $ParrentController = array(
     'module' => 'MyController',
     'method' => 'Start',

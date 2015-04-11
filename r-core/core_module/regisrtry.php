@@ -1,4 +1,4 @@
-<?
+<?php
 class Regisrtry {
     protected static $_data = array();
     

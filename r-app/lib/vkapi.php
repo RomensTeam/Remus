@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * VKAPI class for vk.com social network

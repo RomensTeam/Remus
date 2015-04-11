@@ -1,4 +1,4 @@
-<?
+<?php
 /* Делаем роутинг */
 if(defined('ROUTER') && ROUTER == 'STATIC'){
     $path_to_module = _filter(DIR_APP_PAGE.substr($uri,1));

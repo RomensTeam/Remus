@@ -1,4 +1,4 @@
-<?
+<?php
 # Защита
 if (!defined('VERSION')){exit();}
 

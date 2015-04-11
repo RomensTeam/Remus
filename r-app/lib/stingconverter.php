@@ -1,4 +1,4 @@
-<?
+<?php
 class StingConverter {
     public function Rus2Translite($st){
         $st2=strtr($st,"абвгдеёзийклмнопрстуфхъыэ_","abvgdeeziyklmnoprstufh'iei");
