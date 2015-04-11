@@ -1,5 +1,3 @@
 <?
 // Здесь ваш код перед началом работы вашего приложения
-Remus::Model()->var_app(array(
-    'url' => URL
-));
+var_app(array('url' => URL));

@@ -49,8 +49,7 @@ function TestModeOn() {
  */
 function connect($path) {
     $path = _filter($path);
-    include $path;
-    return NULL;
+    return require $path;
 }
 /**
  * Осуществляет перенаправление на необходимую страницу 

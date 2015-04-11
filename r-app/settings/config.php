@@ -4,10 +4,9 @@
  *
  */
 # Настройки движка
-define('LANG', 'ru'); # Язык фреймворка ошибок
+define('LANG', 'ru'); # Язык фреймворка
 define('TEST_MODE', TRUE);
 define('WWW', FALSE); # Оставлять доступ к сайту через www.your_site.com
-define('FUNC_FUNNY',TRUE);
 
 
 /**
@@ -15,7 +14,7 @@ define('FUNC_FUNNY',TRUE);
  *
  * Если вы используете SQLite то укажите путь.
  */
-define('BASE_SETTINGS_FILE', 'base.json'); # Название файла настроек
+define('BASE_SETTINGS_FILE', 'base.php'); # Название файла настроек
 
 
  /**
@@ -24,15 +23,14 @@ define('BASE_SETTINGS_FILE', 'base.json'); # Название файла нас�
   */
 define('ROUTER', 'DYNAMIC2');
 
-
 /**
- *  Environment
+ *  Environment - среда выполнения
  *
  *  Access values:
- *    LOCAL         - локальный сервер
- *    DEVELOPMENT   - разработка
- *    TESTING       - тестирование
- *    PRODUCTION    -
+ *    LOCAL     - локальный сервер
+ *    DEVELOP   - разработка
+ *    TESTING   - тестирование
+ *    PRODUCT   - продакшн
  *
  */
 define('ENV', 'LOCAL');

@@ -7,9 +7,9 @@
  * @author RomanTrutnev <romantrutnev@gmail.com>
  */
 
-class View {
+class View implements RemusViewInterface {
     
-    private $settings   = array(
+    public $settings   = array(
         'module' => array(
             'block',
             'foreach',
@@ -70,17 +70,18 @@ class View {
     /**
      * @var array Буффер
      */
-    protected $buffer   = null;
+    public $buffer   = null;
     
     /**
      * @var array Данные
      */
-    protected $var_app  = null;
+    public $var_app  = null;
     
     /**
      * Генерирование данных в шапке и конце
      */
     public function generateHead(){
+        
         foreach($this->meta as $key => $value) {
             if ($key == 'keywords' || $key == 'description' || $key == 'author' || $key == 'robots' || $key == 'url') {
                 if(is_string($value))$this->head_string .= '<meta name="'.$key.'" content="'.$value.'">';
@@ -96,7 +97,6 @@ class View {
             }
         }
         if(CheckFlag('SUPPORT_DEVELOPERS') ){
-            $this->head_string.='<meta name="generator" content="Remus">';
             $this->head_string.='<meta name="generator" content="Remus">';
         }
         foreach($this->css_link as $value){
@@ -127,7 +127,7 @@ class View {
      * Объединение МЕТА-данных
      */
     public function head($meta) {
-        $this->meta = array_merge($this->meta, $meta);
+        $this->meta = $this->meta + $meta;
     }
     
     /**
@@ -196,159 +196,51 @@ class View {
         }
         return NULL;
     }
-    public function block_replace($buffer = null) {
-        
-        if($buffer === null){
-            $buffer = $this->buffer;
-            $this->buffer = null;
-            $w = true;
-        } else { $w = false; }
-        
-        for($io = 0; $io < 3; $io++){
-            
-            $all = null;
-            
-            preg_match_all(VIEW_BLOCK_TAG_PATTERN, $buffer, $all);
-            
-            if(count($all[1]) > 0){
-                foreach($all[1] as $value) {
-                    $block_path = RE_Theme::$dir_theme. strtolower(VIEW_BLOCK_TAG_FOLDER . _DS .$value) . '.tpl';
-                    if(file_exists($block_path)){
-                        $block = file_get_contents($block_path);
-                        $buffer = str_replace(VIEW_TAG_START . strtoupper(VIEW_BLOCK_TAG_NAME . $value ). VIEW_TAG_END , $block, $buffer);
-                    }
-                }
-            }else{break;}
-        }
-        
-        if($w){
-            $this->buffer = $buffer;
-        } else {
-            return $buffer;
-        }
-    }
     
-    /**
-     * FILL_REPLACE - Вывод с форматированием
-     * 
-     * Example:   
-     *          {[<p>NAME_FILL</p>]|[NAME_FILL]}
-     *          {[<p>???</p>]|[NAME_FILL]}
-     * 
-     * RegExp:   /\{\[(.*)\](?:)?\|\[([A-Z0-9_]+)\]\}/
-     */
-    public function fill_replace() {
-    
-        preg_match_all(FILL_TAG_PATTERN, $this->buffer, $all); // Получаем все доступные в странице ключе
-        
-        for ($c = 0; $c < count($all[0]); $c++) {
-            $matches = '';
-            $name = strtolower($all[2][$c]);
-            if(isset($this->var_app[$name]) and !empty($this->var_app[$name])){
-                preg_match_all('/('.strtoupper($name).')/', $all[1][$c], $matches);
-                if(count($matches[0]) > 0){
-                    $value = strtoupper($name);
-                }else{
-                    $value = FILL_ALTER_TAG_PATTERN;
-                }
-                $value = str_replace($value, $this->var_app[$name], $all[1][$c]);
-                $this->buffer = str_replace($all[0][$c], $value, $this->buffer);
-            }
-        }
-    }
-    
-    /**
-     * FOREACH_REPLACE - вывод списка с форматированием
-     * 
-     * Example:
-     * 
-     * $array['test'] = array(
-     *  array('SECRET' => 'WHAT'),
-     *  array('SECRET' => 'THE'),
-     *  array('SECRET' => 'Remus?'),
-     * );
-     *    
-     * {[FOREACH([TEST]):START}
-     *      {[SECRET]}
-     * {FOREACH:END]}
-     * 
-     * RegExp:   /\{\[FOREACH\(([A-Z_]+)\)\:START\]\}([^\:]+)\{\[FOREACH\:END\]\}/
-     */
-    public function foreach_replace() {
-    
-        $all = null;
-        preg_match_all(FOREACH_TAG_PATTERN, $this->buffer, $all); // Получаем все доступные в странице ключе
-        $number = count($all[1]);
-        
-        for ($c = 0; $c < $number; $c++) {
-            $name = strtolower($all[1][$c]);
-            if(isset($this->var_app[$name]) and is_array($this->var_app[$name]) and !empty($this->var_app[$name])){
-                $text = '';
-                
-                foreach ($this->var_app[$name] as $value) {
-                    $text .= $this->foreach_replace_function($value, $all[2][$c]);
-                }
-                
-                $this->buffer = str_replace($all[0][$c], $text, $this->buffer);
-            }
-        }
-    }
-    
-    protected function foreach_replace_function($value,$text) {
-        $return = $text;
-        
-        for ($i = 0; $i < 3; $i++) {
-            $return = $this->block_replace($return);
-            
-            foreach ($value as $key => $val) {
-                $return = str_replace(pattern($key), $val, $return);
-            }
-        } 
-        
-        return $return;
-    }
     
     /**
      * Рендеринг страницы
      */
-    public function render(){
+    public function render($view_core = NULL){
+        
         $this->generateHead();
         $this->getBuffer();
         
-        if($this->buffer == null){
+        if(empty($view_core)){
+            if(CheckFlag('VIEW_CORE')){
+                $view_core = VIEW_CORE;
+            } else {
+                return $this->buffer;
+            }
+        }    
+            
+        $view_file = DIR_CORE.'view_core'._DS.$view_core.'.php';
+
+        if(file_exists($view_file)){
+            include_once $view_file;
+        }
+        
+        if(empty($this->buffer)){
             return NULL;
         }
         
-        for($i = 0; $i <= 3; $i++){
-            
-            
-            $this->foreach_replace();
-            
-            if(in_array('block', $this->settings['module'])){
-                $this->block_replace();
-            }
-            foreach ($this->var_app as $key => $value) {
-                if(is_string($value) or is_numeric($value)){
-                    $search = VIEW_TAG_START.strtoupper($key).VIEW_TAG_END;
-                    $this->buffer = str_replace($search,$value, $this->buffer);
-                }
-            }
-            if(in_array('fill', $this->settings['module'])){
-                $this->fill_replace();
-            }
-            
-            
-            preg_match_all(VIEW_TAG_PATTERN, $this->buffer, $all);
-            foreach(array_unique($all[1]) as $value){
-                if(isset($this->var_app[$value])){
-                        $this->buffer = str_replace(VIEW_TAG_START.strtoupper($value).VIEW_TAG_END, $array[$value], $this->buffer);
-                }
-            }                
+        
+        $render = new $view_core;
+        
+        if($render instanceof RemusViewCoreInterface){
+            $render->setView($this);
+            $render->render();
+        } else {
+            throw new RemusException('This ViewCore is not suported. Please use RemusViewCoreInterface in this ViewCore');
         }
         
         # Убираем мусор за собой
         if(!TEST_MODE){
-            $this->delAllKey();
+            if($render instanceof RemusViewCoreInterface){
+                $render->clear();
+            } else {
+                throw new RemusException('This ViewCore is not suported. Please use RemusViewCoreInterface in this ViewCore');
+            }
         }
         
         return $this->buffer;

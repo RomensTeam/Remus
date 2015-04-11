@@ -9,7 +9,7 @@ if (!defined('DIR')) {
  * @author Romens <romantrutnev@gmail.com>
  * @version 1.2
  */
-class Model {
+class Model implements RemusModelInterface {
     public $registr;
     public $app_lang = array();
     public $var_app = array();
@@ -19,17 +19,17 @@ class Model {
 
     /* Настройки языка */
     public function app_lang($lang = FALSE,$library = FALSE) {
-	     $lang = ($lang==FALSE)? 'LANG': $lang;
-        $lang = str_replace('-', '_', $lang);
-        $this->registr['lang'] = $lang;
-        $this->var_app(array(
-            'lang'=>$lang
-        ));
-        if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
-            if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
-                include DIR_CORE_MODULE.'lang_format'._DS.'json.php';
+            $lang = ($lang==FALSE)? 'LANG': $lang;
+            $lang = str_replace('-', '_', $lang);
+            $this->registr['lang'] = $lang;
+            $this->var_app(array(
+                'lang'=>$lang
+            ));
+            if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
+                if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
+                    include DIR_CORE_MODULE.'lang_format'._DS.'json.php';
+                }
             }
-        }
         return $this->app_lang;
     }
     /* Управление приложением */
@@ -43,7 +43,7 @@ class Model {
         Remus::View()->meta = array_merge(Remus::View()->meta,$meta);
         return $this;
     }
-    public function end_html_app($keyword = null,$time = null){
+    public function end_html_app(){
         if(isset($this->registr['end_html_app'])){
             return $this;
         }
@@ -53,6 +53,8 @@ class Model {
         }
 
         $this->registr['end_html_app'] = TRUE;
+        
+        return $this;
     }
     /* Взаимодействие с View */
 
@@ -78,6 +80,7 @@ class Model {
         }
         if(is_array($var)){$this->var_app = array_merge($this->var_app, $var);}
         else{ $this->var_app[$var] = $value; }
+        return $this;
     }
     public function addScript($script, $link = FALSE){
         if(is_array($script)){
@@ -145,16 +148,21 @@ class Model {
         if( isset($settings['base'][strtolower(ENV)]) ){
             $settings = $settings['base'][strtolower(ENV)]['access'];
         } else {
-            throw new RemusException('Don\'t settings of base for '.ENV);
+            throw new RemusException('Don\'t settings of base for '.ENV.' environment');
         }
         
         extract($settings);
         
-        self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass);
+        self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass, array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 
+                '  set character_set_client=\'utf8\';  '
+                .' set character_set_results=\'utf8\'; '
+                .' set collation_connection=\'utf8\';  '
+        ));
         
         return self::$PDO;
     }
-
+    
 	private function open_json($path){
             if(is_file($path)){
                 $lang_json_data = (string) file_get_contents($path);
@@ -176,14 +184,11 @@ class Model {
             if($ext == 'json'){
                 return $this->open_json($path);
             } else {
-                include $path;
+                return connect($path);
             }
         }
-        return NULL;
     }
         
-
-    /* Пасхалки */
     public function __toString(){
         return 'Remus.'.VERSION;
     }

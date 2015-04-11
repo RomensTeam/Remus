@@ -1,50 +1,44 @@
 <?php
-if(!defined('DIR')){exit();} // Защита
+if(!defined('DIR')){exit();}
 
 class Index {
     
     public function __construct($name) {
-        $this->Start();
-    }
-    
-    public function Start(){
-        M()->setLayout('index');
-        $this->StartApp();
-        $this->addStyles();
+        Remus::Model()->setLayout('index');
+        
+        $this->StartApp($name);
         
         $array = array(
             'version'	=>  VERSION,
-            'copyright'	=>  '2013 - '.pattern('this_year')
+            'copyright'	=>  '2013 - '.pattern('this_year'),
+            'heading'   =>  'Hello, World!'
         );
         if(TEST_MODE){
             $array['copyright'] .= ' <span class="label label-info">Запущено в безопасном режиме</span>';
-            
-            $array['test'] = array(
-                array('SECRET' => 'WHAT'),
-                array('SECRET' => 'THE'),
-                array('SECRET' => 'Remus?')
-            );
         }
         
+        /* I AM READY */
         
-        M()->var_app($array);
-        M()->render();
+        var_app($array);
+        Remus::Model()->render();
     }
     
     public function StartApp() {
         
-        M()->app_lang('ru-RU');
+        Remus::Model()->app_lang('ru-RU','main');
         
-        M()->start_html_app(array(
+        Remus::Model()->start_html_app(array(
             'title'         => app_lang('index_title'),
             'description'   => app_lang('index_description'),
             'keywords'      => app_lang('index_keywords')
         ));
         
+        Remus::Model()->addToHead('<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">');
+        Remus::Model()->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
     }
-    
-    public function addStyles() {
-        M()->addToHead('<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">');
-        M()->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
-    }
+}
+
+if(ROUTER == 'DYNAMIC'){
+    echo 'Вы выбрали динамический вид роутинга!<br>';
+    echo 'Отредактируйте файл: <b>'.__FILE__.'</b> для продолжения разработки.';
 }

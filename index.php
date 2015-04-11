@@ -28,12 +28,14 @@
         'MODEL'         =>  'r-core/model',
         'DEV_LIB'       =>  'r-core/devlib',
         'SETTINGS'      =>  'r-app/settings',
+        'VIEW_CORE'     =>  'r-core/view_core',
         'CORE_MODULE'   =>  'r-core/core_module',
         'INTERFACE'     =>  'r-app/lib/interface',
         'DEFAULT'       =>  'r-core/core_module/def_set',
+        'CORE_INTERFACE'=>  'r-core/core_module/interface'
     );
 
-    foreach ($directory as $key => $value) {
+    foreach ($directory as $key => $value) {      
         if(!defined($key)){
             $value = realpath(DIR.$value)._DS;
             if($value != '\\'){

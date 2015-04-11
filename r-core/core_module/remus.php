@@ -10,16 +10,6 @@
 class Remus {
     
     /**
-     * @var array GET
-     */
-    public $input_data_get = array();
-    
-    /**
-     * @var array POST
-     */
-    public $input_data_post = array();
-    
-    /**
      * @var Model Модель
      */
     private static $model = NULL;
@@ -49,11 +39,14 @@ class Remus {
      */
     public $lang = array();
     
+    /**
+     * 
+     */
+    private $registr;
+
+
     # Начало класса
     public function __construct() {
-        # Определение POST и GET
-        $this->input_data_get  = $_GET;
-        $this->input_data_post = $_POST;
         
         # Подключаем языковой пакет фреймворка 
         $lang = _filter(DIR_CORE.'lang'._DS.  substr(strtolower(LANG),0,2).'.php');
@@ -74,6 +67,7 @@ class Remus {
         }
         return self::$view;
     }
+    
     /**
      * @return Model
      */
@@ -83,6 +77,7 @@ class Remus {
         }
         return self::$model;
     }
+    
     /**
      * @return Remus
      */
@@ -92,6 +87,7 @@ class Remus {
         }
         return self::$controller;
     }
+    
     # Управление приложением
     public function run_app($name_module){
         @define('ROUTING_STATUS', TRUE);
@@ -113,6 +109,8 @@ class Remus {
             }
             
             $AppController = null;
+        } elseif (ROUTER == 'DYNAMIC') {
+            include $name_module;
         }
         return $this;
     }
@@ -134,12 +132,15 @@ class Remus {
     }
     # Управление MODEL и VIEW
     public function load_model($model_name){
+        include DIR_CORE_INTERFACE.'RemusModelInterface.php';
         $this->connect_file('model.'.strtolower($model_name), DIR_MODEL);
         self::$model = new $model_name();
     }
     public function load_view($view_name) {
+        include DIR_CORE_INTERFACE.'RemusViewInterface.php';
+        include_once DIR_CORE_INTERFACE.'RemusViewCoreInterface.php';
         $this->connect_file('view.'.strtolower($view_name), DIR_VIEW);
-            self::$view = new $view_name();
+        self::$view = new $view_name();
     }
     # Подключение библиотек
     public function library($library_list) {
@@ -159,9 +160,27 @@ class Remus {
 		if(substr($connect_file, -4) != '.php'){
 			$connect_file .= '.php';
 		}
-        include_once _filter($connect_file);
+        connect($connect_file);
         return $this;
     }
+    
+    public function env() {
+        $args = func_get_args();
+        if(!empty($args)){
+            foreach ($args as $value) {
+                if(is_string($value)){
+                    $value = explode(',', $value);
+                }
+                if(is_array($value)){
+                    foreach ($value as $val) {
+                        if(strtolower(ENV)==strtolower($val)) return true;
+                    }
+                }
+            }
+        }
+        return FALSE;
+    }
+    
     protected function connect_list_file($list,$dir) {
         $list = (array) $list;
         foreach ($list as $name) {
