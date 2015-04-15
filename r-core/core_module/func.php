@@ -19,13 +19,20 @@ function _urlen($url) {
     $path = str_replace('\\', '/', $url);
     return (string) $path;
 }
-function __autoload($class) {
-
-    $file = _urlen(DIR_LIB.$class.'.php');
-    if (!file_exists($file)) {
-        return false;
+function __autoload($className)
+{
+    $className = ltrim($className, '\\');
+    $fileName  = '';
+    $namespace = '';
+    if ($lastNsPos = strrpos($className, '\\')) {
+        $namespace = substr($className, 0, $lastNsPos);
+        $className = substr($className, $lastNsPos + 1);
+        $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
     }
-    include_once $file;
+    $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+    $fileName = DIR_LIB.$fileName;
+    
+    require $fileName;
 }
 
 /**

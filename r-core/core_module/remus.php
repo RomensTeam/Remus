@@ -51,7 +51,7 @@ class Remus {
         # Подключаем языковой пакет фреймворка 
         $lang = _filter(DIR_CORE.'lang'._DS.  substr(strtolower(LANG),0,2).'.php');
         if(!empty($lang)){
-            include_once $lang;
+            include $lang;
             $this->lang = $_LANG;
         }
         

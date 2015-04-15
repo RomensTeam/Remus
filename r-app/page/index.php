@@ -19,8 +19,6 @@ class Index {
         
         /* I AM READY */
         
-        print_var(get_declared_classes(), 'Classes');
-        print_var(get_defined_constants(TRUE), 'Constants');
         
         var_app($array);
         Remus::Model()->render();
