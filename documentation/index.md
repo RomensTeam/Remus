@@ -18,7 +18,7 @@
 - Создание простого приложения
 	- Работа с данными
 	- Работа с БД
-	- Работа с библиотеками
+	- [Работа с библиотеками](https://github.com/RomensTeam/Remus/blob/documentation/documentation/base/create-app-library.md)
 	- Отладка приложения
 - Словарь
 
