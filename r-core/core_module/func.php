@@ -35,6 +35,36 @@ function __autoload($className)
     require $fileName;
 }
 
+function get_user_constants() {
+    $constants = get_defined_constants(TRUE);
+    return $constants['user'];
+}
+
+function input_test($test = 'session') {
+    if(is_string($test)){ $test = explode(',', $test);}
+    
+    foreach ($test as $value) {
+        switch (strtolower($value)) {
+            case 'session':
+                print_var($_SESSION,'SESSION');
+                break;
+            case 'get':
+                print_var($_GET,'GET');
+                break;
+            case 'post':
+                print_var($_POST,'POST');
+                break;
+            case 'constants':
+                print_var(get_user_constants(), 'User Constants');;
+                break;
+            case 'classes':
+                print_var(get_declared_classes(), 'Classes');
+                break;
+        }
+    }
+}
+
+
 /**
  *  Проверка флага (константа типа boolean)
  * 
