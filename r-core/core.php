@@ -11,16 +11,16 @@ if(defined('TEST_MODE') && !TEST_MODE) {error_reporting(0);}
 
 
 # Подключение модулей
-    @include DIR_CORE_MODULE.'func.php';        # Функции ядра
-    @include DIR_SETTINGS.'config.php';         # Подключаем настройки
-    @include DIR_DEFAULT.'config.php';          # Оптимизируем настройки
-    @include DIR_CORE_MODULE.'htaccess.php';    # HTACCESS-правки (см. докуоментацию)
-    @include DIR_CORE_MODULE.'regisrtry.php';   # Регистр
-    @include DIR_CORE_MODULE.'identclient.php'; # Определение клиента
-    @include DIR_CORE_MODULE.'remus.php';       # Контроллер
-    @include DIR_CORE_MODULE.'Exception.php';   # Исключения
-    @include DIR_CORE_MODULE.'theme.php';   	# Класс Тем
-    @include DIR_CORE_MODULE.'route.php';   	# Роутер
+    @include_once DIR_CORE_MODULE.'func.php';        # Функции ядра
+    @include_once DIR_SETTINGS.'config.php';         # Подключаем настройки
+    @include_once DIR_DEFAULT.'config.php';          # Оптимизируем настройки
+    @include_once DIR_CORE_MODULE.'htaccess.php';    # HTACCESS-правки (см. докуоментацию)
+    @include_once DIR_CORE_MODULE.'regisrtry.php';   # Регистр
+    @include_once DIR_CORE_MODULE.'identclient.php'; # Определение клиента
+    @include_once DIR_CORE_MODULE.'remus.php';       # Контроллер
+    @include_once DIR_CORE_MODULE.'Exception.php';   # Исключения
+    @include_once DIR_CORE_MODULE.'theme.php';   	# Класс Тем
+    @include_once DIR_CORE_MODULE.'route.php';   	# Роутер
 
 /**
  * Включаем возможность краткого обращения
@@ -37,7 +37,7 @@ ${R}->library(LIBRARY);
 
 # print_var()
 if (CheckFlag('TEST_MODE')){
-    include _filter(DIR_CORE.'devlib/print_var.php');
+    include_once _filter(DIR_CORE.'devlib/print_var.php');
 }   else{
     function print_var($var = null,$var2= null){}
 }
@@ -53,14 +53,14 @@ if (CheckFlag('APP_VIEW_HTML')) {
 }
 
 if(CheckFlag('FUNC_FUNNY')){
-    include DIR_CORE_MODULE.'funcfunny.php';
+    include_once DIR_CORE_MODULE.'funcfunny.php';
 }
 
 # Подключаем начальный файл приложения
-include DIR_APP.'_start.php';
+include_once DIR_APP.'_start.php';
 
 # Подключаем настройки приложения
-include DIR_APP.'config.php';
+include_once DIR_APP.'config.php';
 
 # Определяем парметр вызова
 if($_SERVER['REQUEST_URI']){
@@ -74,17 +74,17 @@ if($_SERVER['REQUEST_URI']){
 $router = DIR_CORE_MODULE.'router/'.ROUTER.'.php';
 
 if(is_file($router)){
-    include $router;
+    include_once $router;
     
     if( defined('ROUTING_STATUS') != TRUE && defined('NOT_ROUTING_FILE') ) 
     {
-        include _filter(DIR_APP_PAGE.NOT_ROUTING_FILE);
+        include_once _filter(DIR_APP_PAGE.NOT_ROUTING_FILE);
     }
 }
 
 # Подключаем конечный файл приложения при необходимости
 if(!defined('NO_END_APP')){
-    include _filter(DIR_APP.'_end.php');
+    include_once _filter(DIR_APP.'_end.php');
 }
 
 # Конец работы фреймворка

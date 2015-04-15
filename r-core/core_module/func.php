@@ -25,7 +25,7 @@ function __autoload($class) {
     if (!file_exists($file)) {
         return false;
     }
-    include $file;
+    include_once $file;
 }
 
 /**

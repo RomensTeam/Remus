@@ -48,4 +48,4 @@
     }
 
 # Подключаем основу
-    include DIR_CORE.'core.php';
+    include_once DIR_CORE.'core.php';

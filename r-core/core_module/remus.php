@@ -51,7 +51,7 @@ class Remus {
         # Подключаем языковой пакет фреймворка 
         $lang = _filter(DIR_CORE.'lang'._DS.  substr(strtolower(LANG),0,2).'.php');
         if(!empty($lang)){
-            include $lang;
+            include_once $lang;
             $this->lang = $_LANG;
         }
         
@@ -110,7 +110,7 @@ class Remus {
             
             $AppController = null;
         } elseif (ROUTER == 'DYNAMIC') {
-            include $name_module;
+            include_once $name_module;
         }
         return $this;
     }
