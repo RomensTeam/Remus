@@ -169,3 +169,9 @@ function var_app($var = NULL, $value = NULL){
     return Remus::Model()->var_app($var, $value);
 }
 
+/**
+ *  Возвращает последний символ строки
+ */
+function lastSymbol($str) {
+    return substr($str, -1);
+}

@@ -4,30 +4,24 @@ if (!defined('VERSION')){exit();}
 
 ob_start();
 
+include_once DIR_CORE_MODULE.'core.php';
+
 # Активируем отладку 
 error_reporting(E_ALL);
 
-if(defined('TEST_MODE') && !TEST_MODE) {error_reporting(0);}
-
 
 # Подключение модулей
-    @include_once DIR_CORE_MODULE.'func.php';        # Функции ядра
-    @include_once DIR_SETTINGS.'config.php';         # Подключаем настройки
-    @include_once DIR_DEFAULT.'config.php';          # Оптимизируем настройки
-    @include_once DIR_CORE_MODULE.'htaccess.php';    # HTACCESS-правки (см. докуоментацию)
-    @include_once DIR_CORE_MODULE.'regisrtry.php';   # Регистр
-    @include_once DIR_CORE_MODULE.'identclient.php'; # Определение клиента
-    @include_once DIR_CORE_MODULE.'remus.php';       # Контроллер
-    @include_once DIR_CORE_MODULE.'Exception.php';   # Исключения
-    @include_once DIR_CORE_MODULE.'theme.php';   	# Класс Тем
-    @include_once DIR_CORE_MODULE.'route.php';   	# Роутер
+Core::load_modules();
+
+
+if(defined('TEST_MODE') && !TEST_MODE) {error_reporting(0);}
 
 /**
  * Включаем возможность краткого обращения
  * 
  * Example: ${R}
  */
-define('R', 'remus', TRUE);   
+@define('R', 'remus', TRUE);   
 
 # Запускаем контроллер
 ${R} = new Remus();
@@ -35,22 +29,13 @@ ${R} = new Remus();
 # Подключение библиотек с помощью Контроллера
 ${R}->library(LIBRARY);
 
-# print_var()
-if (CheckFlag('TEST_MODE')){
-    include_once _filter(DIR_CORE.'devlib/print_var.php');
-}   else{
-    function print_var($var = null,$var2= null){}
-}
+Core::test_lib();
 
 # MODEL
-if (CheckFlag('APP_MODEL')) {
-    ${R}->load_model(APP_MODEL);
-}
+Core::loadModel();
 
 # VIEW
-if (CheckFlag('APP_VIEW_HTML')) {
-    ${R}->load_view(APP_VIEW_HTML);
-}
+    Core::loadView();
 
 if(CheckFlag('FUNC_FUNNY')){
     include_once DIR_CORE_MODULE.'funcfunny.php';
@@ -63,38 +48,19 @@ include_once DIR_APP.'_start.php';
 include_once DIR_APP.'config.php';
 
 # Определяем парметр вызова
-if($_SERVER['REQUEST_URI']){
-	$uri = str_replace('?'.$_SERVER['QUERY_STRING'],'', $_SERVER['REQUEST_URI']);
-} else {
-	$uri = $_SERVER['REDIRECT_URL'];
-}
-
-@define('URI', substr($uri,1));
-
-$router = DIR_CORE_MODULE.'router/'.ROUTER.'.php';
-
-if(is_file($router)){
-    include_once $router;
-    
-    if( defined('ROUTING_STATUS') != TRUE && defined('NOT_ROUTING_FILE') ) 
-    {
-        include_once _filter(DIR_APP_PAGE.NOT_ROUTING_FILE);
-    }
-}
-
+Core::router();
 # Подключаем конечный файл приложения при необходимости
-if(!defined('NO_END_APP')){
-    include_once _filter(DIR_APP.'_end.php');
-}
 
-# Конец работы фреймворка
+Core::end();
+
+
 if(defined('TEST_MODE_ON') || TEST_MODE){
-    if(!defined('TEST_MODE_OFF')){
-        
-        $time   = sprintf(lang('test_time_script'), microtime(true)-$time_start);
-        $memory = sprintf(lang('memory_time_script'), memory_get_usage());
-        
-        print_var(array($time,$memory), lang('test_time_name'));
-        
-    }
-}
+            if(!defined('TEST_MODE_OFF')){
+
+                $time   = sprintf(lang('test_time_script'), microtime(true)-$time_start);
+                $memory = sprintf(lang('memory_time_script'), memory_get_usage());
+
+                print_var(array($time,$memory), lang('test_time_name'));
+
+            }
+        }

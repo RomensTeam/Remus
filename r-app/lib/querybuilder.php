@@ -33,7 +33,7 @@ class QueryBuilder {
 	 */
     public function __construct(PDO $PDO = null) {
         if($PDO == NULL){
-            $PDO = Controller::Model()->registr['PDO'];
+            $PDO = Model::$PDO;
         }
         $this->PDO = $PDO;
     }
