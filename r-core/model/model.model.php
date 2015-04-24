@@ -1,8 +1,10 @@
 <?php
+
 # Защита
 if (!defined('DIR')) {
     exit();
 }
+
 /**
  *  Класс Model - Базовый класс
  *
@@ -19,19 +21,23 @@ class Model implements RemusModelInterface {
 
     /* Настройки языка */
     public function app_lang($lang = FALSE,$library = FALSE) {
-            $lang = ($lang==FALSE)? 'LANG': $lang;
-            $lang = str_replace('-', '_', $lang);
-            $this->registr['lang'] = $lang;
-            $this->var_app(array(
-                'lang'=>$lang
-            ));
-            if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
-                if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
-                    include DIR_CORE_MODULE.'lang_format'._DS.'json.php';
-                }
-            }
+	    
+	    $lang = ($lang==FALSE)? 'LANG': $lang;
+	    $lang = str_replace('-', '_', $lang);
+	    $this->registr['lang'] = $lang;
+	    $this->var_app(array(
+	        'lang'=>$lang
+	    ));
+	    
+	    if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
+	        if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
+	            include DIR_CORE_MODULE.'lang_format'._DS.'json.php';
+	        }
+	    }
+	    
         return $this->app_lang;
     }
+    
     /* Управление приложением */
     public function start_html_app($meta = array()){
         if(!is_array($meta)){
@@ -43,6 +49,7 @@ class Model implements RemusModelInterface {
         Remus::View()->meta = array_merge(Remus::View()->meta,$meta);
         return $this;
     }
+    
     public function end_html_app(){
         if(isset($this->registr['end_html_app'])){
             return $this;
@@ -56,6 +63,7 @@ class Model implements RemusModelInterface {
         
         return $this;
     }
+    
     /* Взаимодействие с View */
 
     public function render(){
@@ -74,6 +82,7 @@ class Model implements RemusModelInterface {
         }
         return VIEW_TAG_START.strtoupper($name).VIEW_TAG_END;
     }
+    
     public function var_app($var = NULL, $value = NULL){
         if($var === NULL){
             return $this->var_app;
@@ -82,6 +91,7 @@ class Model implements RemusModelInterface {
         else{ $this->var_app[$var] = $value; }
         return $this;
     }
+    
     public function addScript($script, $link = FALSE){
         if(is_array($script)){
             if ($link == FALSE) {
@@ -97,7 +107,9 @@ class Model implements RemusModelInterface {
         }
         return $this;
     }
+    
     public function addStyle($style, $link = FALSE){
+    	
         if(is_array($style)){
             if ($link == FALSE) {
                 Remus::View()->css = array_merge(Remus::View()->css,$style);
@@ -112,6 +124,7 @@ class Model implements RemusModelInterface {
         }
         return $this;
     }
+    
     public function addToHead($string){
         if(is_array($string)){
             $string = implode('', $string);
@@ -119,6 +132,7 @@ class Model implements RemusModelInterface {
         Remus::View()->head_string.= $string;
         return $this;
     }
+    
     public function addToEnd($string){
         if(is_array($string)){
             $string = implode('', $string);
@@ -126,9 +140,11 @@ class Model implements RemusModelInterface {
         Remus::View()->end_string.= $string;
         return $this;
     }
+    
     public function setTheme($theme_name){
         return Remus::View()->setTheme($theme_name);
     }
+    
     public function getBlock($name){
         $block_path = _filter(RE_Theme::$dir_theme . 'block' . _DS . strtolower($name) . '.tpl');
         if(is_file($block_path)){
@@ -138,17 +154,28 @@ class Model implements RemusModelInterface {
             return FALSE;
         }
     }
+    
     public function setLayout($layout_name,$theme = null){
       return Remus::View()->setLayout($layout_name,$theme);
     }
+    
+    /**
+     *  Connect - инициализирует подключение к базе данных, возвращая активное подключение.
+     * 
+     * @return PDO
+     */
     public function connect(){
+    	
+    	if(!empty(self::$PDO)){
+    		return self::$PDO;
+    	}
         
         $settings = array_change_key_case($this->load_settings(DIR_SETTINGS.BASE_SETTINGS_FILE));
         
         if( isset($settings['base'][strtolower(ENV)]) ){
             $settings = $settings['base'][strtolower(ENV)]['access'];
         } else {
-            throw new RemusException('Don\'t settings of base for '.ENV.' environment');
+            throw new RemusException('Don\'t settings of base for ['.ENV.'] environment');
         }
         
         extract($settings);
@@ -164,16 +191,16 @@ class Model implements RemusModelInterface {
     }
     
 	private function open_json($path){
-            if(is_file($path)){
-                $lang_json_data = (string) file_get_contents($path);
-                if(strlen($lang_json_data) > 0){
-                    $lang_data = json_decode($lang_json_data, TRUE);
-                    if(is_array($lang_data)){
-                        return $lang_data;
-                    }
-                }
-            }
-        }
+	    if(is_file($path)){
+	        $lang_json_data = (string) file_get_contents($path);
+	        if(strlen($lang_json_data) > 0){
+	            $lang_data = json_decode($lang_json_data, TRUE);
+	            if(is_array($lang_data)){
+	                return $lang_data;
+	            }
+	        }
+	    }
+	}
         
     private function load_settings($path) {
         if(file_exists($path)){
