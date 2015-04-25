@@ -32,10 +32,16 @@ class QueryBuilder {
 	 * @return PDO
 	 */
     public function __construct(PDO $PDO = null) {
-        if($PDO == NULL){
-            $PDO = Model::$PDO;
+        if(empty($PDO)){
+            $this->PDO = Model::$PDO;
+        } else {
+            if($PDO instanceof PDO) {
+                $this->PDO = $PDO;
+            } else {
+                throw new RemusException('Пиздец');
+            }
         }
-        $this->PDO = $PDO;
+        return $this->PDO;
     }
     
     public function from($nameTable) {
@@ -253,12 +259,10 @@ class QueryBuilder {
                     }
                 }
                 $STH->execute();
-                $STH->setFetchMode(PDO::FETCH_ASSOC);
-                $this->result = $STH->fetchAll();
+                $this->result = $STH->fetchAll(PDO::FETCH_ASSOC);
             } elseif (array_shift($this->operation) == NULL) {
                 $STH->execute();
-                $STH->setFetchMode(PDO::FETCH_ASSOC);
-                $this->result = $STH->fetchAll();
+                $this->result = $STH->fetchAll(PDO::FETCH_ASSOC);
             } else{
                 if($this->bind <> null){
                     $STH->execute($this->bind);
@@ -269,9 +273,6 @@ class QueryBuilder {
             }
         } catch (PDOException $exc) {
             echo $exc->getTraceAsString();
-        }
-        if(isset(Controller::Model()->registr['db_time'])){
-            Controller::Model()->registr['db_time'] += microtime(true)-$time;
         }
     }
     

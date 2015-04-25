@@ -34,7 +34,7 @@ class Index {
             'keywords'      => app_lang('index_keywords')
         ));
         
-        Remus::Model()->addToHead('<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">');
+        Remus::Model()->addToHead('<link href="style/bootstrap.min.css" media="screen" rel="stylesheet">');
         Remus::Model()->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
     }
 }
