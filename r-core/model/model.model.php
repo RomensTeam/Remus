@@ -153,12 +153,7 @@ class Model implements RemusModelInterface {
         
         extract($settings);
         
-        self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass, array(
-            PDO::MYSQL_ATTR_INIT_COMMAND => 
-                '  set character_set_client=\'utf8\';  '
-                .' set character_set_results=\'utf8\'; '
-                .' set collation_connection=\'utf8\';  '
-        ));
+        self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass);
         
         return self::$PDO;
     }
