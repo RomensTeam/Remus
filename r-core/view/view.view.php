@@ -231,7 +231,7 @@ class View implements RemusViewInterface {
             $render->setView($this);
             $render->render();
         } else {
-            throw new RemusException('This ViewCore is not suported. Please use RemusViewCoreInterface in this ViewCore');
+            throw new RemusException(lang('not_support_viewcore'));
         }
         
         # Убираем мусор за собой
@@ -239,7 +239,7 @@ class View implements RemusViewInterface {
             if($render instanceof RemusViewCoreInterface){
                 $render->clear();
             } else {
-                throw new RemusException('This ViewCore is not suported. Please use RemusViewCoreInterface in this ViewCore');
+                throw new RemusException(lang('not_support_viewcore'));
             }
         }
         

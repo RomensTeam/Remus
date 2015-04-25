@@ -35,6 +35,7 @@ class Index {
         ));
         
         Remus::Model()->addToHead('<link href="style/bootstrap.min.css" media="screen" rel="stylesheet">');
+        Remus::Model()->addScript('style/jquery.min.js', true);
         Remus::Model()->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
     }
 }

@@ -148,7 +148,7 @@ class Model implements RemusModelInterface {
         if( isset($settings['base'][strtolower(ENV)]) ){
             $settings = $settings['base'][strtolower(ENV)]['access'];
         } else {
-            throw new RemusException('Don\'t settings of base for '.ENV.' environment');
+            throw new RemusException(lang('not_settings_base_env'));
         }
         
         extract($settings);

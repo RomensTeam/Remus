@@ -101,7 +101,7 @@ class Remus {
             if (class_exists($Controller, true)) {
                 $AppController  = new $Controller($name_module);
             } else {
-                throw new RemusException('Not Controller app');
+                throw new RemusException(lang('not_user_controller'));
             }
             
             if(isset($app['method']) and  method_exists($AppController, $app['method'])){
