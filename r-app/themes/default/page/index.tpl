@@ -24,7 +24,7 @@
       </div>
       <hr>
       <footer>
-        <div class="btn btn-group">
+        <div class="btn-group">
             <a href="https://github.com/RomensTeam" class="btn btn-primary">RomensTeam</a> 
             <span class="btn btn-default">{[COPYRIGHT]}</span>
         </div>
