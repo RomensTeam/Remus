@@ -15,8 +15,8 @@ class Core {
     public static function load_modules() 
     {
         @include_once DIR_CORE_MODULE.'func.php';           # Функции ядра
-        @include_once DIR_SETTINGS.'config.php';            # Подключаем настройки
-        @include_once DIR_DEFAULT.'config.php';             # Оптимизируем настройки
+        @require DIR_SETTINGS.'config.php';            		# Подключаем настройки
+        self::optimal_settings();                           # Оптимизируем настройки
         @include_once DIR_CORE_MODULE.'htaccess.php';       # HTACCESS-правки (см. докуоментацию)
         @include_once DIR_CORE_MODULE.'regisrtry.php';      # Регистр
         @include_once DIR_CORE_MODULE.'identclient.php';    # Определение клиента
@@ -36,6 +36,29 @@ class Core {
         }
     }
     
+    public static function optimal_settings() {
+        if(file_exists(DIR_DEFAULT.'config.php')){
+            $flag = require DIR_DEFAULT.'config.php';
+            
+            foreach ($flag as $key => $value) {
+                $key = strtoupper($key);
+                if(!defined($key)){
+                    @define($key,$value);
+                }
+            }
+
+            # Экономим память
+            unset($flag);
+
+            # Определяем защищённые
+            if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && !defined('URLS') && defined('URL')){
+                @define('URLS',  str_replace('http://', 'https://', URL));
+                @define('HTTPS', TRUE);
+            }
+            
+        }
+    }
+
     public static function loadModel()
     {
         if (CheckFlag('APP_MODEL')) {
@@ -51,7 +74,7 @@ class Core {
     }
     
     public static function router()
-    {	
+    {
         if($_SERVER['REQUEST_URI']){
 			$uri = substr($_SERVER['SCRIPT_NAME'], 0, strlen($_SERVER['SCRIPT_NAME'])-9);
 			$uri = str_replace($uri,'',$_SERVER['REQUEST_URI']);

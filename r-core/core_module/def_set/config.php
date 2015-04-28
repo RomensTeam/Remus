@@ -1,7 +1,7 @@
 <?php
-$flag = array(
+return array(
     'TEST_MODE'             => FALSE,
-    'URL'                   => 'http://' . $_SERVER['HTTP_HOST'] . '/',
+    'URL'                   => getURL(),
     'WWW'                   => TRUE,
     'LOAD_MODEL'            => TRUE,
     'NOT_INDEX'             => TRUE,
@@ -43,18 +43,3 @@ $flag = array(
     'VIEW_TAG_END'              =>']}',
     'LANG'                      =>'ru'
 );
-foreach ($flag as $key => $value) {
-    $key = strtoupper($key);
-    if(!defined($key)){
-        define($key,$value);
-    }
-}
-
-# Экономим память
-unset($flag);
-
-# Определяем защищённые
-if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && !defined('URLS') && defined('URL')){
-    define('URLS',  str_replace('http://', 'https://', URL));
-    define('HTTPS', TRUE);
-}
