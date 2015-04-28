@@ -1,6 +1,6 @@
 <?php
 $default_settings =  array(
     'this_year' => date('Y',time()),
-    'this_url'  => URL,
+    'this_url'  => getURL(),
     'version'   => VERSION
 );

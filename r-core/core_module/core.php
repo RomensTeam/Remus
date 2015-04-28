@@ -51,9 +51,11 @@ class Core {
     }
     
     public static function router()
-    {
+    {	
         if($_SERVER['REQUEST_URI']){
-            $uri = str_replace('?'.$_SERVER['QUERY_STRING'],'', $_SERVER['REQUEST_URI']);
+			$uri = substr($_SERVER['SCRIPT_NAME'], 0, strlen($_SERVER['SCRIPT_NAME'])-9);
+			$uri = str_replace($uri,'',$_SERVER['REQUEST_URI']);
+            $uri = str_replace('?'.$_SERVER['QUERY_STRING'],'', $uri);
         } else {
             $uri = $_SERVER['REDIRECT_URL'];
         }

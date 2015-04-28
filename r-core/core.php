@@ -35,7 +35,7 @@ Core::test_lib();
 Core::loadModel();
 
 # VIEW
-    Core::loadView();
+Core::loadView();
 
 if(CheckFlag('FUNC_FUNNY')){
     include_once DIR_CORE_MODULE.'funcfunny.php';

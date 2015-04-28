@@ -19,6 +19,18 @@ function _urlen($url) {
     $path = str_replace('\\', '/', $url);
     return (string) $path;
 }
+
+function getURL() {
+    if(!defined('URL')){
+        return URL;
+    } else {
+        $url = str_replace($_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME']);
+        $url = substr($url, 0, strlen($url)-9);
+        $url = 'http://'.$_SERVER['HTTP_HOST'].$url;
+        return $url;
+    }
+}
+
 function __autoload($className)
 {
     $className = ltrim($className, '\\');
