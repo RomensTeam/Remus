@@ -43,6 +43,7 @@ class Model implements RemusModelInterface {
         Remus::View()->meta = array_merge(Remus::View()->meta,$meta);
         return $this;
     }
+	
     public function end_html_app(){
         if(isset($this->registr['end_html_app'])){
             return $this;
