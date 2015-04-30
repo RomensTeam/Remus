@@ -114,6 +114,28 @@ class Remus {
         }
         return $this;
     }
+    
+    protected $_allowTypes = array(
+        'InfoBlock'
+    );
+    
+    /**
+     * getTypes - Подключает типы для их использования
+     * 
+     * @param string|array $typeName Название типов для подключения
+     * @return void
+     */
+    public function getTypes($typeName) 
+    {
+        if(is_string($typeName))
+            {$typeName = array($typeName);}
+        
+        foreach ($typeName as $type) {
+            if(file_exists(DIR_TYPES.$type.'.php')){
+                include_once DIR_TYPES.$type.'.php';
+            }
+        }
+    }
 
     public function get_app_info($name_module){
         $app = Remus()->routing[$name_module];

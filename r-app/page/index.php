@@ -19,7 +19,12 @@ class Index {
         
         /* I AM READY */
         
+        M()->connect();
         
+        Remus()->getTypes('InfoBlock');
+        
+        $obj = new InfoBlock('Blogs');
+		
         var_app($array);
         Remus::Model()->render();
     }
