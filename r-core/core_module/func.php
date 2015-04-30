@@ -101,6 +101,34 @@ function connect($path) {
     $path = _filter($path);
     return require $path;
 }
+
+function open_json($path){
+    if(is_file($path)){
+        $lang_json_data = (string) file_get_contents($path);
+        if(strlen($lang_json_data) > 0){
+            $lang_data = json_decode($lang_json_data, TRUE);
+            if(is_array($lang_data)){
+                return $lang_data;
+            }
+        }
+    }
+    return NULL;
+}
+
+function load_settings($path) {
+    if(file_exists($path)){
+
+        $ext = explode('.', $path);
+        $ext = strtolower(array_pop($ext));
+
+        if($ext == 'json'){
+            return open_json($path);
+        } else {
+            return connect($path);
+        }
+    }
+}
+
 /**
  * Осуществляет перенаправление на необходимую страницу 
  * и завершает работу скрипта
@@ -168,9 +196,12 @@ function lang($name){
 /**
  * Короткий доступ к фразам приложения
  */
+/**
+ * Короткий доступ к фразам приложения
+ */
 function app_lang($name){
-    if(isset(Remus::Model()->app_lang[$name])){
-        return Remus::Model()->app_lang[$name];
+    if(isset(Lang::$lang[$name])){
+        return Lang::$lang[$name];
     }
     return NULL;
 }
@@ -187,4 +218,12 @@ function var_app($var = NULL, $value = NULL){
  */
 function lastSymbol($str) {
     return substr($str, -1);
+}
+
+function strtoarray($str) {
+    if(is_string($str)){
+        return explode(',', $str);
+    }
+    if(is_array($str)){return $str;}
+    return array($str);
 }
