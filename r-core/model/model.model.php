@@ -11,25 +11,24 @@ if (!defined('DIR')) {
  */
 class Model implements RemusModelInterface {
     public $registr;
-    public $app_lang = array();
+    
+    /**
+     * @var Lang
+     */
+    public $app_lang;
     public $var_app = array();
     public $pfc_status;
     public $base_list;
     public static $PDO = NULL;
 
     /* Настройки языка */
-    public function app_lang($lang = FALSE,$library = FALSE) {
-            $lang = ($lang==FALSE)? 'LANG': $lang;
-            $lang = str_replace('-', '_', $lang);
-            $this->registr['lang'] = $lang;
-            $this->var_app(array(
-                'lang'=>$lang
-            ));
-            if (CheckFlag('APP_LANG_FORMAT') && CheckFlag('APP_LANG_METHOD')) {
-                if (APP_LANG_FORMAT == 'JSON' && APP_LANG_METHOD == 'JSON_FILE') {
-                    include DIR_CORE_MODULE.'lang_format'._DS.'json.php';
-                }
-            }
+    public function app_lang($lang = null,$library = null) {
+		if ($this->app_lang instanceof Lang){
+			return $this->app_lang;
+		}
+        include_once DIR_CORE_MODULE.'Lang.php';
+		$this->app_lang = new Lang($lang,$library);
+		
         return $this->app_lang;
     }
     /* Управление приложением */
@@ -60,7 +59,7 @@ class Model implements RemusModelInterface {
 
     public function render(){
         include _filter(DIR_DEFAULT.'var_app.php');
-        $array = array_merge($default_settings,$this->app_lang,$this->var_app);
+        $array = array_merge($default_settings,  Lang::$lang,$this->var_app);
         $array = array_change_key_case($array, CASE_LOWER);
 
         Remus::View()->setData($array);

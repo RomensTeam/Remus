@@ -22,7 +22,7 @@ class Route {
             $app = explode('@', $adress);
             
             if(count($app) != 2){
-                throw new RemusException(lang('error_add_route_rule'));
+                throw new RemusException('ERROR ADD RULE');
             }
             
             $router['module'] = $app[0];
