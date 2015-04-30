@@ -13,7 +13,6 @@ class Core {
         self::optimal_settings();                           # Оптимизируем настройки
         @include_once DIR_CORE_MODULE.'htaccess.php';       # HTACCESS-правки (см. докуоментацию)
         @include_once DIR_CORE_MODULE.'regisrtry.php';      # Регистр
-        @include_once DIR_CORE_MODULE.'identclient.php';    # Определение клиента
         @include_once DIR_CORE_MODULE.'remus.php';          # Контроллер
         @include_once DIR_CORE_MODULE.'RemusException.php'; # Исключения
         @include_once DIR_CORE_MODULE.'theme.php';          # Класс Тем
@@ -48,6 +47,13 @@ class Core {
             if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && !defined('URLS') && defined('URL')){
                 @define('URLS',  str_replace('http://', 'https://', URL));
                 @define('HTTPS', TRUE);
+            }
+            
+            # Определение AJAX-запроса
+            if ( !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' ){
+                   define('AJAX',TRUE);
+            } else{
+                   define('AJAX',FALSE);
             }
             
         }

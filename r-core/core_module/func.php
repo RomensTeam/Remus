@@ -20,8 +20,9 @@ function _urlen($url) {
     return (string) $path;
 }
 
+/***/
 function getURL() {
-    if(!defined('URL')){
+    if(defined('URL')){
         return URL;
     } else {
         $url = str_replace($_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME']);
