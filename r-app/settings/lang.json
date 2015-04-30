@@ -1,0 +1,8 @@
+{
+    "lang": {
+        "defaultLang"   : "ru_RU",
+        "availableLang" : ["ru_RU","en_US"],
+        "basicLang"     : "en_US",
+        "primaryFiles"   : "main"
+    }
+}
