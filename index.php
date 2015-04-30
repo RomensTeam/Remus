@@ -34,7 +34,7 @@
         'DEFAULT'       =>  'r-core/core_module/def_set',
         'CORE_INTERFACE'=>  'r-core/core_module/interface'
     );
-
+	
     foreach ($directory as $key => $value) {      
         if(!defined($key)){
             $value = realpath(DIR.$value)._DS;
