@@ -31,6 +31,7 @@
         'VIEW_CORE'     =>  'r-core/view_core',
         'CORE_MODULE'   =>  'r-core/core_module',
         'INTERFACE'     =>  'r-app/lib/interface',
+        'TYPES'         =>  'r-core/core_module/types',
         'DEFAULT'       =>  'r-core/core_module/def_set',
         'CORE_INTERFACE'=>  'r-core/core_module/interface'
     );
