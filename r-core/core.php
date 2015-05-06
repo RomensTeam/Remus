@@ -55,12 +55,12 @@ Core::end();
 
 
 if(defined('TEST_MODE_ON') || TEST_MODE){
-            if(!defined('TEST_MODE_OFF')){
+    if(!defined('TEST_MODE_OFF')){
 
-                $time   = sprintf(lang('test_time_script'), microtime(true)-$time_start);
-                $memory = sprintf(lang('memory_time_script'), memory_get_usage());
+        $time   = sprintf(lang('test_time_script'), microtime(true)-$time_start);
+        $memory = sprintf(lang('memory_time_script'), memory_get_usage());
 
-                print_var(array($time,$memory), lang('test_time_name'));
+        print_var(array($time,$memory), lang('test_time_name'));
 
-            }
-        }
+    }
+}
