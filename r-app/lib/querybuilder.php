@@ -1,33 +1,42 @@
 <?php
+
 /**
  * QueryBuilder - Постройка запроса
  * 
  * @author Romens
  */
 class QueryBuilder {
+    
+    /**
+     * @var PDO
+     */
     public $PDO;
+    
+    /**
+     * @var string
+     */
     public $SQL;
-    public $SET;
-    public $registr = array(
+    
+    private $registr = array(
         'column' => array(),
         'set' => array(),
         'param'  => array()
     );
-    public $table;
-    public $column;
-    public $where;
-    public $limit;
-    public $count;
-    public $bind;
+    
+    private $table;
+    private $column;
+    private $where;
+    private $limit;
+    private $order;
+    private $count;
+    private $bind;
     public $result;
+    private $operation   = array(null);
     public static $show = false;
-    public $operation = array(null);
     public static $affected_rows;
     public static $lastInsertID;
 	
 	/**
-	 *
-	 *
 	 * @param PDO $PDO
 	 * @return PDO
 	 */
@@ -44,10 +53,76 @@ class QueryBuilder {
         return $this->PDO;
     }
     
+	/**
+     * SELECT - осуществляет выборкуиз БД
+     * 
+     * @param string|array $column Необходимые столбцы
+     * @return QueryBuilder
+     */
+    public function select($column = '*') {
+        $this->reset();
+        $this->operation[0] = 'select';
+        $this->column($column);
+        $this->SQL = 'SELECT ';
+        
+        return $this;
+    }
+    
+    /**
+     * UPDATE - Изменение записи в БД
+     * 
+     * @param type $set_array Данные которые требуется заменить
+     * @return QueryBuilder
+     */
+    public function update($set_array) {
+        $this->reset('update');
+        $this->SQL = 'UPDATE ';
+        $this->registr['set'] = $set_array;
+        return $this;
+    }
+    
+    /**
+     * DELETE - удаление записи из БД
+     * 
+     * @return QueryBuilder
+     */
+    public function delete() {
+        $this->reset('delete');
+        $this->SQL = 'DELETE ';
+        return $this;
+    }
+    
+    /**
+     * INSERT - добавление новой записи в БД
+     * 
+     * @param array $record Запись
+     * @return QueryBuilder
+     */
+    public function insert($record) {
+        $this->reset('insert');
+        $this->SQL = 'INSERT INTO ';
+        foreach ($record as $key => $value) {
+            $this->registr['column'][] = $key;
+            $this->registr['param'][]  = $value;
+        }
+        return $this;
+    } 
+    
+    /**
+     * FROM -  таблица с которой будет работать класс
+     * @param string $nameTable Название таблицы
+     */
     public function from($nameTable) {
         $this->table = $nameTable;
         return $this;
     }
+    
+    /**
+     * WHERE - Устанаваливает условия отбора записи
+     * 
+     * @param string $string Условия отбора записи
+     * @return QueryBuilder
+     */
     public function where($string) {
         if($this->where == NULL){
             $this->where = 'WHERE '.$string.' ';
@@ -56,6 +131,62 @@ class QueryBuilder {
         }
         return $this;
     }
+    
+    /**
+     * ORDER BY - Сортирует по указаному столбцу
+     * 
+     * @param array $column Столбец
+     * @return QueryBuilder
+     */
+    public function order($column,$asc = false) {
+        $order = '';
+        
+        if($asc){$asc = 'ASC';} else {$asc = 'DESC';}
+        
+        foreach ($column as $table => $col) {
+            $order .= ' ORDER BY `'.$table.'`.`'.$col.'` '.$asc.' ';
+        }
+        $this->order = $order;
+        
+        return $this;
+    }
+    
+    /**
+     * LIMIT - Устанавливает лимит выборки
+     * 
+     * @param string|integer|array $start Начальная
+     * @param string|integer $number Количество
+     * @return QueryBuilder
+     */
+    public function limit($start,$number = null) {
+        
+        if(is_array($start)){
+            if((count($start) == 2)){
+                $number = $start[1];
+                $start = $start[0];
+            } elseif (count($start) == 1) {
+                $number = array_shift($start);
+                $start = 0;
+            } else {
+                throw new Exception('Wrong limit parametr');
+            }
+        }
+        
+        $this->limit = 'LIMIT '.(int) $start;
+        
+        if($number != NULL){
+            $this->limit .= ' , '.(int) $number;
+        }
+        return $this;
+    }
+    
+    /**
+     * BIND - Устанавливает значения для замены в SQL-коде
+     * 
+     * @param string|array $mask Маска
+     * @param string $value Значение
+     * @return QueryBuilder
+     */
     public function bind($mask,$value = null) {
         if($value=== null and is_array($mask)){
             $this->bind = array();
@@ -75,43 +206,8 @@ class QueryBuilder {
         }
         return $this;
     }
-    public function limit($start,$number = null) {
-        $this->limit = 'LIMIT '.(int) $start;
-        
-        if($number != NULL){
-            $this->limit .= ' , '.(int) $number;
-        }
-        return $this;
-    }
-    public function select($column = '*') {
-        $this->reset();
-        $this->operation[0] = 'select';
-        $this->column($column);
-        $this->SQL = 'SELECT ';
-        return $this;
-    }
-    public function delete() {
-        /*
-         * DELETE FROM `Base`.`Projects` WHERE `projects`.`id` = 25
-         */
-        $this->reset();
-        $this->operation[0] = 'delete';
-        $this->SQL = 'DELETE ';
-        return $this;
-    }
     
-    public function update($set_array) {
-        /*
-         * UPDATE  `Base`.`Projects` SET  `Status` =  '3' WHERE  `projects`.`id` =38;
-         */
-        $this->reset();
-        $this->operation[0] = 'update';
-        $this->SQL = 'UPDATE ';
-        $this->registr['set'] = $set_array;
-        return $this;
-    }
-    
-    public function SafeQuot($array) {
+    private function SafeQuot($array) {
         if(is_array($array)){
             foreach ($array as $key => $value) {
                 $exit = $key.'`.`'.$value;
@@ -148,6 +244,7 @@ class QueryBuilder {
                 $column = explode(',',$column);
             }
             if(is_array($column)){
+                $arroy = array();
                 foreach ($column as $key => $value) {
                     if(is_array($value)){
                         $mors = array();
@@ -156,24 +253,23 @@ class QueryBuilder {
                         }
                         $value = $mors;
                     }
-                    $this->column = $value;
+                    $arroy[] = $value;
                 }
+                $this->column = $arroy;
             }
         }
     }
+    
+    /**
+     * Возвраает последний выставленный ID
+     */
     public function GetLastID() {
         return $this->PDO->lastInsertId();
     }
-    public function insert($record) {
-        $this->reset('insert');
-        $this->operation = array('insert'); 
-        $this->SQL = 'INSERT INTO ';
-        foreach ($record as $key => $value) {
-            $this->registr['column'][] = $key;
-            $this->registr['param'][]  = $value;
-        }
-        return $this;
-    }
+    
+    /**
+     * Обнуляет все св-ва класса
+     */
     public function reset($operation = NULL) {
         if($operation <> NULL){
             $this->operation = array($operation);
@@ -184,14 +280,14 @@ class QueryBuilder {
         $this->where    = NULL;
         $this->limit    = NULL;
         $this->count    = NULL;
+        $this->order    = NULL;
         $this->bind     = NULL;
         $this->result   = NULL;
         $this->registr['column']  = array();
-        $this->registr['param'] = array();
-        $this->registr['set'] = array();
-        $this->result   = NULL;
+        $this->registr['param']   = array();
+        $this->registr['set']     = array();
         self::$affected_rows = NULL;
-        self::$lastInsertID = NULL;
+        self::$lastInsertID  = NULL;
     }
     private function getColumn(){
         if(is_array($this->column)){
@@ -202,6 +298,7 @@ class QueryBuilder {
             return $this->column;
         }
     }
+    
     public function prepare(){
         if($this->operation[0] == NULL){
             $this->operation[0] = '';
@@ -209,10 +306,11 @@ class QueryBuilder {
         switch ($this->operation[0]) {
             case 'select':
                 $this->SQL.=
-                         $this->getColumn()
-                         .' FROM '._quote($this->table)
-                         .$this->where
-                         .$this->limit; break;
+                    $this->getColumn()
+                    .' FROM '._quote($this->table)
+                    .$this->where
+                    .$this->order
+                    .$this->limit; break;
 
             case 'delete':
                 $this->table = $this->SafeQuot($this->table);
@@ -274,8 +372,25 @@ class QueryBuilder {
         } catch (PDOException $exc) {
             echo $exc->getTraceAsString();
         }
+        if($this->operation[0] == 'insert'){
+            self::$lastInsertID = $this->GetLastID();
+        }
+        
+        if(CheckFlag('REMUSPANEL')){
+            
+            $trace = debug_backtrace(); 
+            
+            RemusPanel::addData('query', array(
+                'sql'       => $this->SQL,
+                'result'    => RemusPanel::types($this->result),
+                'trace'     => $trace[1]
+            ));
+        }
     }
     
+    /**
+     * Позволяет добавить свой SQL код
+     */
     public function sql($sql) {
         if($this->SQL != NULL){
            $this->SQL .= $sql;
@@ -283,7 +398,10 @@ class QueryBuilder {
             $this->SQL = $sql;
         }
     }
-        
+    
+    /**
+     * Получение результата всех манипуляций
+     */
     public function result(){
         $this->prepare();
         $this->execute();
