@@ -9,8 +9,9 @@ class Core {
     public static function load_modules() 
     {
         @require DIR_SETTINGS.'config.php';            		# Подключаем настройки
-        self::optimal_settings();                           # Оптимизируем настройки
+        self::composerOptimal();                            # Оптимизируем настройки Composer
         @include_once DIR_CORE_MODULE.'func.php';           # Функции ядра
+        self::optimal_settings();                           # Оптимизируем настройки
         @include_once DIR_CORE_MODULE.'htaccess.php';       # HTACCESS-правки (см. докуоментацию)
         @include_once DIR_CORE_MODULE.'regisrtry.php';      # Регистр
         @include_once DIR_CORE_MODULE.'remus.php';          # Контроллер
@@ -61,11 +62,14 @@ class Core {
                    define('AJAX',FALSE);
             }
             
-            @define('COMPOSER', file_exists(DIR.'vendor/autoload.php'));
-            
         }
     }
 
+        
+    private static function composerOptimal() {
+        @define('COMPOSER', file_exists(DIR.'vendor/autoload.php'));
+    }
+    
     public static function loadModel()
     {
         if (CheckFlag('APP_MODEL')) {
