@@ -144,7 +144,7 @@ function load_settings($path) {
  */
 function redirect($url = URL){
     if($url == 404){
-        $url = URL.'404.php';
+        Error::error(404, URL.NOT_ROUTING_FILE);
     }
     header('Location: '.$url); 
     exit();
