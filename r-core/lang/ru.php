@@ -17,5 +17,6 @@ $_LANG = array(
     'error_no_theme' => 'Отсутствует выбраная тема',
     'null_data_for_render' => 'Отсутствуют данные для рендеринга',
     'wrong_settings_view' => 'Ошибка при настройки View',
+    'not_theme_settings' => 'Нет настроек для выбранной темы',
 );
 ?>

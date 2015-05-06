@@ -18,13 +18,13 @@ class RE_Theme {
         $this->addStyle();
     }
     
-    public function readSettings($dir) {
+    private function readSettings($dir) {
         
         $settings_data = file_get_contents($dir.THEME_FILE);
         $settings = json_decode($settings_data,TRUE);
         
         if($settings == NULL){
-            // ERROR
+            throw new RemusException(lang('not_theme_settings'),301);
         }
         
         self::$settings = $settings;
@@ -36,7 +36,7 @@ class RE_Theme {
      * записи в нужные места
      * 
      */
-    public function addStyle() {
+    private function addStyle() {
         foreach (self::$settings  as $key => $value) {
             switch ($key) {
                 case 'addStyleLocal':
