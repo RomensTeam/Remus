@@ -32,13 +32,8 @@ function getURL() {
     }
 }
 
-if(COMPOSER)
+function getLib($className)
 {
-    require DIR.'vendor/autoload.php';
-} else 
-{
-    function __autoload($className)
-    {
         $className = ltrim($className, '\\');
         $fileName  = '';
         $namespace = '';
@@ -51,7 +46,13 @@ if(COMPOSER)
         $fileName = DIR_LIB.$fileName;
 
         require $fileName;
-    }    
+}
+if(COMPOSER){
+    require DIR.'vendor/autoload.php';  
+} else {  
+    function __autoload($className){
+        getLib($className);    
+    }
 }
 
 function get_user_constants() {
