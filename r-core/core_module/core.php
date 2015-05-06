@@ -24,6 +24,11 @@ class Core {
         # print_var()
         if (CheckFlag('TEST_MODE')){
             include_once _filter(DIR_CORE.'devlib/print_var.php');
+            
+            if (CheckFlag('REMUSPANEL')){
+                include_once _filter(DIR_CORE.'devlib/RemusPanel/RemusPanel.php');
+            } 
+			
         }   else{
             function print_var(){}
         }

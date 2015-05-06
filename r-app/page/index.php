@@ -18,7 +18,11 @@ class Index {
         }
         
         /* I AM READY */
-        
+		
+        RemusPanel::log('Простое сообщение');
+        RemusPanel::log('Ошибка','error');
+        RemusPanel::log('Предупреждение','warning');
+        RemusPanel::log('Удачно','success');
         
         var_app($array);
         Remus::Model()->render();

@@ -8,6 +8,7 @@ define('LANG', 'ru'); # Язык фреймворка
 define('TEST_MODE', TRUE);
 define('WWW', FALSE); # Оставлять доступ к сайту через www.your_site.com
 
+define('REMUSPANEL',true);
 
 /**
  * Настройки базы данных

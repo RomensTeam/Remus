@@ -22,6 +22,7 @@ return array(
     'SUPPORT_DEVELOPERS'    => TRUE,
     'ENV'                   => 'LOCAL',
     'VIEW_CORE'             => 'RemusView',
+    'REMUSPANEL'            => FALSE,
     
     # Предопределенные константы
     'LIBRARY' => 2,

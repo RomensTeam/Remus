@@ -18,5 +18,12 @@ $_LANG = array(
     'null_data_for_render' => 'Отсутствуют данные для рендеринга',
     'wrong_settings_view' => 'Ошибка при настройки View',
     'not_theme_settings' => 'Нет настроек для выбранной темы',
+	
+    'remuspanel_head' => 'RemusPanel',
+    'remuspanel_tabs_constants' => 'Константы',
+    'remuspanel_tabs_files' => 'Файлы',
+    'remuspanel_tabs_log' => 'Лог',
+    'remuspanel_tabs_var_app' => 'Данные',
+    'remuspanel_tabs_query' => 'Запросы к БД',
 );
 ?>
