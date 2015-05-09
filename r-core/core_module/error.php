@@ -1,5 +1,11 @@
-<?php
+<?php        
 class Error {
+    
+    public static $obj;
+    
+    public function __construct() {}
+    
+    
     public static $error = array(
         400 => 'Bad Request',
         401 => 'Unauthorized',
@@ -10,6 +16,7 @@ class Error {
         408 => 'Request Timeout',
         414 => 'Request-URL Too Long'
     );
+    
     public static function error( $number = 404, $redirect = false){
 		$number = (integer) $number;
 		header('Status: '.$number.' '.self::$error[$number]);
@@ -20,5 +27,3 @@ class Error {
             
     }
 }
-
-?>
