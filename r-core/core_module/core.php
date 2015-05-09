@@ -6,6 +6,78 @@
  * @author Roman
  */
 class Core {
+    
+    public function __construct() 
+    {
+        ob_start();
+        $this->test_on();
+        self::load_modules();
+        $this->test_off();
+        
+        /**
+            * Включаем возможность краткого обращения
+            * 
+            * Example: ${R}
+            */
+           @define('R', 'remus', TRUE);   
+
+           # Запускаем контроллер
+           new Remus();
+           
+           $this->loadModules();
+           
+           $this->run_app();
+    }
+    
+    private function run_app()
+    {
+        
+        # Подключаем начальный файл приложения
+        include_once DIR_APP.'_start.php';
+        # Подключаем настройки приложения
+        include_once DIR_APP.'config.php';
+        # Определяем парметр вызова
+        Core::router();
+        # Подключаем конечный файл приложения при необходимости
+        Core::end_app();
+    }
+    
+    private function loadModules()
+    {
+        # Подключение библиотек с помощью Контроллера
+        Remus::Remus()->library(LIBRARY);
+
+        Core::test_lib();
+
+        # MODEL
+        Core::loadModel();
+
+        # VIEW
+        Core::loadView();
+        
+        $this->func_funny();
+    }
+    
+    private function func_funny()
+    {
+        if(CheckFlag('FUNC_FUNNY')){
+           include_once DIR_CORE_MODULE.'funcfunny.php';
+        }
+    }
+
+
+    private function test_on() 
+    {
+        error_reporting(E_ALL);
+    }
+    
+    private function test_off() 
+    {
+        if(defined('TEST_MODE') && !TEST_MODE) 
+            {error_reporting(0);}
+    }
+
+
     public static function load_modules() 
     {
         @require DIR_SETTINGS.'config.php';            		# Подключаем настройки
@@ -35,7 +107,8 @@ class Core {
         }
     }
     
-    public static function optimal_settings() {
+    public static function optimal_settings() 
+    {
         if(file_exists(DIR_DEFAULT.'config.php')){
             $flag = require DIR_DEFAULT.'config.php';
             
@@ -66,22 +139,19 @@ class Core {
     }
 
         
-    private static function composerOptimal() {
+    private static function composerOptimal()
+    {
         @define('COMPOSER', file_exists(DIR.'vendor/autoload.php'));
     }
     
-    public static function loadModel()
+    public static function loadModel($model = APP_MODEL)
     {
-        if (CheckFlag('APP_MODEL')) {
-            Remus()->load_model(APP_MODEL);
-        }
+        Remus()->load_model($model);
     }
     
-    public static function loadView()
+    public static function loadView($view = APP_VIEW_HTML)
     {
-        if (CheckFlag('APP_VIEW_HTML')) {
-            Remus()->load_view(APP_VIEW_HTML);
-        }
+        Remus()->load_view($view);
     }
     
     public static function router()
@@ -99,6 +169,7 @@ class Core {
         $router = DIR_CORE_MODULE.'router/'.ROUTER.'.php';
 
         if(is_file($router)){
+            ${R} = Remus::Remus();
             include_once $router;
 
             if( defined('ROUTING_STATUS') != TRUE && defined('NOT_ROUTING_FILE') ) 
@@ -108,10 +179,26 @@ class Core {
         }
     }
     
-    public static function end()
+    public static function end_app()
     {
         if(!defined('NO_END_APP')){
             include_once _filter(DIR_APP.'_end.php');
+        }
+    }
+    
+    public function __destruct() {
+        if(defined('TEST_MODE_ON') || TEST_MODE){
+            if(!defined('TEST_MODE_OFF')){
+
+                $time 	= microtime(true)-TIME_START;
+                $time   = sprintf(lang('test_time_script'), $time);
+
+                $memory = memory_get_usage();
+                $memory = sprintf(lang('memory_time_script'), $memory);
+
+                print_var(array($time,$memory), lang('test_time_name'));
+
+            }
         }
     }
 }
