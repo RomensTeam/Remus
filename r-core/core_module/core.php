@@ -85,11 +85,12 @@ class Core {
         @include_once DIR_CORE_MODULE.'func.php';           # Функции ядра
         self::optimal_settings();                           # Оптимизируем настройки
         @include_once DIR_CORE_MODULE.'htaccess.php';       # HTACCESS-правки (см. докуоментацию)
-        @include_once DIR_CORE_MODULE.'regisrtry.php';      # Регистр
-        @include_once DIR_CORE_MODULE.'remus.php';          # Контроллер
+        @include_once DIR_CORE_MODULE.'Regisrtry.php';      # Регистр
+        @include_once DIR_CORE_MODULE.'Error.php';          # Обработчик ошибок
+        @include_once DIR_CORE_MODULE.'Remus.php';          # Контроллер
         @include_once DIR_CORE_MODULE.'RemusException.php'; # Исключения
-        @include_once DIR_CORE_MODULE.'theme.php';          # Класс Тем
-        @include_once DIR_CORE_MODULE.'route.php';          # Роутер
+        @include_once DIR_CORE_MODULE.'RE_Theme.php';       # Класс Тем
+        @include_once DIR_CORE_MODULE.'Route.php';          # Роутер
     }
     
     public static function test_lib()
