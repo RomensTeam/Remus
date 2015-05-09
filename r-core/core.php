@@ -56,9 +56,12 @@ Core::end();
 
 if(defined('TEST_MODE_ON') || TEST_MODE){
     if(!defined('TEST_MODE_OFF')){
-
-        $time   = sprintf(lang('test_time_script'), microtime(true)-$time_start);
-        $memory = sprintf(lang('memory_time_script'), memory_get_usage());
+		
+		$time 	= microtime(true)-TIME_START;
+        $time   = sprintf(lang('test_time_script'), $time);
+		
+		$memory = memory_get_usage();
+        $memory = sprintf(lang('memory_time_script'), $memory);
 
         print_var(array($time,$memory), lang('test_time_name'));
 

@@ -1,13 +1,13 @@
 <?php
 # Время работы скрипта
-    $time_start = microtime(true);
+	define('TIME_START', microtime(true));
 
 # Определение версии
     define('VERSION', '0.3');
 
 # Определение версии PHP
-    if (version_compare(phpversion(),'5.3.0','<')){
-        exit('PHP5.3 Only');
+    if (version_compare(phpversion(),'5.4.16','<=')){
+        exit('PHP 5.4 Only');
     }
 # Дерективы
     define('_DS',DIRECTORY_SEPARATOR);
