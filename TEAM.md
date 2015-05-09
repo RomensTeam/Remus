@@ -1,4 +1,7 @@
-Руководители проекта:
-    Romens <romantrutnev@gmail.com>
-Команда #1:
-    Romens <romantrutnev@gmail.com>
+Руководитель проекта:
+
+- **Romens <romantrutnev@gmail.com>**
+
+Команда #1 **(Разработчики ядра)**:
+
+- **Romens <romantrutnev@gmail.com>**
