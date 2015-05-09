@@ -143,7 +143,6 @@ class Remus {
             $app['module'] = $name_module;
         }
         if(!isset($app['file'])){
-            
             if(file_exists(DIR_APP_PAGE.$name_module.'.php')){
                 $app['file'] = $name_module.'.php';
             } else {

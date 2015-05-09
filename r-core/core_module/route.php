@@ -10,10 +10,11 @@ class Route {
      * @param string $name Название приложения
      * @param string|array $pattern Регулярные выражения
      * @param string $adress Название класса @ Метод для запуска; Example: IndexController@Start
+     * @param string $file Подключаемый файл
      * @param array $settings Настройки
      * @return Route
      */
-    public static function addRule( $name, $pattern = '/^$/', $adress = null, $settings = null) {
+    public static function addRule( $name, $pattern = '/^$/', $adress = null, $file = null, $settings = null) {
         $router = array();
         
         $router['regexp'] = $pattern;
@@ -32,12 +33,12 @@ class Route {
             $router['module'] = $name;
         }
         
-        if(!is_null($settings)){
+        if(!empty($settings)){
             $settings = (array) $settings;
             $router['settings'] = $settings;
             
-            if(isset($settings['file'])){
-                $router['file'] = $settings['file'];
+            if(!empty($file)){
+                $router['file'] = $file;
             }
         }
         

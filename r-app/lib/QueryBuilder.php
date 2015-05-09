@@ -376,7 +376,7 @@ class QueryBuilder {
             self::$lastInsertID = $this->GetLastID();
         }
         
-        if(CheckFlag('REMUSPANEL')){
+        if(REMUSPANEL){
             
             $trace = debug_backtrace(); 
             
