@@ -1,7 +1,7 @@
 <?php
 if(!defined('DIR')){exit();}
 
-class Index {
+class Index extends VarAppController {
     
     public function __construct($name) {
         Remus::Model()->setLayout('index');
