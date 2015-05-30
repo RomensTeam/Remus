@@ -14,6 +14,14 @@ class RemusView implements RemusViewCoreInterface {
         return $this;
     }
     
+    /**
+     * BLOCK_REPLACE - Вывод блоков
+     * 
+     * Example:   
+     *          {[BLOCK_NAME]}
+     * 
+     * RegExp:   /{\[BLOCK_([A-Z0-9_]+)\]\}/
+     */
     public function block_replace($buffer = null) {
         
         if($buffer === null){
@@ -25,9 +33,7 @@ class RemusView implements RemusViewCoreInterface {
         for($io = 0; $io < 3; $io++){
             
             $all = null;
-            
             preg_match_all(VIEW_BLOCK_TAG_PATTERN, $buffer, $all);
-            
             if(count($all[1]) > 0){
                 foreach($all[1] as $value) {
                     $block_path = RE_Theme::$dir_theme. strtolower(VIEW_BLOCK_TAG_FOLDER . _DS .$value) . '.tpl';
@@ -38,7 +44,6 @@ class RemusView implements RemusViewCoreInterface {
                 }
             }else{break;}
         }
-        
         if($w){
             $this->view->buffer = $buffer;
         } else {
@@ -86,14 +91,13 @@ class RemusView implements RemusViewCoreInterface {
      *  array('SECRET' => 'Remus?'),
      * );
      *    
-     * {[FOREACH([TEST]):START}
+     * {[FOREACH([TEST]):START]}
      *      {[SECRET]}
-     * {FOREACH:END]}
+     * {[FOREACH:END]}
      * 
-     * RegExp:   /\{\[FOREACH\(([A-Z_]+)\)\:START\]\}([^\:]+)\{\[FOREACH\:END\]\}/
+     * RegExp:   /\{\[FOREACH\(\[([A-Z0-9_]+)\]\)\:START\]\}([^\:]+)\{\[FOREACH\:END\]\}/
      */
     public function foreach_replace() {
-    
         $all = null;
         preg_match_all(FOREACH_TAG_PATTERN, $this->view->buffer, $all); // Получаем все доступные в странице ключе
         $number = count($all[1]);
@@ -103,7 +107,7 @@ class RemusView implements RemusViewCoreInterface {
             if(isset($this->view->var_app[$name]) and is_array($this->view->var_app[$name]) and !empty($this->view->var_app[$name])){
                 $text = '';
                 
-                foreach ($this->view->var_app[$name] as $value) {
+                foreach ($this->view->var_app[$name] as $key => $value) {
                     $text .= $this->foreach_replace_function($value, $all[2][$c]);
                 }
                 

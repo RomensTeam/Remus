@@ -18,6 +18,17 @@ class Index extends VarAppController {
         }
         
         /* I AM READY */
+        
+        $this->links = array(
+            array( 
+                'link' => 'http://romens.ru/', 
+                'title' => 'Author Framework' 
+            ),
+            array( 
+                'link' => 'https://github.com/RomensTeam/Remus', 
+                'title' => 'GitHub Repository' 
+            ),
+        );
 		
         if(REMUSPANEL){
             RemusPanel::log('Простое сообщение');

@@ -32,7 +32,7 @@ return array(
     
     'VIEW_BLOCK_TAG_PATTERN'    =>'/{\[BLOCK_([A-Z0-9_]+)\]\}/',
     
-    'FOREACH_TAG_PATTERN'       =>'/\{\[FOREACH\(([A-Z0-9_]+)\)\:START\]\}([^\:]+)\{\[FOREACH\:END\]\}/',
+    'FOREACH_TAG_PATTERN'       =>'/\{\[FOREACH\(\[([A-Z0-9_]+)\]\)\:START\]\}([^\:]+)\{\[FOREACH\:END\]\}/',
     
     'FILL_TAG_PATTERN'          =>'/\{\[(.*)\]\|\[([A-Z0-9_]+)\]\}/',
     'FILL_ALTER_TAG_PATTERN'    =>'???',

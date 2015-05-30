@@ -224,7 +224,6 @@ class View implements RemusViewInterface {
             return NULL;
         }
         
-        
         $render = new $view_core;
         
         if($render instanceof RemusViewCoreInterface){
