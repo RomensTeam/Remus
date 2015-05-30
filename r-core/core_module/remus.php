@@ -92,27 +92,36 @@ class Remus {
     public function run_app($name_module){
         @define('ROUTING_STATUS', TRUE);
         if(ROUTER == 'DYNAMIC2'){
-            $app = $this->get_app_info($name_module);
-            
-            include  _filter(DIR_APP_PAGE.$app['file']);
-            
-            $Controller = $app['module'];
-            
-            if (class_exists($Controller, true)) {
-                $AppController  = new $Controller($name_module);
-            } else {
-                throw new RemusException(lang('not_user_controller'));
-            }
-            
-            if(isset($app['method']) and  method_exists($AppController, $app['method'])){
-                $AppController->$app['method']();
-            }
-            
-            $AppController = null;
+            $this->run_app_dynamic2($name_module);
         } elseif (ROUTER == 'DYNAMIC') {
             include_once $name_module;
         }
         return $this;
+    }
+    
+    public function run_app_dynamic2($name_module){
+        $app = $this->get_app_info($name_module);
+        $app['file'] = _filter(DIR_APP_PAGE.$app['file']);
+
+        if(is_file($app['file'])){
+            include $app['file'];
+        } else {
+            throw new RemusException('Нет файла для запуска приложения');
+        }
+
+        $Controller = $app['module'];
+
+        if (class_exists($Controller, true)) {
+            $AppController  = new $Controller($name_module);
+        } else {
+            throw new RemusException(lang('not_user_controller'));
+        }
+
+        if(isset($app['method']) and  method_exists($AppController, $app['method'])){
+            $AppController->$app['method']();
+        }
+
+        $AppController = null;
     }
     
     protected $_allowTypes = array(
