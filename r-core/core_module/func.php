@@ -10,6 +10,7 @@ function _filter($path) {
     if(is_file($path) || is_dir($path)){
         return (string) $path;
     }
+    return $path;
 }
 
 /**
@@ -233,4 +234,10 @@ function strtoarray($str) {
     }
     if(is_array($str)){return $str;}
     return array($str);
+}
+
+function def( string $const, $value ) {
+    if(!defined($const)){
+        define($const, $value);
+    }
 }

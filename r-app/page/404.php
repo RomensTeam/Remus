@@ -1,4 +1,4 @@
 <?php
 if(!defined('DIR')){exit();} // Защита
 
-echo '404 - Страница не найдена';
+echo '<h1 class="container text-center">404 - Страница не найдена</h1>';

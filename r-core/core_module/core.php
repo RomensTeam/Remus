@@ -19,7 +19,7 @@ class Core {
         * 
         * Example: ${R}
         */
-       @define('R', 'remus', TRUE);   
+       def('R', 'remus', TRUE);   
 
        # Запускаем контроллер
        new Remus();
@@ -116,7 +116,7 @@ class Core {
             foreach ($flag as $key => $value) {
                 $key = strtoupper($key);
                 if(!defined($key)){
-                    @define($key,$value);
+                    def($key,$value);
                 }
             }
 
@@ -125,8 +125,8 @@ class Core {
 
             # Определяем защищённые
             if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && !defined('URLS') && defined('URL')){
-                @define('URLS',  str_replace('http://', 'https://', URL));
-                @define('HTTPS', TRUE);
+                def('URLS',  str_replace('http://', 'https://', URL));
+                def('HTTPS', TRUE);
             }
             
             # Определение AJAX-запроса
@@ -142,7 +142,7 @@ class Core {
         
     private static function composerOptimal()
     {
-        @define('COMPOSER', file_exists(DIR.'vendor/autoload.php'));
+        def('COMPOSER', file_exists(DIR.'vendor/autoload.php'));
     }
     
     public static function loadModel($model = APP_MODEL)
@@ -158,9 +158,7 @@ class Core {
     public static function router()
     {
         if(isset($_SERVER['REQUEST_URI'])){
-			$uri = substr($_SERVER['SCRIPT_NAME'], 0, strlen($_SERVER['SCRIPT_NAME'])-9);
-			$uri = str_replace($uri,'',$_SERVER['REQUEST_URI']);
-            $uri = str_replace('?'.$_SERVER['QUERY_STRING'],'', $uri);
+            $uri = $_SERVER['REQUEST_URI'];
         } else {
             $uri = $_SERVER['REDIRECT_URL'];
         }
@@ -169,7 +167,7 @@ class Core {
             $uri = substr($uri,1);
         }
         
-        @define('URI', $uri);
+        def('URI', $uri);
         
 
         $router = DIR_CORE_MODULE.'router/'.ROUTER.'.php';
@@ -203,7 +201,7 @@ class Core {
                 $memory = sprintf(lang('memory_time_script'), $memory);
 
                 print_var(array($time,$memory), lang('test_time_name'));
-
+                echo '<script>if(document.title == ""){document.title = "Remus PHP Framework.";}</script>';
             }
         }
     }

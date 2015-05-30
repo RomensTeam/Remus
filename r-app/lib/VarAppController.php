@@ -5,7 +5,7 @@
  *
  * @author Roman
  */
-class AppController {
+class VarAppController {
 
     public function __set($name,$value) {
         Remus::Model()->var_app[$name] = $value;

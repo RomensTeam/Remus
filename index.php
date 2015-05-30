@@ -40,9 +40,9 @@
         if(!defined($key)){
             $value = realpath(DIR.$value)._DS;
             if($value != '\\'){
-                if(is_dir($value)){
+                if(is_dir($value) and !defined($value)){
                     $key = 'DIR_'.strtoupper(str_replace(' ','_',$key));
-                    @define($key, $value);
+                    define($key, $value);
                 }
             }
         }

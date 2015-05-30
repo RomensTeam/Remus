@@ -141,7 +141,11 @@ class Model implements RemusModelInterface {
     public function setLayout($layout_name,$theme = null){
       return Remus::View()->setLayout($layout_name,$theme);
     }
-    public function connect(){
+    public function connect($comment = null){
+        
+        if(self::$PDO instanceof PDO){
+            return self::$PDO;
+        }
         
         $settings = array_change_key_case($this->load_settings(DIR_SETTINGS.BASE_SETTINGS_FILE));
         
@@ -154,6 +158,22 @@ class Model implements RemusModelInterface {
         extract($settings);
         
         self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass);
+        
+        if(REMUSPANEL){
+            $trace = debug_backtrace(); 
+            
+            $sql = 'Открыто соединение с БД `<b>'.$host.'@'.$login.'</b>` к БД: `'.$base.'`.';
+            
+            if(!empty($comment)){
+                $sql .= '<br>'.$comment;
+            }
+            
+            RemusPanel::addData('query', array(
+                'sql'       => $sql,
+                'result'    => '',
+                'trace'     => $trace[1]
+            ));
+        }
         
         return self::$PDO;
     }
