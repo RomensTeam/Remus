@@ -142,7 +142,8 @@ class Core {
         
     private static function composerOptimal()
     {
-        def('COMPOSER', file_exists(DIR.'vendor/autoload.php'));
+        if(!defined('COMPOSER'))
+            {define('COMPOSER', file_exists(DIR.'vendor/autoload.php'));}
     }
     
     public static function loadModel($model = APP_MODEL)

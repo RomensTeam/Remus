@@ -236,7 +236,7 @@ function strtoarray($str) {
     return array($str);
 }
 
-function def( string $const, $value ) {
+function def($const, $value ) {
     if(!defined($const)){
         define($const, $value);
     }
