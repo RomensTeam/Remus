@@ -25,6 +25,11 @@ class Remus {
     private static $controller  = NULL;
     
     /**
+     * @var Route Контроллер
+     */
+    public static $route  = NULL;
+    
+    /**
      * @var array Совпадения с регулярным выражением
      */
     public $routing_matches = NULL;
@@ -47,6 +52,8 @@ class Remus {
 
     # Начало класса
     public function __construct() {
+        
+        self::$route = new Route();
         
         # Подключаем языковой пакет фреймворка 
         $lang = _filter(DIR_CORE.'lang'._DS.  substr(strtolower(LANG),0,2).'.php');
@@ -99,27 +106,39 @@ class Remus {
         return $this;
     }
     
+    public static $app;
+
     public function run_app_dynamic2($name_module){
         $app = $this->get_app_info($name_module);
         $app['file'] = _filter(DIR_APP_PAGE.$app['file']);
-
+        
         if(is_file($app['file'])){
             include $app['file'];
         } else {
             throw new RemusException('Нет файла для запуска приложения');
         }
-
+        
+        self::$app = $app;
         $Controller = $app['module'];
-
-        if (class_exists($Controller, true)) {
-            $AppController  = new $Controller($name_module);
-        } else {
-            throw new RemusException(lang('not_user_controller'));
-        }
-
-        if(isset($app['method']) and  method_exists($AppController, $app['method'])){
+        
+        if(AJAX and isset($app['settings']['ajax'])){
+            $app = $app['settings']['ajax'];
+            ob_clean();
+            $AppController  = new $Controller($name_module,'ajax');
             $AppController->$app['method']();
-        }
+            def('TEST_MODE_OFF',FALSE);
+            exit;
+        } else {
+            if (class_exists($Controller, true)) {
+                $AppController  = new $Controller($name_module);
+            } else {
+                throw new RemusException(lang('not_user_controller'));
+            }
+
+            if(isset($app['method']) and  method_exists($AppController, $app['method'])){
+                $AppController->$app['method']();
+            }
+        } 
 
         $AppController = null;
     }
@@ -146,7 +165,10 @@ class Remus {
         }
     }
 
-    public function get_app_info($name_module){
+    public function get_app_info($name_module = NULL){
+        if(empty($name_module)){
+            return self::$app;
+        }
         $app = Remus()->routing[$name_module];
         if(!isset($app['module'])){
             $app['module'] = $name_module;

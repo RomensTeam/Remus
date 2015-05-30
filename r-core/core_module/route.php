@@ -5,6 +5,8 @@
 
 class Route {
     
+    public static $LAST;
+
     /**
      * 
      * @param string $name Название приложения
@@ -14,7 +16,7 @@ class Route {
      * @param array $settings Настройки
      * @return Route
      */
-    public static function addRule( $name, $pattern = '/^$/', $adress = null, $file = null, $settings = null) {
+    public static function addRule( $name, $pattern = null, $adress = null, $file = null, $settings = null) {
         $router = array();
         
         $router['regexp'] = self::correctPattern($pattern);
@@ -38,18 +40,47 @@ class Route {
         } else {
             $router['module'] = $name;
         }
+            
+        if(!empty($file)){
+            $router['file'] = $file;
+        }
         
         if(!empty($settings)){
             $settings = (array) $settings;
             $router['settings'] = $settings;
-            
-            if(!empty($file)){
-                $router['file'] = $file;
-            }
         }
         
         Remus()->routing[$name] = $router;
-        return true;
+        self::$LAST = $name;
+        return Remus::$route;
+    }
+    
+    public function addAjaxAlias($adress = 'ajax',$file = '') {
+        $router = array();
+        $router['module'] = self::$LAST;
+        if(!empty($adress)){
+            $app = explode('@', $adress);
+            switch (count($app)) {
+                case 2:
+                    $router['module'] = $app[0];
+                    $router['method'] = $app[1];
+                    break;
+                case 1:
+                    $router['method'] = array_shift($app);
+                    break;
+
+                default:
+                    throw new RemusException(lang('error_add_route_rule'));
+                    break;
+            } 
+        }
+        if(isset($file)){
+            $router['file'] = $file;
+        } else {
+            $info = Remus()->get_app_info(self::$LAST);
+            $router['file'] = $info['file'];
+        }
+        Remus()->routing[self::$LAST]['settings']['ajax'] = $router;
     }
     
     public static function addFullRule($name, $array) {

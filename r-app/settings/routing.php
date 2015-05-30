@@ -2,4 +2,4 @@
 /**
  * Маршрутизация
  */
-Route::addRule('Index');
+Route::addRule('Index')->addAjaxAlias('ajax');

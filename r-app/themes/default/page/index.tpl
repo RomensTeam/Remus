@@ -3,6 +3,7 @@
       <div class="jumbotron">
         <h1 class="text-center">{[HEADING]}</h1>
         <h2 class="text-center">I am Remus {[VERSION]}</h2>
+        <div class="ajax-area text-center"><button class="btn btn-primary ajax-btn">Click Me!</button></div>
       </div>
     </div>
     <div class="container">
