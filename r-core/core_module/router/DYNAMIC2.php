@@ -11,7 +11,7 @@ if(defined('ROUTER') && ROUTER == 'DYNAMIC2'){
                 if($check){
                     $regexp = Route::verbalePatternCorrect($value);
                 } else {
-                    $regexp = $value;
+                    $regexp = Route::correctPattern($value);
                 }
                 
                 $result = preg_match($regexp, URI, $matches);
@@ -20,7 +20,7 @@ if(defined('ROUTER') && ROUTER == 'DYNAMIC2'){
                     if($check)
                         { Route::generateRoutingMatches($value,$matches); }
                     Remus()->run_app($AppController);
-                    break;
+                    break(2);
                 }
             }
         }

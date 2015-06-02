@@ -137,6 +137,10 @@ class Remus {
 
             if(isset($app['method']) and  method_exists($AppController, $app['method'])){
                 $AppController->$app['method']();
+            }else {
+                if(isset($this->registr['end_html_app'])){
+                    throw new RemusException(lang('not_user_controller_method'));
+                }
             }
         } 
 

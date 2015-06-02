@@ -91,7 +91,7 @@ class Route {
     /**
      * Исправляет поведение RegExp паттерна
      */
-    private static function correctPattern($pattern) {
+    public static function correctPattern($pattern) {
         $pattern_old = strtoarray($pattern);
         
         $pattern_true = array();
@@ -99,8 +99,7 @@ class Route {
         foreach ($pattern_old as $value) {
             
             $first = substr($value, 0,1);
-            
-            if((explode('^', $value) == 1) and (1 == explode('^', $value))){
+            if(( count(explode('^', $value)) == 1) and (1 == count(explode('$', $value)))){
                 $value = '^'.$value.'$';
             }
             

@@ -24,7 +24,7 @@ function exception_handler(Exception $exc) {
     asort($array);
     foreach ($array as $value) {
         echo '<tr>';
-        echo '<td>'.$i.'</td><td> <code>'.  str_replace(DIR, '', $value['file']).'</code> <span class="badge">'.$value['line'].'</span></td><td>'; 
+        echo '<td>'.$i.'</td><td> <code>'.  @str_replace(DIR, '', $value['file']).'</code> <span class="badge">'.@$value['line'].'</span></td><td>'; 
             echo @$value['class']; 
             echo @$value['type']; 
             echo @$value['function']; 

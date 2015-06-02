@@ -60,7 +60,10 @@ class Model implements RemusModelInterface {
 
     public function render(){
         include _filter(DIR_DEFAULT.'var_app.php');
-        $array = array_merge($default_settings,  Lang::$lang,$this->var_app);
+        if(class_exists('Lang',false) and is_array(Lang::$lang)){
+            $default_settings = array_merge($default_settings,  Lang::$lang);
+        }
+        $array = array_merge($default_settings,$this->var_app);
         $array = array_change_key_case($array, CASE_LOWER);
 
         Remus::View()->setData($array);
@@ -126,7 +129,7 @@ class Model implements RemusModelInterface {
         Remus::View()->end_string.= $string;
         return $this;
     }
-    public function setTheme($theme_name){
+    public function setTheme($theme_name = 'default'){
         return Remus::View()->setTheme($theme_name);
     }
     public function getBlock($name){
@@ -138,7 +141,7 @@ class Model implements RemusModelInterface {
             return FALSE;
         }
     }
-    public function setLayout($layout_name,$theme = null){
+    public function setLayout($layout_name = 'index',$theme = null){
       return Remus::View()->setLayout($layout_name,$theme);
     }
     public function connect($comment = null){
@@ -161,38 +164,32 @@ class Model implements RemusModelInterface {
         
         if(REMUSPANEL){
             $trace = debug_backtrace(); 
-            
             $sql = 'Открыто соединение с БД `<b>'.$host.'@'.$login.'</b>` к БД: `'.$base.'`.';
-            
-            if(!empty($comment)){
-                $sql .= '<br>'.$comment;
-            }
-            
+            if(!empty($comment))
+                { $sql .= '<br>'.$comment;}
             RemusPanel::addData('query', array(
                 'sql'       => $sql,
                 'result'    => '',
                 'trace'     => $trace[1]
             ));
         }
-        
         return self::$PDO;
     }
     
 	private function open_json($path){
-            if(is_file($path)){
-                $lang_json_data = (string) file_get_contents($path);
-                if(strlen($lang_json_data) > 0){
-                    $lang_data = json_decode($lang_json_data, TRUE);
-                    if(is_array($lang_data)){
-                        return $lang_data;
-                    }
+        if(is_file($path)){
+            $lang_json_data = (string) file_get_contents($path);
+            if(strlen($lang_json_data) > 0){
+                $lang_data = json_decode($lang_json_data, TRUE);
+                if(is_array($lang_data)){
+                    return $lang_data;
                 }
             }
         }
+    }
         
     private function load_settings($path) {
         if(file_exists($path)){
-            
             $ext = explode('.', $path);
             $ext = strtolower(array_pop($ext));
             
@@ -203,7 +200,7 @@ class Model implements RemusModelInterface {
             }
         }
     }
-        
+    
     public function __toString(){
         return 'Remus.'.VERSION;
     }

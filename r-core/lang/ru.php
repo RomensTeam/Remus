@@ -18,6 +18,8 @@ $_LANG = array(
     'null_data_for_render' => 'Отсутствуют данные для рендеринга',
     'wrong_settings_view' => 'Ошибка при настройки View',
     'not_theme_settings' => 'Нет настроек для выбранной темы',
+    'not_user_controller' => 'Нет контроллера приложения',
+    'not_user_controller_method' => 'Нет метода контролера приложения',
 	
     'remuspanel_head' => 'RemusPanel',
     'remuspanel_tabs_constants' => 'Константы',
