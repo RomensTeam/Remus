@@ -14,6 +14,10 @@ if(defined('ROUTER') && ROUTER == 'DYNAMIC2'){
                     $regexp = Route::correctPattern($value);
                 }
                 
+                if(is_array($regexp)){
+                    $regexp = array_shift($regexp);
+                }
+                
                 $result = preg_match($regexp, URI, $matches);
                 
                 if($result){
