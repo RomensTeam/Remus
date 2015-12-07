@@ -38,8 +38,10 @@ class Index extends VarAppController {
         }
 		
         var_app($array);
+        
         $ajax = M()->getBlock('ajax');
         M()->addToEnd($ajax);
+        
         Remus::Model()->render();
     }
     
@@ -59,7 +61,7 @@ class Index extends VarAppController {
     }
     
     public function ajax() {
-        echo '<h3>ДА! Это AJAX!</h3>';
+        echo '<h3>Yes! This is AJAX!</h3>';
     }
 }
 

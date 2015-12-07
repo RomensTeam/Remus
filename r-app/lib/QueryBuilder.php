@@ -127,7 +127,7 @@ class QueryBuilder {
         if($this->where == NULL){
             $this->where = 'WHERE '.$string.' ';
         } else{
-            $this->where .= $string.' ';
+            $this->where .= ' AND '.$string.' ';
         }
         return $this;
     }

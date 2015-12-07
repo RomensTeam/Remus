@@ -58,7 +58,7 @@ class InfoBlock {
      * 
      * Status: WORK!
      */
-    public function get($type,$column = '*') 
+    public function get($type = null,$column = '*', $limit = array(0,10)) 
     {
         self::$QB->select($column)
                 ->from($this->_name);
@@ -79,13 +79,8 @@ class InfoBlock {
                 }
             }
         }
+        self::$QB->limit($limit);
         $result = self::$QB->result();
-
-        if(!empty($result)){
-            if(count($result) == 1){
-                return array_shift($result);
-            }
-        }
         return $result;
     }
     

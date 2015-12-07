@@ -31,6 +31,9 @@ class Core {
     
     private function run_app()
     {
+        if(REMUSPANEL){
+            new RemusPanel();
+        }
         
         # Подключаем начальный файл приложения
         include_once DIR_APP.'_start.php';

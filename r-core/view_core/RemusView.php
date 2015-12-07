@@ -104,11 +104,18 @@ class RemusView implements RemusViewCoreInterface {
         
         for ($c = 0; $c < $number; $c++) {
             $name = strtolower($all[1][$c]);
-            if(isset($this->view->var_app[$name]) and is_array($this->view->var_app[$name]) and !empty($this->view->var_app[$name])){
+            if(isset($this->view->var_app[$name]) and is_array($this->view->var_app[$name])){
                 $text = '';
                 
                 foreach ($this->view->var_app[$name] as $key => $value) {
-                    $text .= $this->foreach_replace_function($value, $all[2][$c]);
+                    
+                    if(is_array($value)){ 
+                        $text .= $this->foreach_replace_function($value, $all[2][$c]);
+                    } else {
+                        if(REMUSPANEL){
+                            RemusPanel::log('FOREACH_REPLACE: Value is not array', 'danger');
+                        }
+                    }
                 }
                 
                 $this->view->buffer = str_replace($all[0][$c], $text, $this->view->buffer);
@@ -117,6 +124,7 @@ class RemusView implements RemusViewCoreInterface {
     }
     
     protected function foreach_replace_function($value,$text) {
+        
         $return = $text;
         
         for ($i = 0; $i < 3; $i++) {
