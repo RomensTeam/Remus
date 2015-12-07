@@ -163,6 +163,7 @@ class Core {
     {
         if(isset($_SERVER['REQUEST_URI'])){
             $uri = $_SERVER['REQUEST_URI'];
+		    $uri = str_replace('?'.$_SERVER['QUERY_STRING'], '', $uri);
         } else {
             $uri = $_SERVER['REDIRECT_URL'];
         }

@@ -287,7 +287,11 @@ class View implements RemusViewInterface {
             RE_Theme::$layout_name = $layout_name;
             
         } else {
-            throw new RemusException(lang('error_no_layout').' - '.$layout_path);
+            if(REMUSPANEL){
+                RemusPanel::log(lang('error_no_layout').' - '.$layout_path, RemusPanel::$LOG_ERROR);
+            } else {
+                throw new RemusException(lang('error_no_layout').' - '.$layout_path);
+            }
         }
     }
     

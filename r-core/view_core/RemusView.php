@@ -104,7 +104,7 @@ class RemusView implements RemusViewCoreInterface {
         
         for ($c = 0; $c < $number; $c++) {
             $name = strtolower($all[1][$c]);
-            if(isset($this->view->var_app[$name]) and is_array($this->view->var_app[$name])){
+            if(isset($this->view->var_app[$name]) and is_array($this->view->var_app[$name]) and !empty($this->view->var_app[$name])){
                 $text = '';
                 
                 foreach ($this->view->var_app[$name] as $key => $value) {

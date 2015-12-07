@@ -114,6 +114,8 @@ class Remus {
         
         if(is_file($app['file'])){
             include $app['file'];
+        } elseif (is_file($app['file'].'.php')) {
+            include $app['file'].'.php';
         } else {
             throw new RemusException('Нет файла для запуска приложения');
         }

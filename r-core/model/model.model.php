@@ -56,6 +56,14 @@ class Model implements RemusModelInterface {
         
         return $this;
     }
+    
+    public function end_json_app(){
+        ob_clean();
+        header('Content-Type: application/json');
+        echo json_encode($this->var_app,JSON_PRETTY_PRINT);
+        define('TEST_MODE_OFF',TRUE);
+        exit();
+    }
     /* Взаимодействие с View */
 
     public function render(){
@@ -130,11 +138,17 @@ class Model implements RemusModelInterface {
         return $this;
     }
     public function setTheme($theme_name = 'default'){
+        if(REMUSPANEL){
+            RemusPanel::log('Выбрана тема: <span class="label label-info">'.$theme_name.'</span>');
+        }
         return Remus::View()->setTheme($theme_name);
     }
     public function getBlock($name){
         $block_path = _filter(RE_Theme::$dir_theme . 'block' . _DS . strtolower($name) . '.tpl');
         if(is_file($block_path)){
+            if(REMUSPANEL){
+                RemusPanel::log('Использован блок: <span class="label label-info">'.$name.'</span>');
+            }
             return file_get_contents($block_path);
         }
         else{
@@ -142,7 +156,11 @@ class Model implements RemusModelInterface {
         }
     }
     public function setLayout($layout_name = 'index',$theme = null){
-      return Remus::View()->setLayout($layout_name,$theme);
+        if(REMUSPANEL){
+            RemusPanel::log('Выбрано полотно: <span class="label label-info">'.$layout_name.'</span>');
+        }
+        
+        return Remus::View()->setLayout($layout_name,$theme);
     }
     public function connect($comment = null){
         
@@ -176,7 +194,7 @@ class Model implements RemusModelInterface {
         return self::$PDO;
     }
     
-	private function open_json($path){
+    private function open_json($path){
         if(is_file($path)){
             $lang_json_data = (string) file_get_contents($path);
             if(strlen($lang_json_data) > 0){

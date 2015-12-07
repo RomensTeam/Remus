@@ -81,6 +81,24 @@ class InfoBlock {
         }
         self::$QB->limit($limit);
         $result = self::$QB->result();
+        
+        return $result;
+    }
+    
+    /**
+     * GetOne - получение записи инфоблока
+     * 
+     * Status: WORK!
+     */
+    public function getOne($type = array(),$column = '*') 
+    {
+        $result = $this->get($type, $column);
+
+        if(!empty($result)){
+            if(count($result) == 1){
+                return array_shift($result);
+            }
+        }
         return $result;
     }
     

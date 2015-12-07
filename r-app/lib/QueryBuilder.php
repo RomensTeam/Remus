@@ -372,7 +372,7 @@ class QueryBuilder {
         } catch (PDOException $exc) {
             echo $exc->getTraceAsString();
         }
-        if($this->operation[0] == 'insert'){
+        if(isset($this->operation[0]) and ($this->operation[0] == 'insert')){
             self::$lastInsertID = $this->GetLastID();
         }
         
