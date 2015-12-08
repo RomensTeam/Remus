@@ -38,4 +38,4 @@
 	- Model
 	- View
 	- Route
-	- QueryBuilder
+	- QueryBuilder- [Константы](https://github.com/RomensTeam/Remus/blob/documentation/documentation/api/constants.md)
