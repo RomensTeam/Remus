@@ -33,9 +33,10 @@
 
 ## III. API ##
 - Функции фреймворка
+- [Константы](https://github.com/RomensTeam/Remus/blob/documentation/documentation/api/constants.md)
 - Классы фреймворка
 	- Remus (Controller)
 	- Model
 	- View
 	- Route
-	- QueryBuilder- [Константы](https://github.com/RomensTeam/Remus/blob/documentation/documentation/api/constants.md)- [Константы](https://github.com/RomensTeam/Remus/blob/documentation/documentation/api/constants.md)- [Константы](https://github.com/RomensTeam/Remus/blob/documentation/documentation/api/constants.md)
+	- QueryBuilder
