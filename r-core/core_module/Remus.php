@@ -202,7 +202,10 @@ class Remus {
     }
     # Подключение библиотек
     public function library($library_list) {
-        if($library_list === LIBRARY){include_once DIR_SETTINGS.'library.php';}
+        if($library_list === LIBRARY){
+            if(!file_exists(DIR_SETTINGS.'library.php')){ return false;}
+            include_once DIR_SETTINGS.'library.php';
+        }
         return $this->connect_list_file($library_list, DIR_LIB);
     }
     public function devlib($devlibrary_list) {
