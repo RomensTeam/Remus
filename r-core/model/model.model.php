@@ -68,10 +68,7 @@ class Model implements RemusModelInterface {
 
     public function render(){
         include _filter(DIR_DEFAULT.'var_app.php');
-        if(class_exists('Lang',false) and is_array(Lang::$lang)){
-            $default_settings = array_merge($default_settings,  Lang::$lang);
-        }
-        $array = array_merge($default_settings,$this->var_app);
+        $array = array_merge(Lang::$lang,$this->var_app);
         $array = array_change_key_case($array, CASE_LOWER);
 
         Remus::View()->setData($array);
