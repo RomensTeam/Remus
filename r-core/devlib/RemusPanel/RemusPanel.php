@@ -213,7 +213,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         $data .= '<tr class="danger"><th>All files: '.  count($files).'</th></tr>';
         
         foreach ($files as $value) {
-            $data .= '<tr><td>'.str_replace(DIR, '<b>DIR:</b>', $value).'</td></tr>';
+            $data .= '<tr><td>'.str_replace(DIR, '<abbr title="'.DIR.'"><b>DIR</b></abbr> ', $value).'</td></tr>';
         }
         
         $data .= '</tbody></table>';
@@ -278,9 +278,8 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
             if($mixed === ''){
                 return '(empty string)';
             }
-            
-            
-            return (string) '<code>'.htmlspecialchars($mixed).'</code>';
+            $mixed = preg_replace_callback(VIEW_TAG_PATTERN, function($match){return '<b>'.$match[0].'</b>';}, htmlspecialchars($mixed));
+            return (string) '<code>'.$mixed.'</code>';
         }
         if(is_bool($mixed)){
             if($mixed){ return '<span class="label label-info">TRUE</span>';} 
@@ -293,7 +292,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
             return 'NULL';
         } 
         if(is_array($mixed)){
-            return 'array['.count($mixed).']';
+            return 'array <span class="label label-info">'.count($mixed).'</span>';
         }
         return 'ERROR';
     }
