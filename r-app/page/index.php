@@ -21,6 +21,10 @@ class Index extends VarAppController {
         
         $this->links = array(
             array( 
+                'link' => 'https://github.com/RomensTeam/Remus/blob/documentation/documentation/index.md', 
+                'title' => 'Documentation Framework' 
+            ),
+            array( 
                 'link' => 'http://romens.ru/', 
                 'title' => 'Author Framework' 
             ),
