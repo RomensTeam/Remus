@@ -5,6 +5,7 @@
  *
  * @author Romens
  */
+namespace Base;
 class InfoBlock {
     
     /**
