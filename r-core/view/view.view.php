@@ -294,30 +294,4 @@ class View implements RemusViewInterface {
             }
         }
     }
-    
-    /**
-     * Очистка буферра от неиспользованных ключей
-     * 
-     * @return void 
-     */
-    public function delAllKey() {
-        foreach ($this->settings['module'] as $value) {
-            switch ($value) {
-                case 'block':
-                    preg_match_all(VIEW_TAG_PATTERN, $this->buffer, $all);
-                break;
-            
-                case 'fill':
-                    preg_match_all(FILL_TAG_PATTERN, $this->buffer, $all);
-                break;
-            
-                case 'foreach':
-                    preg_match_all(FOREACH_TAG_PATTERN, $this->buffer, $all);
-                break;
-            }
-            
-            foreach ($all[0] as $all1){$this->buffer = str_replace($all1, '', $this->buffer);}
-        }
-    }
-        
 }
