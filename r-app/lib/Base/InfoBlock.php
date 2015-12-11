@@ -18,12 +18,12 @@ class InfoBlock {
 
 
     public function __construct($table = null) 
-    {
-        Remus::Model()->connect('Соединение с БД инициализировано через тип данных InfoBlock');
-        if(isset(Model::$PDO) and Model::$PDO instanceof PDO){
-            self::$QB = new QueryBuilder(Model::$PDO);
+    {     
+        \Remus::Model()->connect('Соединение с БД инициализировано через тип данных InfoBlock');
+        if(isset(\Model::$PDO) and \Model::$PDO instanceof \PDO){
+            self::$QB = new QueryBuilder(\Model::$PDO);
         } else {
-            throw new RemusException('Не подключен');
+            throw new \RemusException('Не подключен');
         }
         
         if(is_string($table)){
