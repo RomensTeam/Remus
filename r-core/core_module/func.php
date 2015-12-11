@@ -45,7 +45,10 @@ function getLib($className)
         }
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
         $fileName = DIR_LIB.$fileName;
-
+        
+        if(!file_exists($fileName)){
+            throw new RemusException;
+        }
         require $fileName;
 }
 if(COMPOSER){
