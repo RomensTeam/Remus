@@ -18,9 +18,9 @@ class RemusView implements RemusViewCoreInterface {
      * BLOCK_REPLACE - Вывод блоков
      * 
      * Example:   
-     *          {[BLOCK_NAME]}
+     *          {[BLOCK NAME]}
      * 
-     * RegExp:   /{\[BLOCK_([A-Z0-9_]+)\]\}/
+     * RegExp:   /\{\[BLOCK ([A-Z0-9_]+)\]\}/
      */
     public function block_replace($buffer = null) {
         

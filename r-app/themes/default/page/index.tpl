@@ -1,4 +1,4 @@
-{[BLOCK_HEADER]}
+{[BLOCK HEADER]}
     <div class="container text-center">
       <div class="jumbotron">
         <h1 class="text-center">{[HEADING]}</h1>
@@ -27,7 +27,7 @@
           <div class="col-md-3">
               <div class="list-group">
                 {[FOREACH([LINKS]):START]}
-                    {[BLOCK_BLOC]}
+                    {[BLOCK BLOC]}
                 {[FOREACH:END]}
               </div>
           </div>
