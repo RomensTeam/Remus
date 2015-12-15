@@ -15,7 +15,7 @@ return array(
     'APP_LANG_PREFIX'       => '',
     'APP_LANG_PATTERN'      => '',
     'APP_LANG_EXT'          => 'json',
-    'APP_VIEW_HTML'         => 'View',
+    'APP_VIEW'         		=> 'View',
     'APP_MODEL'             => 'Model',
     'LAYOUT_FOLDER'         => 'page',
     'THEME_FILE'            => 'theme.json',

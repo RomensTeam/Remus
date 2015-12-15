@@ -9,4 +9,4 @@ $site_meta = array(
     'preview-image' => URL.'preview_image.png'
 );
 Remus::View()->head($site_meta);
-Remus::Model()->setTheme('default'); // Выбираем тему
+Remus::View()->setTheme('default'); // Выбираем тему

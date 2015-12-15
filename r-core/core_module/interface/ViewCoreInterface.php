@@ -10,8 +10,8 @@
  *
  * @author Roman
  */
-interface RemusViewCoreInterface {
+interface ViewCoreInterface {
     public function render();
-    public function setView(RemusViewInterface $view);
+    public function setView($view);
     public function clear();
 }

@@ -14,15 +14,6 @@ class Core {
         self::load_modules();
         $this->test_off();
         
-        /**
-        * Включаем возможность краткого обращения
-        * 
-        * Example: ${R}
-        */
-       def('R', 'remus', TRUE);   
-
-       # Запускаем контроллер
-       new Remus();
 
        $this->loadModules();
 
@@ -31,6 +22,9 @@ class Core {
     
     private function run_app()
     {
+       # Запускаем контроллер
+        new Remus();
+       
         if(REMUSPANEL){
             new RemusPanel();
         }
@@ -113,34 +107,33 @@ class Core {
     
     public static function optimal_settings() 
     {
-        if(file_exists(DIR_DEFAULT.'config.php')){
-            $flag = require DIR_DEFAULT.'config.php';
-            
-            foreach ($flag as $key => $value) {
-                $key = strtoupper($key);
-                if(!defined($key)){
-                    def($key,$value);
-                }
-            }
+        if(!file_exists(DIR_DEFAULT.'config.php')){ return false;}
+        
+        $config = require DIR_DEFAULT.'config.php';
 
-            # Экономим память
-            unset($flag);
-
-            # Определяем защищённые
-            if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && !defined('URLS') && defined('URL')){
-                def('URLS',  str_replace('http://', 'https://', URL));
-                def('HTTPS', TRUE);
+        foreach ($config as $key => $value) {
+            $key = strtoupper($key);
+            if(!defined($key)){
+                def($key,$value);
             }
-            
-            # Определение AJAX-запроса
-            if ( !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' ){
-                   define('AJAX',TRUE);
-            } else{
-                   define('AJAX',FALSE);
-            }
-            
         }
-    }
+
+        # Экономим память
+        unset($flag);
+
+        # Определяем защищённые
+        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && !defined('URLS') && defined('URL')){
+            def('URLS',  str_replace('http://', 'https://', URL));
+            def('HTTPS', TRUE);
+        }
+
+        # Определение AJAX-запроса
+        if ( !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' ){
+               define('AJAX',TRUE);
+        } else{
+               define('AJAX',FALSE);
+        }
+}
 
         
     private static function composerOptimal()
@@ -154,7 +147,7 @@ class Core {
         Remus()->load_model($model);
     }
     
-    public static function loadView($view = APP_VIEW_HTML)
+    public static function loadView($view = APP_VIEW)
     {
         Remus()->load_view($view);
     }

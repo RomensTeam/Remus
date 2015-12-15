@@ -9,7 +9,7 @@ if (!defined('DIR')) {
  * @author Romens <romantrutnev@gmail.com>
  * @version 1.2
  */
-class Model implements RemusModelInterface {
+class Model implements ModelInterface {
     public $registr;
     
     /**
@@ -30,39 +30,6 @@ class Model implements RemusModelInterface {
 		$this->app_lang = new Lang($lang,$library);
 		
         return $this->app_lang;
-    }
-    /* Управление приложением */
-    public function start_html_app($meta = array()){
-        if(!is_array($meta)){
-            $meta = array();
-        }
-        if(defined('CHARSET')){
-                header('Content-Type: text/html; charset=' . strtolower(CHARSET));
-        }
-        Remus::View()->meta = array_merge(Remus::View()->meta,$meta);
-        return $this;
-    }
-	
-    public function end_html_app(){
-        if(isset($this->registr['end_html_app'])){
-            return $this;
-        }
-
-        if(!empty($this->buffer)){
-            echo $this->buffer;
-        }
-
-        $this->registr['end_html_app'] = TRUE;
-        
-        return $this;
-    }
-    
-    public function end_json_app(){
-        ob_clean();
-        header('Content-Type: application/json');
-        echo json_encode($this->var_app,JSON_PRETTY_PRINT);
-        define('TEST_MODE_OFF',TRUE);
-        exit();
     }
     /* Взаимодействие с View */
 
@@ -90,56 +57,7 @@ class Model implements RemusModelInterface {
         else{ $this->var_app[$var] = $value; }
         return $this;
     }
-    public function addScript($script, $link = FALSE){
-        if(is_array($script)){
-            if ($link == FALSE) {
-                Remus::View()->js[] = array_merge(Remus::View()->js,$script);
-            } else {
-                Remus::View()->js_link[] = array_merge(Remus::View()->js_link,$script);
-            }
-        }
-        if ($link == FALSE) {
-            Remus::View()->js[] = $script;
-        } else {
-            Remus::View()->js_link[] = $script;
-        }
-        return $this;
-    }
-    public function addStyle($style, $link = FALSE){
-        if(is_array($style)){
-            if ($link == FALSE) {
-                Remus::View()->css = array_merge(Remus::View()->css,$style);
-            } else {
-                Remus::View()->css_link = array_merge(Remus::View()->css,$style);
-            }
-        }
-        if ($link == FALSE) {
-            Remus::View()->css[] = $style;
-        } else {
-            Remus::View()->css_link[] = $style;
-        }
-        return $this;
-    }
-    public function addToHead($string){
-        if(is_array($string)){
-            $string = implode('', $string);
-        }
-        Remus::View()->head_string.= $string;
-        return $this;
-    }
-    public function addToEnd($string){
-        if(is_array($string)){
-            $string = implode('', $string);
-        }
-        Remus::View()->end_string.= $string;
-        return $this;
-    }
-    public function setTheme($theme_name = 'default'){
-        if(REMUSPANEL){
-            RemusPanel::log('Выбрана тема: <span class="label label-info">'.$theme_name.'</span>');
-        }
-        return Remus::View()->setTheme($theme_name);
-    }
+
     public function getBlock($name){
         $block_path = _filter(RE_Theme::$dir_theme . 'block' . _DS . strtolower($name) . '.tpl');
         if(is_file($block_path)){
@@ -151,13 +69,6 @@ class Model implements RemusModelInterface {
         else{
             return FALSE;
         }
-    }
-    public function setLayout($layout_name = 'index',$theme = null){
-        if(REMUSPANEL){
-            RemusPanel::log('Выбрано полотно: <span class="label label-info">'.$layout_name.'</span>');
-        }
-        
-        return Remus::View()->setLayout($layout_name,$theme);
     }
     public function connect($comment = null){
         

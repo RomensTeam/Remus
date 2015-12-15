@@ -5,11 +5,11 @@
  *
  * @author Roman
  */
-class RemusView implements RemusViewCoreInterface {
+class RemusView implements ViewCoreInterface {
     
     public $view;
 
-    public function setView(RemusViewInterface $view) {
+    public function setView($view) {
         $this->view = $view;
         return $this;
     }

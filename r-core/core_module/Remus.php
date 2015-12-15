@@ -20,6 +20,11 @@ class Remus {
     private static $view  = NULL;
     
     /**
+     * @var string тип данных для отображения
+     */
+    private static $viewCore  = 'html';
+    
+    /**
      * @var Remus Контроллер
      */
     private static $controller  = NULL;
@@ -48,7 +53,11 @@ class Remus {
      * 
      */
     private $registr;
-
+    
+    /**
+     * 
+     */
+    public $settings = array();
 
     # Начало класса
     public function __construct() {
@@ -149,9 +158,67 @@ class Remus {
         $AppController = null;
     }
     
-    protected $_allowTypes = array(
-        'InfoBlock'
-    );
+    /* Управление приложением */
+    
+    public function startApp($viewCore = 'html') {
+        
+        switch ($viewCore) {
+            case 'json':
+                if(defined('CHARSET')){
+                    header('Content-Type: application/json; charset=' . strtolower(CHARSET));
+                }
+            break;
+            
+            case 'xml':
+                if(defined('CHARSET')){
+                    header('Content-Type: application/xml; charset=' . strtolower(CHARSET));
+                }
+            break;
+
+            default:
+                if(!is_array($viewCore)){
+                    $viewCore = array();
+                }
+                if(defined('CHARSET')){
+                    header('Content-Type: text/html; charset=' . strtolower(CHARSET));
+                }
+                Remus::View()->meta = array_merge(Remus::View()->meta,$viewCore);
+                $viewCore = 'html';
+            break;
+        }
+        Remus::$viewCore = $viewCore;
+        return $this;
+    }
+    
+    public function endApp() {
+        if(isset(M()->registr['end_app'])){return $this;}
+        
+        switch (self::$viewCore) {
+            case 'json':
+                ob_clean();
+                echo json_encode(M()->var_app,JSON_PRETTY_PRINT);
+                define('TEST_MODE_OFF',TRUE);
+                exit();
+            break;
+            
+            case 'xml':
+                if(defined('CHARSET')){
+                    header('Content-Type: application/xml; charset=' . strtolower(CHARSET));
+                }
+            break;
+
+            default:
+                if(!empty(M()->buffer)){
+                    echo M()->buffer;
+                }
+
+            break;
+        }
+        M()->registr['end_app'] = TRUE;
+        return $this;
+    }
+    
+    protected $_allowTypes = array();
     
     /**
      * getTypes - Подключает типы для их использования
@@ -190,14 +257,13 @@ class Remus {
     }
     # Управление MODEL и VIEW
     public function load_model($model_name){
-        include DIR_CORE_INTERFACE.'RemusModelInterface.php';
-        $this->connect_file('model.'.strtolower($model_name), DIR_MODEL);
+        include DIR_CORE_INTERFACE.'ModelInterface.php';
+        $this->connect_file($model_name, DIR_MODEL);
         self::$model = new $model_name();
     }
     public function load_view($view_name) {
-        include DIR_CORE_INTERFACE.'RemusViewInterface.php';
-        include_once DIR_CORE_INTERFACE.'RemusViewCoreInterface.php';
-        $this->connect_file('view.'.strtolower($view_name), DIR_VIEW);
+        include_once DIR_CORE_INTERFACE.'ViewCoreInterface.php';
+        $this->connect_file($view_name, DIR_VIEW);
         self::$view = new $view_name();
     }
     # Подключение библиотек

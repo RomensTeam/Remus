@@ -4,7 +4,7 @@ if(!defined('DIR')){exit();}
 class Index extends VarAppController {
     
     public function __construct($name) {
-        Remus::Model()->setLayout('index');
+        Remus::View()->setLayout('index');
         
         $this->StartApp($name);
         
@@ -44,7 +44,7 @@ class Index extends VarAppController {
         var_app($array);
         
         $ajax = M()->getBlock('ajax');
-        M()->addToEnd($ajax);
+        Remus::View()->addToEnd($ajax);
         
         Remus::Model()->render();
     }
@@ -53,15 +53,15 @@ class Index extends VarAppController {
         
         Remus::Model()->app_lang('ru-RU','main');
         
-        Remus::Model()->start_html_app(array(
+        Remus()->startApp(array(
             'title'         => app_lang('index_title'),
             'description'   => app_lang('index_description'),
             'keywords'      => app_lang('index_keywords')
         ));
         
-        Remus::Model()->addToHead('<link href="style/bootstrap.min.css" media="screen" rel="stylesheet">');
-        Remus::Model()->addScript('style/jquery.min.js', true);
-        Remus::Model()->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
+        Remus::View()->addToHead('<link href="style/bootstrap.min.css" media="screen" rel="stylesheet">');
+        Remus::View()->addScript('style/jquery.min.js', true);
+        Remus::View()->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
     }
     
     public function ajax() {
