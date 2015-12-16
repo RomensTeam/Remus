@@ -4,6 +4,7 @@
 ![Remus Logo](https://github.com/RomensTeam/Remus/blob/documentation/documentation/images/RemusLogo.png?raw=true)
 
 Авторы документации: Romens
+
 Основано на версии: 0.3
 
 ## I. База ##
