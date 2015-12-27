@@ -170,8 +170,7 @@ class Core {
 
         $router = DIR_CORE_MODULE.'router/'.ROUTER.'.php';
 
-        if(is_file($router)){
-            ${R} = Remus::Remus();
+        if(file_exists($router)){
             include_once $router;
 
             if( defined('ROUTING_STATUS') != TRUE && defined('NOT_ROUTING_FILE') ) 
@@ -197,10 +196,18 @@ class Core {
 
                 $memory = memory_get_usage();
                 $memory = sprintf(lang('memory_time_script'), $memory);
-
-                print_var(array($time,$memory), lang('test_time_name'));
+                $result = array($time,$memory);
                 echo '<script>if(document.title == ""){document.title = "Remus PHP Framework.";}</script>';
+
+                
+                
+                if(REMUSPANEL){
+                    RemusPanel::renderPanel('RemusPanel',  implode(', ', $result));
+                } else {
+                    print_var($result, lang('test_time_name'));
+                }
             }
         }
+        
     }
 }

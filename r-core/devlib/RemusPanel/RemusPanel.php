@@ -8,6 +8,7 @@
  */
 class RemusPanel {
     
+    public static $hidden = true;
     private static $lang = false;
     public  static $theme = 'RemusPanelStandartStyle';
     
@@ -65,30 +66,30 @@ class RemusPanel {
     
     public static function log($message, $type = 'default') {
         $text = debug_backtrace();
-        $text = $text;
-        
         $data = str_replace(DIR,'',$text[0]['file']).': '.$text[0]['line'];
-        
         if(isset($text[1]['class'],$text[1]['function'])){
             $call = $text[1]['class'].':'.$text[1]['function'].'()';
         } else {$call = null;}
         
+        if($message instanceof Exception){
+            self::$_data['log'][] = array($message->getMessage(),'danger',$data,  get_class($message));
+            return true;
+        }
+        
         self::$_data['log'][] = array($message,$type,$data,$call);
     }
     
-    public static function renderPanel() {
+    public static function renderPanel($head = 'RemusPanel',$subnav = 'Testing Panel') {
         if(!self::$flag){
             return null;
         }
         self::$themeObj->getStyle();
         self::$_data = self::$themeObj->prepare(self::$_data);
         
-        $head = 'RemusPanel';
-        
         if(self::$lang){
             $head = lang('remuspanel_head');
         }
-        self::$themeObj->render($head, self::$_data);
+        self::$themeObj->render(array($head,$subnav), self::$_data);
     }
 }
 
@@ -120,16 +121,20 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     
     public function render($head,$data) {
         
+        if(RemusPanel::$hidden){
+            $style = 'display: none;';
+        }
+        
         echo '<div class="container navbar-fixed-bottom"><div class="panel panel-default" id="remus_panel" style="border: 1px solid rgb(221, 221, 221);box-shadow: 0 0 3px rgb(230, 230, 230); margin-bottom:0; border-radius:0;">
             <div class="panel_head panel-heading">
-            <h3  class="panel-title" style="font-size:1.5em;">'.$head.' <small>Testing panel</small> 
+            <h3  class="panel-title" style="font-size:1.5em;">'.$head[0].' <small>'.$head[1].'</small> 
                 <div class="btn-group-xs pull-right">
                 <span class=" btn btn-default" onclick="$(\'#remus_panel .panel-body\').toggle();">_</span>
                 <span class="btn btn-default" onclick="$(\'#remus_panel\').text(\'\')">X</span>
                 </div>
             </h3>
             </div>
-            <div class="panel_body panel-body" style="padding:0;">
+            <div class="panel_body panel-body" style="padding:0;'.$style.'">
          '.self::render_tabs($data).self::render_area($data).'
          </div>
          </div></div>';
@@ -226,6 +231,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         foreach ($log as $value) {
             $value[2] = '['.$value[2].']';
             switch ($value[1]) {
+                case 'danger':
                 case 'error':
                     $result .= '<tr class="danger">';
                     break;
