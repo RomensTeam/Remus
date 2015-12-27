@@ -47,7 +47,7 @@ function getLib($className)
         $fileName = DIR_LIB.$fileName;
         
         if(!file_exists($fileName)){
-            throw new RemusException;
+            throw new RemusException('Not this library: '.$className);
         }
         require $fileName;
 }
