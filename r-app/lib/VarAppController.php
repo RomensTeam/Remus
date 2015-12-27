@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AppController
+ * VarAppController
  *
  * @author Roman
  */

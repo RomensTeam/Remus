@@ -1,0 +1,12 @@
+{
+    "name": "version03",
+    "author": "Romens",
+    "version": 1.0, 
+    "r_min_version": 0.3,
+    
+    "import_styles": true,
+    
+    "addToEndScriptLink": [],
+    "addStyleLink": [],
+    "addStyleLocal": []
+}

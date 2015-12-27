@@ -339,7 +339,7 @@ class View {
             
         } else {
             if(REMUSPANEL){
-                RemusPanel::log(lang('error_no_layout').' - '.$layout_path, RemusPanel::$LOG_ERROR);
+                RemusPanel::log(lang('error_no_layout').' - '.$layout_path, 'danger');
             } else {
                 throw new RemusException(lang('error_no_layout').' - '.$layout_path);
             }

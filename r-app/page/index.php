@@ -8,44 +8,16 @@ class Index extends VarAppController {
         
         $this->StartApp($name);
         
-        $array = array(
-            'version'	=>  VERSION,
-            'copyright'	=>  '2013 - '.pattern('this_year'),
-            'heading'   =>  'Hello, World!'
-        );
+        $this->copyright = '2013 - '.pattern('this_year');
+        
         if(TEST_MODE){
-            $array['copyright'] .= ' <span class="label label-info">Запущено в безопасном режиме</span>';
+            $this->copyright .= ' <span class="label label-info">Запущено в безопасном режиме</span>';
         }
         
         /* I AM READY */
         
-        $this->links = array(
-            array( 
-                'link' => 'https://github.com/RomensTeam/Remus/blob/documentation/documentation/index.md', 
-                'title' => 'Documentation Framework' 
-            ),
-            array( 
-                'link' => 'http://romens.ru/', 
-                'title' => 'Author Framework' 
-            ),
-            array( 
-                'link' => 'https://github.com/RomensTeam/Remus', 
-                'title' => 'GitHub Repository' 
-            ),
-        );
-		
-        if(REMUSPANEL){
-            RemusPanel::log('Простое сообщение');
-            RemusPanel::log('Ошибка','error');
-            RemusPanel::log('Предупреждение','warning');
-            RemusPanel::log('Удачно','success');
-        }
-		
-        var_app($array);
-        
-        $ajax = M()->getBlock('ajax');
-        Remus::View()->addToEnd($ajax);
-        
+        $java = M()->getBlock('javascript');
+        Remus::View()->addToEnd($java);
         Remus::Model()->render();
     }
     
@@ -59,9 +31,11 @@ class Index extends VarAppController {
             'keywords'      => app_lang('index_keywords')
         ));
         
-        Remus::View()->addToHead('<link href="style/bootstrap.min.css" media="screen" rel="stylesheet">');
         Remus::View()->addScript('style/jquery.min.js', true);
-        Remus::View()->addToHead('<link href="style/style.css" media="screen" rel="stylesheet">');
+        Remus::View()->addToHead('<link rel="stylesheet" href="{[URL]}style/assets/css/normalize.css" media="screen">');
+        Remus::View()->addToHead('<link rel="stylesheet" href="{[URL]}style/assets/css/grid.css" media="screen">');
+        Remus::View()->addToHead('<link rel="stylesheet" href="{[URL]}style/assets/css/style.css" media="screen">');
+        Remus::View()->addToHead('<link rel="stylesheet" href="{[URL]}style/assets/font-awesome/css/font-awesome.min.css">');
     }
     
     public function ajax() {
