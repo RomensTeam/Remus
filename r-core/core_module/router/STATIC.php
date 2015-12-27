@@ -2,7 +2,7 @@
 /* Делаем роутинг */
 if(defined('ROUTER') && ROUTER == 'STATIC'){
     $path_to_module = _filter(DIR_APP_PAGE.substr($uri,1));
-    if(is_file($path_to_module)){
+    if(file_exists($path_to_module)){
         define('ROUTING_STATUS',TRUE);
         include _filter($path_to_module);
     }

@@ -140,8 +140,6 @@ class RemusView implements ViewCoreInterface {
     
     public function render() {
         for($i = 0; $i <= 3; $i++){
-            
-            
             if(in_array('foreach', $this->view->settings['module'])){
                 $this->foreach_replace();
             }
@@ -158,12 +156,11 @@ class RemusView implements ViewCoreInterface {
             if(in_array('fill', $this->view->settings['module'])){
                 $this->fill_replace();
             }
-            
-            
             preg_match_all(VIEW_TAG_PATTERN, $this->view->buffer, $all);
             foreach(array_unique($all[1]) as $value){
                 if(isset($this->view->var_app[$value])){
-                        $this->view->buffer = str_replace(VIEW_TAG_START.strtoupper($value).VIEW_TAG_END, $array[$value], $this->view->buffer);
+                    $search = VIEW_TAG_START.strtoupper($value).VIEW_TAG_END;
+                    $this->view->buffer = str_replace($search, $this->view->var_app[$value], $this->view->buffer);
                 }
             }                
         }

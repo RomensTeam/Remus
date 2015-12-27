@@ -60,7 +60,7 @@ class Model implements ModelInterface {
 
     public function getBlock($name){
         $block_path = _filter(RE_Theme::$dir_theme . 'block' . _DS . strtolower($name) . '.tpl');
-        if(is_file($block_path)){
+        if(file_exists($block_path)){
             if(REMUSPANEL){
                 RemusPanel::log('Использован блок: <span class="label label-info">'.$name.'</span>');
             }
@@ -103,7 +103,7 @@ class Model implements ModelInterface {
     }
     
     private function open_json($path){
-        if(is_file($path)){
+        if(file_exists($path)){
             $lang_json_data = (string) file_get_contents($path);
             if(strlen($lang_json_data) > 0){
                 $lang_data = json_decode($lang_json_data, TRUE);

@@ -121,9 +121,9 @@ class Remus {
         $app = $this->get_app_info($name_module);
         $app['file'] = _filter(DIR_APP_PAGE.$app['file']);
         
-        if(is_file($app['file'])){
+        if(file_exists($app['file'])){
             include $app['file'];
-        } elseif (is_file($app['file'].'.php')) {
+        } elseif (file_exists($app['file'].'.php')) {
             include $app['file'].'.php';
         } else {
             throw new RemusException('Нет файла для запуска приложения');

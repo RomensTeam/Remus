@@ -233,7 +233,7 @@ class View {
      */
     protected function getLayout() {
         if(!empty(RE_Theme::$layout_file)){
-            if(is_file(RE_Theme::$layout_file)){
+            if(file_exists(RE_Theme::$layout_file)){
                 return file_get_contents(RE_Theme::$layout_file);
             } else{
                 throw new RemusException(lang('error_no_layout').' - '.RE_Theme::$layout_file);
@@ -332,7 +332,7 @@ class View {
         
         $layout_path = RE_Theme::$dir_theme.LAYOUT_FOLDER._DS.$layout_name.'.tpl';
         
-        if (is_file($layout_path)) {
+        if (file_exists($layout_path)) {
             
             RE_Theme::$layout_file = $layout_path;
             RE_Theme::$layout_name = $layout_name;

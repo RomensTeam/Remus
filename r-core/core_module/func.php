@@ -114,7 +114,7 @@ function connect($path) {
 }
 
 function open_json($path){
-    if(is_file($path)){
+    if(file_exists($path)){
         $lang_json_data = (string) file_get_contents($path);
         if(strlen($lang_json_data) > 0){
             $lang_data = json_decode($lang_json_data, TRUE);
@@ -158,7 +158,7 @@ function redirect($url = URL){
  * 
  */
 function removeDir($path) {
-    if (is_file($path)) {
+    if (file_exists($path)) {
       @unlink($path);
     } else {
         array_map('removeDir',glob('/*')) == @rmdir($path);
