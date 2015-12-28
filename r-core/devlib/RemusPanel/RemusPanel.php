@@ -235,14 +235,8 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
                 case 'error':
                     $result .= '<tr class="danger">';
                     break;
-                case 'warning':
-                    $result .= '<tr class="warning">';
-                    break;
-                case 'success':
-                    $result .= '<tr class="success">';
-                    break;
                 default:
-                    $result .= '<tr>';
+                    $result .= '<tr class="'.$value[1].'">';
                     break;
             }
             $result .= '<th>'.$value[3].'</th><th>'.$value[2].'</th><td>'.$value[0].'</td></tr>';
