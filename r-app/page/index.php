@@ -30,12 +30,6 @@ class Index extends VarAppController {
             'description'   => app_lang('index_description'),
             'keywords'      => app_lang('index_keywords')
         ));
-        
-        Remus::View()->addScript('style/jquery.min.js', true);
-        Remus::View()->addToHead('<link rel="stylesheet" href="{[URL]}style/assets/css/normalize.css" media="screen">');
-        Remus::View()->addToHead('<link rel="stylesheet" href="{[URL]}style/assets/css/grid.css" media="screen">');
-        Remus::View()->addToHead('<link rel="stylesheet" href="{[URL]}style/assets/css/style.css" media="screen">');
-        Remus::View()->addToHead('<link rel="stylesheet" href="{[URL]}style/assets/font-awesome/css/font-awesome.min.css">');
     }
     
     public function ajax() {
