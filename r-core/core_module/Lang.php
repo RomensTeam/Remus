@@ -64,6 +64,8 @@ class Lang {
             $data = open_json(DIR_APP_LANG.$lang._DS.$value.'.json');
             if(!empty($data)){
                 $array = array_merge($array,$data);
+            } else {
+                \RemusPanel::log('app_lang: Отсутствует библиотека фраз приложения - <b>'.$value.'</b>', 'info');
             }
         }
         return $array;

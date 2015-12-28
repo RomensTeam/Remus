@@ -23,11 +23,11 @@ class Model implements ModelInterface {
 
     /* Настройки языка */
     public function app_lang($lang = null,$library = null) {
-		if ($this->app_lang instanceof Lang){
-			return $this->app_lang;
-		}
+        if ($this->app_lang instanceof Lang){
+            return $this->app_lang;
+        }
         include_once DIR_CORE_MODULE.'Lang.php';
-		$this->app_lang = new Lang($lang,$library);
+        $this->app_lang = new Lang($lang,$library);
 		
         return $this->app_lang;
     }

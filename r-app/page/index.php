@@ -23,7 +23,7 @@ class Index extends VarAppController {
     
     public function StartApp() {
         
-        Remus::Model()->app_lang('ru-RU','main');
+        Remus::Model()->app_lang('ru-RU','main,index');
         
         Remus()->startApp(array(
             'title'         => app_lang('index_title'),
