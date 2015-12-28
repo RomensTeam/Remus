@@ -6,7 +6,7 @@
             </div>
             <div class="row"><div class="col-1-4 centered line"></div></div>
             <div class="row">
-                <div class="col-full"><h4>{[DESC_ENGINE]}</h4></div>
+                <div class="col-full"><h4>{[DESC_ENGINE]} <span class="ajax-area text-center"><span class="ajax-btn"><small>Нажми на меня</small></span></span></h4></div>
             </div>
         </div>
     </div>
@@ -62,3 +62,8 @@
         {[COPYRIGHT]}
     </div>
 </footer>
+<script  type="text/javascript">
+    $(".ajax-btn" ).click(function() {
+        $(".ajax-area").load('#?ajax=1');
+    });
+</script>

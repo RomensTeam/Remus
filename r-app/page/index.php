@@ -39,7 +39,7 @@ class Index extends VarAppController {
     }
     
     public function ajax() {
-        echo '<h3>Yes! This is AJAX!</h3>';
+        echo 'современный';
     }
 }
 
