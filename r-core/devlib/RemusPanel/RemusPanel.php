@@ -50,7 +50,8 @@ class RemusPanel {
         $data = lang('remuspanel_tabs_'.strtolower($key));
         if($data != NULL){
             return $data;
-        } else { return $key;}
+        }
+        return $key;
     }
     
 
@@ -109,11 +110,11 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     public function prepare($data) {
         foreach ($data as $tab_name => $tab_data) {
             switch ($tab_name) {
-                case 'constants': $data[$tab_name] =  self::constants_render($tab_data); break;
-                case 'files':     $data[$tab_name] =  self::files_render($tab_data);     break;
-                case 'var_app':   $data[$tab_name] =  self::var_render($tab_data);       break;
-                case 'query':     $data[$tab_name] =  self::query_render($tab_data);     break;
-                case 'log':       $data[$tab_name] =  self::log_render($tab_data);       break;
+                case 'constants': $data[$tab_name] =  self::constantsRender($tab_data); break;
+                case 'files':     $data[$tab_name] =  self::filesRender($tab_data);     break;
+                case 'var_app':   $data[$tab_name] =  self::varRender($tab_data);       break;
+                case 'query':     $data[$tab_name] =  self::queryRender($tab_data);     break;
+                case 'log':       $data[$tab_name] =  self::logRender($tab_data);       break;
             }
         }
         return $data;
@@ -135,7 +136,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
             </h3>
             </div>
             <div class="panel_body panel-body" style="padding:0;'.$style.'">
-         '.self::render_tabs($data).self::render_area($data).'
+         '.self::renderTabs($data).self::renderArea($data).'
          </div>
          </div></div>';
         
@@ -149,22 +150,16 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         echo "<script>$('#remus_panel > div.panel_body > ul > li > a').click(function (e) {e.preventDefault()$(this).tab('show')})</script>";
     }
 
-    public static function render_tabs($tabs) {
-        
-        
-        
+    public static function renderTabs($tabs) {
         $data = '<ul class="nav nav-tabs">';
-        
         foreach ($tabs as $key => $value) {
             $data .= '<li><a href="#'.$key.'" data-toggle="tab" style="border-radius:0; border-top:none;">'. RemusPanel::name($key).'</a></li>';
         }
-        
         $data .= '</ul>';
-        
         return $data;
     }
     
-    public static function render_area($areaData) {
+    public static function renderArea($areaData) {
         $data = '<div class="tab-content" style="height:300px;overflow-y:scroll;">';
         
         foreach ($areaData as $key => $value) {
@@ -180,7 +175,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         return $data;
     }
     
-    public static function constants_render() {
+    public static function constantsRender() {
         
         $settings  = require DIR_DEFAULT.'config.php';
         
@@ -209,7 +204,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         return $result;
     }
     
-    public static function files_render($data) {
+    public static function filesRender() {
         
         $data = '<table class="table table-bordered"><tbody>';
         
@@ -225,7 +220,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         return $data;
     }
     
-    public static function log_render($log) {
+    public static function logRender($log) {
         $result = '<table class="table table-condensed"><tbody>';
         
         foreach ($log as $value) {
@@ -246,7 +241,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         return $result;
     }
     
-    public static function var_render() {
+    public static function varRender() {
         $result = '<table class="table table-striped"><tbody>';
         
         foreach (Remus::Model()->var_app as $key => $value) {
@@ -258,7 +253,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         return $result;
     }
     
-    public static function query_render($query) {
+    public static function queryRender($query) {
         $result  = '<table class="table"><thead>';
         $result .= '<tr><th>BackTrace</th><th>SQL</th><th>Result</th></tr></thead><tbody>';
         
@@ -272,28 +267,20 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     }
     public static function types($mixed) {
         if(is_string($mixed)){
-            
-            $mixed = trim($mixed);
-            
-            if($mixed === ''){
-                return '(empty string)';
-            }
-            $mixed = preg_replace_callback(VIEW_TAG_PATTERN, function($match){return '<b>'.$match[0].'</b>';}, htmlspecialchars($mixed));
-            return (string) '<code>'.$mixed.'</code>';
+            $string = trim($mixed);
+            if($string === ''){$result = '(empty string)';}
+            $mixed = preg_replace_callback(VIEW_TAG_PATTERN, function($match){return '<b>'.$match[0].'</b>';}, htmlspecialchars($string));
+            $result = '<code>'.$mixed.'</code>';
         }
-        if(is_bool($mixed)){
-            if($mixed){ return '<span class="label label-info">TRUE</span>';} 
-            else { return '<span class="label label-danger">FALSE</span>';}
+        if(is_bool($mixed)){   
+            if($mixed)
+                { $result = '<span class="label label-info">TRUE</span>';} 
+            else 
+                { $result = '<span class="label label-danger">FALSE</span>';}
         }
-        if(is_numeric($mixed)){
-            return (string) '<span class="badge">'.$mixed.'</span>';
-        }
-        if(is_null($mixed)){
-            return 'NULL';
-        } 
-        if(is_array($mixed)){
-            return 'array <span class="label label-info">'.count($mixed).'</span>';
-        }
-        return 'ERROR';
+        if(is_numeric($mixed)){$result = '<span class="badge">'.$mixed.'</span>';}
+        if(is_null($mixed)){$result = 'NULL';} 
+        if(is_array($mixed)){$result = 'array <span class="label label-info">'.count($mixed).'</span>'; } else { $result = 'ERROR'; }
+        return $result;
     }
 }
