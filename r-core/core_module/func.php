@@ -211,6 +211,7 @@ function lang($name){
  * Короткий доступ к фразам приложения
  */
 function app_lang($name){
+    $name = strtolower($name);
     if(isset(Lang::$lang[$name])){
         return Lang::$lang[$name];
     }
