@@ -10,6 +10,7 @@ class RemusPanel {
     
     public static $hidden = true;
     private static $lang = false;
+    public  static $loadScripts = true;
     public  static $theme = 'RemusPanelStandartStyle';
     
     /**
@@ -25,6 +26,7 @@ class RemusPanel {
         'files' => array(),
         'var_app' => array(),
         'query' => array(),
+        'var' => array(),
         'log' => array()
     );
 
@@ -112,7 +114,8 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
             switch ($tab_name) {
                 case 'constants': $data[$tab_name] =  self::constantsRender($tab_data); break;
                 case 'files':     $data[$tab_name] =  self::filesRender($tab_data);     break;
-                case 'var_app':   $data[$tab_name] =  self::varRender($tab_data);       break;
+                case 'var_app':   $data[$tab_name] =  self::varappRender($tab_data);    break;
+                case 'var':       $data[$tab_name] =  self::varRender($tab_data);       break;
                 case 'query':     $data[$tab_name] =  self::queryRender($tab_data);     break;
                 case 'log':       $data[$tab_name] =  self::logRender($tab_data);       break;
             }
@@ -143,10 +146,12 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     }
     
     public function getStyle() {
-        echo '<link href="'.RemusPanel::$urlPath.'style/bootstrap.min.css" rel="stylesheet" type="text/css">';
-        echo '<link href="'.RemusPanel::$urlPath.'style/panel.css" rel="stylesheet" type="text/css">';
-        echo '<script src="'.RemusPanel::$urlPath.'style/jquery.min.js" type="text/javascript"></script>';
-        echo '<script src="'.RemusPanel::$urlPath.'style/bootstrap.min.js" type="text/javascript"></script>';
+        if(RemusPanel::$loadScripts){
+            echo '<link href="'.RemusPanel::$urlPath.'style/bootstrap.min.css" rel="stylesheet" type="text/css">';
+            echo '<link href="'.RemusPanel::$urlPath.'style/panel.css" rel="stylesheet" type="text/css">';
+            echo '<script src="'.RemusPanel::$urlPath.'style/jquery.min.js" type="text/javascript"></script>';
+            echo '<script src="'.RemusPanel::$urlPath.'style/bootstrap.min.js" type="text/javascript"></script>';
+        }
         echo "<script>$('#remus_panel > div.panel_body > ul > li > a').click(function (e) {e.preventDefault()$(this).tab('show')})</script>";
     }
 
@@ -182,6 +187,8 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         $result = '<table class="table table-condensed"><tbody>';
         
         $data = get_user_constants();
+        
+        error_reporting(E_ALL);
         
         foreach ($data as $key => $value) {
             
@@ -241,10 +248,22 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         return $result;
     }
     
-    public static function varRender() {
+    public static function varappRender() {
         $result = '<table class="table table-striped"><tbody>';
         
         foreach (Remus::Model()->var_app as $key => $value) {
+            $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+        }
+        
+        $result .= '</tbody></table>';
+        
+        return $result;
+    }
+    
+    public static function varRender() {
+        $result = '<table class="table table-striped"><tbody>';
+        
+        foreach ($_SESSION as $key => $value) {
             $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
         }
         
@@ -280,7 +299,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         }
         if(is_numeric($mixed)){$result = '<span class="badge">'.$mixed.'</span>';}
         if(is_null($mixed)){$result = 'NULL';} 
-        if(is_array($mixed)){$result = 'array <span class="label label-info">'.count($mixed).'</span>'; } else { $result = 'ERROR'; }
+        if(is_array($mixed)){$result = 'array <span class="label label-info">'.count($mixed).'</span>'; }
         return $result;
     }
 }

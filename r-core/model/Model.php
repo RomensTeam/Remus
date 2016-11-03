@@ -67,6 +67,7 @@ class Model implements ModelInterface {
             return file_get_contents($block_path);
         }
         else{
+            if(REMUSPANEL) {RemusPanel::log ('Called block don\'t exsist: <b>'.$name.'</b><hr>'.$block_path, 'warning');}
             return FALSE;
         }
     }

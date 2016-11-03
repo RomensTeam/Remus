@@ -192,15 +192,12 @@ class Core {
             if(!defined('TEST_MODE_OFF')){
 
                 $time 	= microtime(true)-TIME_START;
-                $time   = sprintf(lang('test_time_script'), $time);
+                $time   = sprintf(lang('test_time_script'), '<b>'.$time.'</b>');
 
                 $memory = memory_get_usage();
-                $memory = sprintf(lang('memory_time_script'), $memory);
+                $memory = sprintf(lang('memory_time_script'), '<b>'.$memory.'</b>');
                 $result = array($time,$memory);
                 echo '<script>if(document.title == ""){document.title = "Remus PHP Framework.";}</script>';
-
-                
-                
                 if(REMUSPANEL){
                     RemusPanel::renderPanel('RemusPanel',  implode(', ', $result));
                 } else {
