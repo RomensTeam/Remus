@@ -75,9 +75,10 @@ class QueryBuilder {
      * @param type $set_array Данные которые требуется заменить
      * @return QueryBuilder
      */
-    public function update($set_array) {
+    public function update($set_array,$IGNORE = FALSE) {
         $this->reset('update');
         $this->SQL = 'UPDATE ';
+        if($IGNORE){$this->SQL .= 'IGNORE ';}
         $this->registr['set'] = $set_array;
         return $this;
     }
@@ -327,7 +328,7 @@ class QueryBuilder {
                     if(is_numeric($value)){
                         $value = (int) $value;
                     } else {
-                        $value = "'".(string) $value."'";
+                        $value = "'".(string) htmlspecialchars($value)."'";
                     }
                     $array[] = $this->SafeQuot($key).' = '.$value;
                 }
@@ -371,7 +372,11 @@ class QueryBuilder {
                 $this->result = $STH->rowCount();
             }
         } catch (\PDOException $exc) {
-            echo $exc->getTraceAsString();
+            if(REMUSPANEL){
+                \RemusPanel::log($exc);
+            } else {
+                echo $exc->getTraceAsString();
+            }
         }
         if(isset($this->operation[0]) and ($this->operation[0] == 'insert')){
             self::$lastInsertID = $this->GetLastID();

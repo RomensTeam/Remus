@@ -148,7 +148,7 @@ function load_settings($path) {
  */
 function redirect($url = URL){
     if($url == 404){
-        Error::error(404, URL.NOT_ROUTING_FILE);
+        $url = URL.NOT_ROUTING_FILE;
     }
     header('Location: '.$url); 
     exit();
@@ -245,3 +245,10 @@ function def($const, $value ) {
         define($const, $value);
     }
 }
+function delTree($dir) { 
+   $files = array_diff(scandir($dir), array('.','..')); 
+    foreach ($files as $file) { 
+      (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
+    } 
+    return rmdir($dir); 
+  } 

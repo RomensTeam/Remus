@@ -39,33 +39,40 @@ class FormChecker {
                 }
             }
         } else {
-            if($this->check){
+            if(!$this->check){
                 if(REMUSPANEL){
                     \RemusPanel::log(new \RemusException('Your not start Form checking'), 'danger');
                 } else {
                     throw new \RemusException('Your not start Form checking');
                 }
-            } else {
-                return $this->get($name, true);
             }
+            return $this->get($name, true);
         }
     }
 
 
     public function check() {
         if(empty($this->Settings)){
-            \RemusPanel::log('Form check: Not settings', 'error');
+            if(REMUSPANEL){
+                \RemusPanel::log('Form check: Not settings', 'error');
+            }
             return FALSE;
         }
         foreach ($this->Settings as $name => $input) {
             try {
                 $this->check = $this->checkInput($name, $input);
             } catch (\RemusException $exc) {
-                \RemusPanel::log($exc, 'error');
+                if(REMUSPANEL){
+                    \RemusPanel::log($exc, 'error');
+                } else {
+                    $exc->getTraceAsString();
+                }
                 return false;
             }
         }
-        \RemusPanel::log('Form check: OK', 'success');
+        if(REMUSPANEL){
+            \RemusPanel::log('Form check: OK', 'success');
+        }
         return true;
     }
     
@@ -76,17 +83,14 @@ class FormChecker {
      * @param array $input Массив с информацией для проверки
      */
     private function checkInput($name,$input) {
-        $source = $this->get($name);
+        $source = $this->get($name,TRUE);
         $check = true;
                 
         foreach ($input as $method => $value) {
-            if(!isset($input[$method])){
-                continue; 
-            }
             switch ($method) {
                 case 'min':
                     if(strlen($source) < $value){
-                        throw new \RemusException('MIN');
+                        throw new \RemusException(strtoupper($this->method).'["'.$name.'"] не прошел проверку из-за маленькой длины.');
                         $check = FALSE;
                     }
                     break;
@@ -125,11 +129,8 @@ class FormChecker {
                     }
                     break;
             }
-            if($check == false){
-                return FALSE;
-            }
         }
-        return true;
+        return $check;
     }
 }
 
@@ -146,25 +147,31 @@ class Input {
     
     public function minimum($min) {
         $this->FormChecker->Settings[$this->Name]['min'] = $min;
+        return $this;
     }
     
     public function maximum($max) {
         $this->FormChecker->Settings[$this->Name]['max'] = $max;
+        return $this;
     }
     
     public function handler($Handler) {
         $this->FormChecker->Settings[$this->Name]['function'] = $Handler;
+        return $this;
     }
     
     public function value($value) {
         $this->FormChecker->Settings[$this->Name]['value'] = $value;
+        return $this;
     }
     
     public function regexp($regexp) {
         $this->FormChecker->Settings[$this->Name]['regexp'] = $regexp;
+        return $this;
     }
     
     public function set($set) {
         $this->FormChecker->Settings[$this->Name]['set'] = $set;
+        return $this;
     }
 }

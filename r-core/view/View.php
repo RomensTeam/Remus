@@ -83,8 +83,12 @@ class View {
     public function generateHead(){
         
         foreach($this->meta as $key => $value) {
+			if($key == 'desc'){$key = 'description';}
             if ($key == 'keywords' || $key == 'description' || $key == 'author' || $key == 'robots' || $key == 'url') {
                 if(is_string($value))$this->head_string .= '<meta name="'.$key.'" content="'.$value.'">';
+            }
+            if ($key == 'description' || $key == 'image') {
+                if(is_string($value))$this->head_string .= '<meta property="og:'.$key.'" content="'.$value.'" />';
             }
             if ($key == 'favicon'){
                 if(is_string($value))$this->head_string .= '<link rel="icon" type="image/'.substr($value, -3).'" href="'.$value.'" />';
@@ -93,7 +97,7 @@ class View {
                 if(is_string($value))$this->head_string .= '<meta http-equiv="'.$key.'" content="'.$value.'" />';
             }
             if ($key == 'title'){
-                if(is_string($value))$this->head_string .= '<title>'.$value.'</title>';
+                if(is_string($value))$this->head_string .= '<title>'.$value.'</title><meta property="og:title" content="'.$value.'" />';
             }
         }
         if(CheckFlag('SUPPORT_DEVELOPERS') ){
@@ -218,8 +222,9 @@ class View {
         
         $this->buffer = 
             '<!doctype html>'.
-            '<html>'.
+            '<html lang="ru">'.
             '<head>'.
+            '<meta charset="utf-8">'.
             $this->head_string.
             '</head><body>'.
             $layout.
@@ -298,7 +303,7 @@ class View {
      */
     public function setTheme($theme_name = 'default'){
         if(REMUSPANEL){
-            RemusPanel::log('Выбрана тема: <span class="label label-info">'.$theme_name.'</span>');
+            RemusPanel::log('Выбрана тема: <span class="badge badge-info">'.$theme_name.'</span>');
         }
         
         $dir_theme = DIR_THEMES . $theme_name . _DS;
@@ -327,7 +332,7 @@ class View {
      */
     public function setLayout($layout_name = 'index',$theme = null){
         if(REMUSPANEL){
-            RemusPanel::log('Выбрано полотно: <span class="label label-info">'.$layout_name.'</span>');
+            RemusPanel::log('Выбрано полотно: <span class="badge badge-info">'.$layout_name.'</span>');
         }
         
         $layout_path = RE_Theme::$dir_theme.LAYOUT_FOLDER._DS.$layout_name.'.tpl';

@@ -24,7 +24,9 @@ class Session implements ArrayAccess {
         if(!empty($name)){
             $this->name($name);
         }
-        session_start();
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            session_start();
+        }
     }
     
     /**

@@ -107,6 +107,10 @@ class Remus {
     # Управление приложением
     public function run_app($name_module){
         def('ROUTING_STATUS', TRUE);
+        M()->registr['modules'][] = $name_module;
+        if(REMUSPANEL){
+            RemusPanel::log('Запущен модуль: '.$name_module,'warning');
+        }
         if(ROUTER == 'DYNAMIC2'){
             $this->run_app_dynamic2($name_module);
         } elseif (ROUTER == 'DYNAMIC') {

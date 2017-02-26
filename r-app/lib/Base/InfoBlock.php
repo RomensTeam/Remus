@@ -129,13 +129,13 @@ class InfoBlock {
      * 
      * Status: WORK!
      */
-    public function update($id,$record) 
+    public function update($id,$record,$IGNORE = false) 
     {
         if(!empty($record)){
-            self::$QB->update($record)
+            self::$QB->update($record,$IGNORE)
                      ->from($this->_name)
                     ->where('`id` = '. (int) $id);
-             return (bool) self::$QB->result();
+             return self::$QB->result();
         }
         return FALSE;
     }
