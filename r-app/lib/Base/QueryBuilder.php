@@ -251,7 +251,11 @@ class QueryBuilder {
                     if(is_array($value)){
                         $mors = array();
                         foreach ($value as $col) {
-                            $mors[] = $key._quote().'.'._quote().$col;
+                            if(substr($col, 0,5) == 'COUNT'){
+                                $mors[] = $key.'.'.$col;
+                            } else {
+                                $mors[] = $key._quote().'.'._quote().$col;
+                            }
                         }
                         $value = $mors;
                     }

@@ -54,7 +54,8 @@ class Model implements ModelInterface {
             return $this->var_app;
         }
         if(is_array($var)){$this->var_app = array_merge($this->var_app, $var);}
-        else{ $this->var_app[$var] = $value; }
+        else if(is_string($var) and is_null($value)){ return $this->var_app[$var]; } 
+        else { $this->var_app[$var] = $value;}
         return $this;
     }
 
@@ -62,7 +63,7 @@ class Model implements ModelInterface {
         $block_path = _filter(RE_Theme::$dir_theme . 'block' . _DS . strtolower($name) . '.tpl');
         if(file_exists($block_path)){
             if(REMUSPANEL){
-                RemusPanel::log('Использован блок: <span class="label label-info">'.$name.'</span>');
+                RemusPanel::log('Использован блок: <span class="badge badge-info">'.$name.'</span>');
             }
             return file_get_contents($block_path);
         }

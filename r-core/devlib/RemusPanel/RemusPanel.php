@@ -129,16 +129,17 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
             $style = 'display: none;';
         }
         
-        echo '<div class="container navbar-fixed-bottom"><div class="panel panel-default" id="remus_panel" style="border: 1px solid rgb(221, 221, 221);box-shadow: 0 0 3px rgb(230, 230, 230); margin-bottom:0; border-radius:0;">
+        echo '<div class="container navbar-fixed-bottom fixed-bottom" id="remus_panel">
+            <div class="card panel panel-default">
             <div class="panel_head panel-heading">
-            <h3  class="panel-title" style="font-size:1.5em;">'.$head[0].' <small>'.$head[1].'</small> 
-                <div class="btn-group-xs pull-right">
-                <span class=" btn btn-default" onclick="$(\'#remus_panel .panel-body\').toggle();">_</span>
-                <span class="btn btn-default" onclick="$(\'#remus_panel\').text(\'\')">X</span>
+            <h3  class="panel-title card-title" style="font-size:1.5em;">'.$head[0].' <small>'.$head[1].'</small> 
+                <div class="btn-group pull-right">
+                <span class=" btn btn-info" onclick="$(\'#remus_panel .panel-body\').toggle();">_</span>
+                <span class="btn btn-primary" onclick="$(\'#remus_panel\').text(\'\')">X</span>
                 </div>
             </h3>
             </div>
-            <div class="panel_body panel-body" style="padding:0;'.$style.'">
+            <div class="panel_body panel-body card-block" style="padding:0;'.$style.'">
          '.self::renderTabs($data).self::renderArea($data).'
          </div>
          </div></div>';
@@ -158,7 +159,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     public static function renderTabs($tabs) {
         $data = '<ul class="nav nav-tabs">';
         foreach ($tabs as $key => $value) {
-            $data .= '<li><a href="#'.$key.'" data-toggle="tab" style="border-radius:0; border-top:none;">'. RemusPanel::name($key).'</a></li>';
+            $data .= '<li class="nav-item"><a href="#'.$key.'" class="nav-link" data-toggle="tab" style="border-radius:0; border-top:none;">'. RemusPanel::name($key).'</a></li>';
         }
         $data .= '</ul>';
         return $data;
@@ -194,13 +195,13 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
             
             if(isset($settings[$key])){
                 if($settings[$key] === $value){
-                    $result .= '<tr class="warning"><th><abbr title="Значение по умолчанию">'.$key.'</abbr></th><td>'.  self::types($value).'</td></tr>';
+                    $result .= '<tr class="table-warning"><th><abbr title="Значение по умолчанию">'.$key.'</abbr></th><td>'.  self::types($value).'</td></tr>';
                 } else {
-                    $result .= '<tr class="success"><th><abbr title="Измененно">'.$key.'</abbr></th><td>'.  self::types($value).'</td></tr>';
+                    $result .= '<tr class="table-success"><th><abbr title="Измененно">'.$key.'</abbr></th><td>'.  self::types($value).'</td></tr>';
                 }
             } else {
                 if(substr($key, 0,4) == 'DIR_'){
-                    $result .= '<tr class="active"><th><abbr title="Являются директориями приложения">'.$key.'</abbr></th><td>'.  self::types($value).'</td></tr>';
+                    $result .= '<tr class="table-active"><th><abbr title="Являются директориями приложения">'.$key.'</abbr></th><td>'.  self::types($value).'</td></tr>';
                 } else {
                     $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
                 }
@@ -217,7 +218,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         
         $files = get_included_files();
         
-        $data .= '<tr class="danger"><th>All files: '.  count($files).'</th></tr>';
+        $data .= '<tr class="table-danger"><th>All files: '.  count($files).'</th></tr>';
         
         foreach ($files as $value) {
             $data .= '<tr><td>'.str_replace(DIR, '<abbr title="'.DIR.'"><b>DIR</b></abbr> ', $value).'</td></tr>';
@@ -228,17 +229,17 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     }
     
     public static function logRender($log) {
-        $result = '<table class="table table-condensed"><tbody>';
+        $result = '<table class="table"><tbody>';
         
         foreach ($log as $value) {
             $value[2] = '['.$value[2].']';
             switch ($value[1]) {
                 case 'danger':
                 case 'error':
-                    $result .= '<tr class="danger">';
+                    $result .= '<tr class="table-danger">';
                     break;
                 default:
-                    $result .= '<tr class="'.$value[1].'">';
+                    $result .= '<tr class="table-'.$value[1].'">';
                     break;
             }
             $result .= '<th>'.$value[3].'</th><th>'.$value[2].'</th><td>'.$value[0].'</td></tr>';
@@ -261,11 +262,21 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     }
     
     public static function varRender() {
-        $result = '<table class="table table-striped"><tbody>';
+        $result = '<table class="table"><tbody>';
         
+        $result .= '<tr class="table-info"><th colspan="2">SESSION ['.  count($_SESSION).']</th></tr>';
         foreach ($_SESSION as $key => $value) {
             $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
         }
+        $result .= '<tr class="table-warning"><th colspan="2">POST ['.  count($_POST).']</th></tr>';
+        foreach ($_POST as $key => $value) {
+            $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+        }
+        $result .= '<tr class="table-success"><th colspan="2">GET ['.  count($_GET).']</th></tr>';
+        foreach ($_GET as $key => $value) {
+            $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+        }
+        
         
         $result .= '</tbody></table>';
         
@@ -293,13 +304,13 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         }
         if(is_bool($mixed)){   
             if($mixed)
-                { $result = '<span class="label label-info">TRUE</span>';} 
+                { $result = '<span class="badge badge-info">TRUE</span>';} 
             else 
-                { $result = '<span class="label label-danger">FALSE</span>';}
+                { $result = '<span class="badge badge-danger">FALSE</span>';}
         }
-        if(is_numeric($mixed)){$result = '<span class="badge">'.$mixed.'</span>';}
+        if(is_numeric($mixed)){$result = '<span class="badge badge-primary">'.$mixed.'</span>';}
         if(is_null($mixed)){$result = 'NULL';} 
-        if(is_array($mixed)){$result = 'array <span class="label label-info">'.count($mixed).'</span>'; }
+        if(is_array($mixed)){$result = 'array <span class="label label-info badge badge-pill badge-default">'.count($mixed).'</span>'; }
         return $result;
     }
 }

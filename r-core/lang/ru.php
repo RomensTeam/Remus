@@ -27,5 +27,6 @@ $_LANG = array(
     'remuspanel_tabs_log' => 'Лог',
     'remuspanel_tabs_var_app' => 'Данные',
     'remuspanel_tabs_query' => 'Запросы к БД',
+    'remuspanel_tabs_var' => 'Глоб.Данные',
 );
 ?>

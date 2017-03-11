@@ -83,7 +83,6 @@ class View {
     public function generateHead(){
         
         foreach($this->meta as $key => $value) {
-			if($key == 'desc'){$key = 'description';}
             if ($key == 'keywords' || $key == 'description' || $key == 'author' || $key == 'robots' || $key == 'url') {
                 if(is_string($value))$this->head_string .= '<meta name="'.$key.'" content="'.$value.'">';
             }
