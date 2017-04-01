@@ -73,16 +73,16 @@ class Core {
 
     public static function load_modules() 
     {
-        @require DIR_SETTINGS.'config.php';            		# Подключаем настройки
+        require DIR_SETTINGS.'config.php';            		# Подключаем настройки
         self::composerOptimal();                            # Оптимизируем настройки Composer
-        @include_once DIR_CORE_MODULE.'func.php';           # Функции ядра
+        include_once DIR_CORE_MODULE.'func.php';            # Функции ядра
         self::optimal_settings();                           # Оптимизируем настройки
-        @include_once DIR_CORE_MODULE.'htaccess.php';       # HTACCESS-правки (см. докуоментацию)
-        @include_once DIR_CORE_MODULE.'Regisrtry.php';      # Регистр
-        @include_once DIR_CORE_MODULE.'Remus.php';          # Контроллер
-        @include_once DIR_CORE_MODULE.'RemusErrorHandler.php'; # Исключения
-        @include_once DIR_CORE_MODULE.'RE_Theme.php';       # Класс Тем
-        @include_once DIR_CORE_MODULE.'Route.php';          # Роутер
+        include_once DIR_CORE_MODULE.'htaccess.php';        # HTACCESS-правки (см. докуоментацию)
+        include_once DIR_CORE_MODULE.'Regisrtry.php';       # Регистр
+        include_once DIR_CORE_MODULE.'Remus.php';           # Контроллер
+        include_once DIR_CORE_MODULE.'RemusErrorHandler.php'; # Исключения
+        include_once DIR_CORE_MODULE.'RE_Theme.php';        # Класс Тем
+        include_once DIR_CORE_MODULE.'Route.php';           # Роутер
     }
     
     public static function test_lib()

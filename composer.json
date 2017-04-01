@@ -1,6 +1,6 @@
 {
     "name": "romensteam/remus",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Simple PHP framework",
     "keywords": ["framework"],
     "homepage":"http://romensteam.github.io/remus/",
@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0.0"
     },
     "autoload": {
         "psr-4": {

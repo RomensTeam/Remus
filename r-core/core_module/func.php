@@ -51,8 +51,8 @@ function getLib($className)
         }
         require $fileName;
 }
-if(COMPOSER){
-    require DIR.'vendor/autoload.php';  
+if(COMPOSER and file_exists(DIR.'vendor'._DS.'autoload.php')){
+    require DIR.'vendor'._DS.'autoload.php';
 } else {  
     function __autoload($className){
         getLib($className);    

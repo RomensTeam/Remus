@@ -9,7 +9,7 @@ class RemusView implements ViewCoreInterface {
     
     public $view;
 
-    public function setView($view) {
+    public function setView(View $view) {
         $this->view = $view;
         return $this;
     }
