@@ -353,9 +353,11 @@ class QueryBuilder {
     public function execute() {
         
         $time = microtime(true);
-        $STH = $this->PDO->prepare($this->SQL);
         
         try {
+            $this->PDO->beginTransaction();
+            $STH = $this->PDO->prepare($this->SQL);
+
             if($this->operation[0] == 'select'){
                 if($this->bind <> null){
                     foreach ($this->bind as $key => $value) {
@@ -375,11 +377,13 @@ class QueryBuilder {
                 }
                 $this->result = $STH->rowCount();
             }
+            $this->PDO->commit();
         } catch (\PDOException $exc) {
+            $this->PDO->rollBack();
             if(REMUSPANEL){
                 \RemusPanel::log($exc);
             } else {
-                echo $exc->getTraceAsString();
+                writeLog($exc);
             }
         }
         if(isset($this->operation[0]) and ($this->operation[0] == 'insert')){
