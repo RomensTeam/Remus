@@ -1,0 +1,19 @@
+{
+  "name": "Remus",
+  "version": "0.4.0",
+  "description": "PHP Framework",
+  "main": "style/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomensTeam/Remus.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RomensTeam/Remus/issues"
+  },
+  "homepage": "https://github.com/RomensTeam/Remus#readme"
+}

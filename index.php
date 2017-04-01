@@ -3,11 +3,11 @@
 	define('TIME_START', microtime(true));
 
 # Определение версии
-    define('VERSION', '0.3');
+    define('VERSION', '0.4');
 
 # Определение версии PHP
-    if (version_compare(phpversion(),'5.4.16','<=')){
-        exit('PHP 5.4 Only');
+    if (version_compare(phpversion(),'7.0.0','<=')){
+        exit('PHP 7 or higher');
     }
 # Дерективы
     define('_DS',DIRECTORY_SEPARATOR);
@@ -47,6 +47,5 @@
             }
         }
     }
-
 # Подключаем основу
     include_once DIR_CORE.'core.php';

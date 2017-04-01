@@ -12,6 +12,6 @@
  */
 interface ViewCoreInterface {
     public function render();
-    public function setView($view);
+    public function setView(View $view);
     public function clear();
 }

@@ -25,7 +25,7 @@ if(defined('ROUTER') && ROUTER == 'DYNAMIC'){
         }
     }
     else {
-        $router_file = DIR_APP_PAGE.'index.php';
+        $router_file = DIR_APP_PAGE.'Index.php';
         Remus()->run_app($router_file);
     }
     

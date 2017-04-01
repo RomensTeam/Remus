@@ -140,7 +140,12 @@ class Remus {
             $app = $app['settings']['ajax'];
             ob_clean();
             $AppController  = new $Controller($name_module,'ajax');
-            $AppController->$app['method']();
+            if(method_exists($AppController,$app['method'])){
+                $method = $app['method'];
+                $AppController->$method();
+            }else
+                throw new RemusException('NOT AJAX METHOD');
+
             def('TEST_MODE_OFF',FALSE);
             exit;
         } else {

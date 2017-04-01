@@ -87,14 +87,23 @@ class Model implements ModelInterface {
         }
         
         extract($settings);
-        
-        self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass);
+
+        try {
+            self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass, array(
+                PDO::ATTR_ERRMODE,
+                PDO::ERRMODE_EXCEPTION
+            ));
+        } catch (PDOException $exc) {
+            writeLog($exc);
+            return false;
+        }
         
         if(REMUSPANEL){
             $trace = debug_backtrace(); 
             $sql = 'Открыто соединение с БД `<b>'.$host.'@'.$login.'</b>` к БД: `'.$base.'`.';
             if(!empty($comment))
-                { $sql .= '<br>'.$comment;}
+                $sql .= '<br>'.$comment;
+            writeLog($sql);
             RemusPanel::addData('query', array(
                 'sql'       => $sql,
                 'result'    => '',

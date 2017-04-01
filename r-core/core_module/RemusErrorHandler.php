@@ -1,19 +1,26 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Exception
- *
- * @author Roman
- */
 class RemusException extends Exception {}
 
-function exception_handler(Exception $exc) {
+/**
+ * Добавление записи в лог
+ *
+ */
+function writeLog($data, $type = null){
+    if($type == 'json')
+        $data = json_encode( $data, JSON_PRETTY_PRINT);
+    error_log( print_r($data,true)."\n", 3, DIR_APP . 'debug.log');
+}
+
+function exception_handler( Throwable $exc) {
+
+        if(TEST_MODE){
+            if(REMUSPANEL)
+                RemusPanel::log($exc);
+            else
+                writeLog($exc);
+            return FALSE;
+        }
         echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">';
         echo '<div class="alert alert-danger">';
         echo '<b>'.get_class($exc) .'</b>: '.lang('exc_pull').': <i>';
@@ -40,4 +47,13 @@ function exception_handler(Exception $exc) {
         }
         echo'</tbody></table>'.lang('exc_path').': <b>' . $exc->getFile() . '</b> '.lang('exc_line').' <b>' . $exc->getLine() . '</b></div>';
 }
+function error_handler($number, $string, $file, $line)
+{
+    if (intval(E_WARNING) != intval($number))
+    {
+        $file = str_replace(DIR,'',$file);
+        writeLog("PHP Error: ".$number." ".$file."(".$line.") | ".$string."");
+    }
+}
+set_error_handler("error_handler",E_ALL);
 set_exception_handler('exception_handler');

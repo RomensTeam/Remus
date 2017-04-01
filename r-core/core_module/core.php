@@ -13,11 +13,8 @@ class Core {
         $this->test_on();
         self::load_modules();
         $this->test_off();
-        
-
-       $this->loadModules();
-
-       $this->run_app();
+        $this->loadModules();
+        $this->run_app();
     }
     
     private function run_app()
@@ -25,9 +22,8 @@ class Core {
        # Запускаем контроллер
         new Remus();
        
-        if(REMUSPANEL){
+        if(REMUSPANEL)
             new RemusPanel();
-        }
         
         # Подключаем начальный файл приложения
         include_once DIR_APP.'_start.php';
@@ -83,9 +79,8 @@ class Core {
         self::optimal_settings();                           # Оптимизируем настройки
         @include_once DIR_CORE_MODULE.'htaccess.php';       # HTACCESS-правки (см. докуоментацию)
         @include_once DIR_CORE_MODULE.'Regisrtry.php';      # Регистр
-        @include_once DIR_CORE_MODULE.'Error.php';          # Обработчик ошибок
         @include_once DIR_CORE_MODULE.'Remus.php';          # Контроллер
-        @include_once DIR_CORE_MODULE.'RemusException.php'; # Исключения
+        @include_once DIR_CORE_MODULE.'RemusErrorHandler.php'; # Исключения
         @include_once DIR_CORE_MODULE.'RE_Theme.php';       # Класс Тем
         @include_once DIR_CORE_MODULE.'Route.php';          # Роутер
     }
@@ -101,7 +96,11 @@ class Core {
             } 
 			
         }   else{
-            function print_var(){}
+            function print_var($data,$name = null){
+                if(isset($name))
+                    writeLog($name);
+                writeLog($data);
+            }
         }
     }
     
