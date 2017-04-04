@@ -1,4 +1,4 @@
-/*#remus_panel {
+#remus_panel {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     padding: 10px 10px 0 10px;
@@ -6,7 +6,7 @@
 }
 #remus_panel > div.panel_head {
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1em;
 }
 #remus_panel > div.panel_body {
     background-color: #fff;
@@ -24,15 +24,55 @@
 #remus_panel .tab-pane.seduce {
     padding: 0;
 }
-#remus_panel > div.panel_body > ul > li.active > a {
-    background-color: #000;
-    color: #fff;
+#remus_panel .nav-tabs {
+    margin: 10px;
+}
+#remus_panel .nav-tabs > li {
+     display: inline;
+}
+#remus_panel .nav-tabs li > a,
+#remus_panel .nav-tabs li > a:hover{
+    padding: 10px 20px;
+    color: #444444;
+    text-decoration: none;
+}
+#remus_panel .nav-tabs li:hover a {
+    background-color: #79cbe4;
 }
 #remus_panel > div.panel_head > h3 {
     font-family: 'Calibri';
     margin: 5px;
-}*/
+}
 
 #remus_panel {
     margin-bottom: 0;
+}
+
+#remus_panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+#remus_panel > div.panel_body {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: -250px;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    height: 250px;
+}
+#remus_panel.all {
+    bottom: 250px;
+}
+#remus_panel.all  .panel_body {
+    display: block;
+    bottom: 0;
 }

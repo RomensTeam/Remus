@@ -126,22 +126,20 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     public function render($head,$data) {
         
         if(RemusPanel::$hidden){
-            $style = 'display: none;';
+            $style = 'all';
         }
         
-        echo '<div class="container navbar-fixed-bottom fixed-bottom" id="remus_panel">
-            <div class="card panel panel-default">
+        echo '<div id="remus_panel" class="'.$style.'">
             <div class="panel_head panel-heading">
             <h3  class="panel-title card-title" style="font-size:1.5em;">'.$head[0].' <small>'.$head[1].'</small> 
                 <div class="btn-group pull-right">
-                <span class=" btn btn-info" onclick="$(\'#remus_panel .panel-body\').toggle();">_</span>
-                <span class="btn btn-primary" onclick="$(\'#remus_panel\').text(\'\')">X</span>
+                <span class="btn btn-info" onclick="switchPanel()">_</span>
+                <span class="btn" onclick="closePanel()">X</span>
                 </div>
             </h3>
             </div>
-            <div class="panel_body panel-body card-block" style="padding:0;'.$style.'">
+            <div class="panel_body" id="remus_panel_body" style="padding:0;">
          '.self::renderTabs($data).self::renderArea($data).'
-         </div>
          </div></div>';
         
     }
@@ -149,24 +147,43 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     public function getStyle() {
         if(RemusPanel::$loadScripts){
             echo '<link href="'.RemusPanel::$urlPath.'style/bootstrap.min.css" rel="stylesheet" type="text/css">';
-            echo '<link href="'.RemusPanel::$urlPath.'style/panel.css" rel="stylesheet" type="text/css">';
             echo '<script src="'.RemusPanel::$urlPath.'style/jquery.min.js" type="text/javascript"></script>';
             echo '<script src="'.RemusPanel::$urlPath.'style/bootstrap.min.js" type="text/javascript"></script>';
         }
-        echo "<script>$('#remus_panel > div.panel_body > ul > li > a').click(function (e) {e.preventDefault()$(this).tab('show')})</script>";
+        echo '<link href="'.RemusPanel::$urlPath.'style/panel.css" rel="stylesheet" type="text/css">';
+        echo "<script>
+            function switchPanel() {
+                var block = document.getElementById('remus_panel');
+                block.classList.toggle('all');
+            }
+            function switchTab(tab) {
+                var block = document.getElementById('areaData');
+                block.
+                block.forEach(function(id) {
+                    if(tab == id ){
+                        id.classList.add('active');
+                    } else {
+                        id.classList.remove('active');
+                    }
+                });
+            }
+            function closePanel() {
+                document.getElementById('remus_panel').parentNode.removeChild(document.getElementById('remus_panel'));
+            }
+        </script>";
     }
 
     public static function renderTabs($tabs) {
-        $data = '<ul class="nav nav-tabs">';
+        $data = '<ul class="nav-tabs">';
         foreach ($tabs as $key => $value) {
-            $data .= '<li class="nav-item"><a href="#'.$key.'" class="nav-link" data-toggle="tab" style="border-radius:0; border-top:none;">'. RemusPanel::name($key).'</a></li>';
+            $data .= '<li class="nav-item"><a href="#'.$key.'" onclick="switchTab(\''.$key.'\')" class="nav-link" data-toggle="tab" style="border-radius:0; border-top:none;">'. RemusPanel::name($key).'</a></li>';
         }
         $data .= '</ul>';
         return $data;
     }
     
     public static function renderArea($areaData) {
-        $data = '<div class="tab-content" style="height:300px;overflow-y:scroll;">';
+        $data = '<div class="tab-content" id="areaData" style="height:300px;overflow-y:scroll;">';
         
         foreach ($areaData as $key => $value) {
             if($key == 'log'){
@@ -263,10 +280,12 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     
     public static function varRender() {
         $result = '<table class="table"><tbody>';
-        
-        $result .= '<tr class="table-info"><th colspan="2">SESSION ['.  count($_SESSION).']</th></tr>';
-        foreach ($_SESSION as $key => $value) {
-            $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+
+        if(session_status() == PHP_SESSION_ACTIVE){
+            $result .= '<tr class="table-info"><th colspan="2">SESSION ['.  count($_SESSION).']</th></tr>';
+            foreach ($_SESSION as $key => $value) {
+                $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+            }
         }
         $result .= '<tr class="table-warning"><th colspan="2">POST ['.  count($_POST).']</th></tr>';
         foreach ($_POST as $key => $value) {
