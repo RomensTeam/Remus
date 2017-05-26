@@ -1,7 +1,7 @@
 [Документация Remus](https://github.com/RomensTeam/Remus/blob/documentation/documentation/index.md)
 ================
 
-Углубленое изучение > RemusPanel
+[Углубленое изучение](https://github.com/RomensTeam/Remus/tree/documentation/documentation/full) > RemusPanel
 ----
  
 В **Remus** включен интересный инструмент разработчика - **RemusPanel**  
