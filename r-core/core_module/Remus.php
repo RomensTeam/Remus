@@ -109,7 +109,7 @@ class Remus {
         def('ROUTING_STATUS', TRUE);
         M()->registr['modules'][] = $name_module;
         if(REMUSPANEL){
-            RemusPanel::log('Запущен модуль: '.$name_module,'warning');
+            RemusPanel::log('Запущен модуль: '.$name_module,'info');
         }
         if(ROUTER == 'DYNAMIC2'){
             $this->run_app_dynamic2($name_module);
@@ -135,12 +135,12 @@ class Remus {
         
         self::$app = $app;
         $Controller = $app['module'];
-        
+
         if(AJAX and isset($app['settings']['ajax'])){
             $app = $app['settings']['ajax'];
             ob_clean();
             $AppController  = new $Controller($name_module,'ajax');
-            $AppController->$app['method']();
+            $AppController->{$app['method']}();
             def('TEST_MODE_OFF',FALSE);
             exit;
         } else {
@@ -151,7 +151,7 @@ class Remus {
             }
 
             if(isset($app['method']) and  method_exists($AppController, $app['method'])){
-                $AppController->$app['method']();
+                $AppController->{$app['method']}();
             }else {
                 if(isset($this->registr['end_html_app'])){
                     throw new RemusException(lang('not_user_controller_method'));

@@ -66,7 +66,7 @@ class Lang {
                 $array = array_merge($array,$data);
             } else {
                 if(REMUSPANEL){
-                    \RemusPanel::log('app_lang: Отсутствует библиотека фраз приложения - <b>'.$value.'</b>', 'info');
+                    \RemusPanel::log('app_lang: Отсутствует библиотека фраз приложения - <b>'.$value.'</b>', 'warning');
                 }
                     
             }

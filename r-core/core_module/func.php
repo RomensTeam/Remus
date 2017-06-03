@@ -47,7 +47,7 @@ function getLib($className)
         $fileName = DIR_LIB.$fileName;
         
         if(!file_exists($fileName)){
-            throw new RemusException('Not this library: '.$className);
+            throw new RemusException('Not this library: '.$className.' in '.$fileName);
         }
         require $fileName;
 }
@@ -251,4 +251,23 @@ function delTree($dir) {
       (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
     } 
     return rmdir($dir); 
-  } 
+  }
+
+function writeLog($data)
+{
+    if(CheckFlag('REMUSPANEL')){
+        RemusPanel::log($data);
+    }
+    if (!is_string($data))
+        $data = print_r($data, 1);
+    $file = fopen(DIR.ENV.".log", "a+");
+    $query = "$data" . "\n";
+    fputs($file, $query);
+    fclose($file);
+}
+function log_error( $num, $str, $file, $line, $context = null )
+{
+    writeLog($num.'['.str_replace(DIR,'',$file).':'.$line.'] : '.$str);
+}
+error_reporting(E_ALL);
+set_error_handler('log_error',E_ALL);

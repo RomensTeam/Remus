@@ -10,8 +10,6 @@ if (!defined('DIR')) {
  * @version 1.2
  */
 class Model implements ModelInterface {
-    public $registr;
-    
     /**
      * @var Lang
      */
@@ -60,7 +58,11 @@ class Model implements ModelInterface {
     }
 
     public function getBlock($name){
-        $block_path = _filter(RE_Theme::$dir_theme . 'block' . _DS . strtolower($name) . '.tpl');
+        $block_path = RE_Theme::$dir_theme . 'block' . _DS . strtolower($name);
+        if(!file_exists(_filter($block_path))){
+            $block_path .= '.tpl';
+        }
+        $block_path = _filter($block_path);
         if(file_exists($block_path)){
             if(REMUSPANEL){
                 RemusPanel::log('Использован блок: <span class="badge badge-info">'.$name.'</span>');

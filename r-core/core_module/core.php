@@ -9,15 +9,20 @@ class Core {
     
     public function __construct() 
     {
+
         ob_start();
+
         $this->test_on();
+
         self::load_modules();
+
         $this->test_off();
-        
+
 
        $this->loadModules();
 
        $this->run_app();
+
     }
     
     private function run_app()
@@ -63,30 +68,37 @@ class Core {
     }
 
 
-    private function test_on() 
+    private function test_on()
     {
         error_reporting(E_ALL);
     }
-    
-    private function test_off() 
+
+    private function test_off()
     {
-        if(defined('TEST_MODE') && !TEST_MODE) 
+        if(defined('TEST_MODE') && !TEST_MODE)
             {error_reporting(0);}
     }
 
 
-    public static function load_modules() 
+    public static function load_modules()
     {
+
         @require DIR_SETTINGS.'config.php';            		# Подключаем настройки
+
         self::composerOptimal();                            # Оптимизируем настройки Composer
+
         @include_once DIR_CORE_MODULE.'func.php';           # Функции ядра
         self::optimal_settings();                           # Оптимизируем настройки
+
         @include_once DIR_CORE_MODULE.'htaccess.php';       # HTACCESS-правки (см. докуоментацию)
-        @include_once DIR_CORE_MODULE.'Regisrtry.php';      # Регистр
-        @include_once DIR_CORE_MODULE.'Error.php';          # Обработчик ошибок
+        #@include_once DIR_CORE_MODULE.'Regisrtry.php';      # Регистр
+
+        #@include_once DIR_CORE_MODULE.'Error.php';          # Обработчик ошибок
         @include_once DIR_CORE_MODULE.'Remus.php';          # Контроллер
+
         @include_once DIR_CORE_MODULE.'RemusException.php'; # Исключения
         @include_once DIR_CORE_MODULE.'RE_Theme.php';       # Класс Тем
+
         @include_once DIR_CORE_MODULE.'Route.php';          # Роутер
     }
     

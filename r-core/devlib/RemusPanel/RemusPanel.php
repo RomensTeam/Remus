@@ -131,11 +131,11 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         
         echo '<div class="container navbar-fixed-bottom fixed-bottom" id="remus_panel">
             <div class="card panel panel-default">
-            <div class="panel_head panel-heading">
-            <h3  class="panel-title card-title" style="font-size:1.5em;">'.$head[0].' <small>'.$head[1].'</small> 
-                <div class="btn-group pull-right">
-                <span class=" btn btn-info" onclick="$(\'#remus_panel .panel-body\').toggle();">_</span>
-                <span class="btn btn-primary" onclick="$(\'#remus_panel\').text(\'\')">X</span>
+            <div class="panel_head pb-0 panel-heading card-header">
+            <h3  class="panel-title card-title m-0" style="font-size:1.5em;">'.$head[0].' <small>'.$head[1].'</small> 
+                <div class="btn-group pb-2 float-right pull-right">
+                    <span class=" btn btn-info" onclick="$(\'#remus_panel .panel-body\').toggle();">_</span>
+                    <span class="btn btn-primary" onclick="$(\'#remus_panel\').text(\'\')">X</span>
                 </div>
             </h3>
             </div>
@@ -188,9 +188,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         $result = '<table class="table table-condensed"><tbody>';
         
         $data = get_user_constants();
-        
-        error_reporting(E_ALL);
-        
+
         foreach ($data as $key => $value) {
             
             if(isset($settings[$key])){
