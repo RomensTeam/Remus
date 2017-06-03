@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
     'TEST_MODE'             => FALSE,
     'URL'                   => getURL(),
     'WWW'                   => TRUE,
@@ -23,7 +23,9 @@ return array(
     'ENV'                   => 'LOCAL',
     'VIEW_CORE'             => 'RemusView',
     'REMUSPANEL'            => FALSE,
-    
+    'CacheManager'          => FALSE,
+    'dir_cache'             => DIR.'r-tmp'._DS,
+
     # Предопределенные константы
     'LIBRARY' => 2,
     
@@ -43,4 +45,4 @@ return array(
     'VIEW_TAG_START'            =>'{[',
     'VIEW_TAG_END'              =>']}',
     'LANG'                      =>'ru'
-);
+];

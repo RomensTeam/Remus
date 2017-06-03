@@ -47,7 +47,7 @@ function getLib($className)
         $fileName = DIR_LIB.$fileName;
         
         if(!file_exists($fileName)){
-            throw new RemusException('Not this library: '.$className);
+            throw new RemusException('Not this library: '.$className.' in '.$fileName);
         }
         require $fileName;
 }
@@ -91,11 +91,15 @@ function input_test($test = 'session') {
 
 /**
  *  Проверка флага (константа типа boolean)
- * 
+ *
+ * Добавлена поддержка проверки нескольких параметров
  * @return boolean 
  */
 function CheckFlag($const = null) {
-    return defined($const) && constant($const);
+    foreach (func_get_args() as $arg)
+        if(!defined(strtoupper($arg)) || !constant(strtoupper($arg)))
+            return false;
+    return true;
 }
 /**
  * Включение Тестового режима
@@ -251,4 +255,4 @@ function delTree($dir) {
       (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
     } 
     return rmdir($dir); 
-  } 
+}

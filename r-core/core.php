@@ -2,6 +2,16 @@
 # Защита
 if (!defined('VERSION')){exit();}
 
-include_once DIR_CORE_MODULE.'core.php';
+include_once DIR_CORE_MODULE.'Core.php';
 
-new Core();
+try {
+
+    new Core();
+} catch (Throwable $exc){
+    exception_handler($exc);
+    exit();
+}
+catch (RemusException $exc){
+    exception_handler($exc);
+    exit();
+}

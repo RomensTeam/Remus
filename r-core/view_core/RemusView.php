@@ -175,6 +175,9 @@ class RemusView implements ViewCoreInterface {
                 }
             }                
         }
+        ###
+        preg_match_all(FILL_TAG_PATTERN, $this->view->buffer, $all);
+        foreach ($all[0] as $all1){$this->view->buffer = str_replace($all1, '', $this->view->buffer);}
     }
     
     /**

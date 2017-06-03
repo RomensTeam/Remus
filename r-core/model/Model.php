@@ -10,14 +10,12 @@ if (!defined('DIR')) {
  * @version 1.2
  */
 class Model implements ModelInterface {
-    public $registr;
-    
     /**
      * @var Lang
      */
     public $app_lang;
     public $var_app = array();
-    public $pfc_status;
+    public $cache = null;
     public $base_list;
     public static $PDO = NULL;
 
@@ -33,12 +31,18 @@ class Model implements ModelInterface {
     }
     /* Взаимодействие с View */
 
-    public function render(){
+    private function getData(){
         include _filter(DIR_DEFAULT.'var_app.php');
-        $array = array_merge(Lang::$lang,$this->var_app);
-        $array = array_change_key_case($array, CASE_LOWER);
+        $this->var_app = array_merge(Lang::$lang,$this->var_app);
+        return $this->var_app = array_change_key_case($this->var_app, CASE_LOWER);
+    }
 
-        Remus::View()->setData($array);
+    public function render($cacheTagName = null){
+
+        if(empty($this->var_app))
+            $this->getData();
+
+        Remus::View()->setData($this->var_app);
 
         $this->buffer = Remus::View()->render();
     }
@@ -60,7 +64,11 @@ class Model implements ModelInterface {
     }
 
     public function getBlock($name){
-        $block_path = _filter(RE_Theme::$dir_theme . 'block' . _DS . strtolower($name) . '.tpl');
+        $block_path = RE_Theme::$dir_theme . 'block' . _DS . strtolower($name);
+        if(!file_exists(_filter($block_path))){
+            $block_path .= '.tpl';
+        }
+        $block_path = _filter($block_path);
         if(file_exists($block_path)){
             if(REMUSPANEL){
                 RemusPanel::log('Использован блок: <span class="badge badge-info">'.$name.'</span>');

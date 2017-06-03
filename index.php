@@ -3,11 +3,11 @@
 	define('TIME_START', microtime(true));
 
 # Определение версии
-    define('VERSION', '0.3');
+    define('VERSION', '0.4');
 
 # Определение версии PHP
-    if (version_compare(phpversion(),'5.4.16','<=')){
-        exit('PHP 5.4 Only');
+    if (version_compare(phpversion(),'7.0.0','<=')){
+        exit('PHP 7.0 Only');
     }
 # Дерективы
     define('_DS',DIRECTORY_SEPARATOR);
@@ -17,7 +17,7 @@
     /**
      *  Здесь прописываются директории
      */
-    $directory = array(
+    $directory = [
         'APP'           =>  'r-app',
         'CORE'          =>  'r-core',
         'LIB'           =>  'r-app/lib',
@@ -34,7 +34,7 @@
         'TYPES'         =>  'r-core/core_module/types',
         'DEFAULT'       =>  'r-core/core_module/def_set',
         'CORE_INTERFACE'=>  'r-core/core_module/interface'
-    );
+    ];
 	
     foreach ($directory as $key => $value) {      
         if(!defined($key)){

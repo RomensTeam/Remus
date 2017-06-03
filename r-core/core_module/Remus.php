@@ -40,9 +40,9 @@ class Remus {
     public $routing_matches = NULL;
     
     /**
-     * @var array Маршрутизатор
+     * @var string|null Текущий модуль
      */
-    public $routing = array();
+    public static $app = null;
     
     /**
      * @var array Языковой пакет фреймворка
@@ -109,7 +109,7 @@ class Remus {
         def('ROUTING_STATUS', TRUE);
         M()->registr['modules'][] = $name_module;
         if(REMUSPANEL){
-            RemusPanel::log('Запущен модуль: '.$name_module,'warning');
+            RemusPanel::log('Запущен модуль: '.$name_module,'info');
         }
         if(ROUTER == 'DYNAMIC2'){
             $this->run_app_dynamic2($name_module);
@@ -118,8 +118,6 @@ class Remus {
         }
         return $this;
     }
-    
-    public static $app;
 
     public function run_app_dynamic2($name_module){
         $app = $this->get_app_info($name_module);
@@ -135,12 +133,12 @@ class Remus {
         
         self::$app = $app;
         $Controller = $app['module'];
-        
+
         if(AJAX and isset($app['settings']['ajax'])){
             $app = $app['settings']['ajax'];
             ob_clean();
             $AppController  = new $Controller($name_module,'ajax');
-            $AppController->$app['method']();
+            $AppController->{$app['method']}();
             def('TEST_MODE_OFF',FALSE);
             exit;
         } else {
@@ -151,7 +149,7 @@ class Remus {
             }
 
             if(isset($app['method']) and  method_exists($AppController, $app['method'])){
-                $AppController->$app['method']();
+                $AppController->{$app['method']}();
             }else {
                 if(isset($this->registr['end_html_app'])){
                     throw new RemusException(lang('not_user_controller_method'));
@@ -171,13 +169,13 @@ class Remus {
                 if(defined('CHARSET')){
                     header('Content-Type: application/json; charset=' . strtolower(CHARSET));
                 }
-            break;
+                break;
             
             case 'xml':
                 if(defined('CHARSET')){
                     header('Content-Type: application/xml; charset=' . strtolower(CHARSET));
                 }
-            break;
+                break;
 
             default:
                 if(!is_array($viewCore)){
@@ -188,7 +186,7 @@ class Remus {
                 }
                 Remus::View()->meta = array_merge(Remus::View()->meta,$viewCore);
                 $viewCore = 'html';
-            break;
+                break;
         }
         Remus::$viewCore = $viewCore;
         return $this;
@@ -220,26 +218,6 @@ class Remus {
         }
         M()->registr['end_app'] = TRUE;
         return $this;
-    }
-    
-    protected $_allowTypes = array();
-    
-    /**
-     * getTypes - Подключает типы для их использования
-     * 
-     * @param string|array $typeName Название типов для подключения
-     * @return void
-     */
-    public function getTypes($typeName) 
-    {
-        if(is_string($typeName))
-            {$typeName = array($typeName);}
-        
-        foreach ($typeName as $type) {
-            if(file_exists(DIR_TYPES.$type.'.php')){
-                include_once DIR_TYPES.$type.'.php';
-            }
-        }
     }
 
     public function get_app_info($name_module = NULL){

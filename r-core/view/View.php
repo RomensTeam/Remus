@@ -144,7 +144,7 @@ class View {
         }
     }
     
-        public function addScript($script, $link = FALSE){
+    public function addScript($script, $link = FALSE){
         if(is_array($script)){
             if ($link == FALSE) {
                 Remus::View()->js[] = array_merge(Remus::View()->js,$script);
@@ -159,33 +159,39 @@ class View {
         }
         return $this;
     }
+
+    /**
+     * Добавление стилей
+     *
+     * @param string $style - данные -  URL или строка стилей
+     * @param boolean $link - определение - URL или строка
+    */
     public function addStyle($style, $link = FALSE){
-        if(is_array($style)){
-            if ($link == FALSE) {
-                Remus::View()->css = array_merge(Remus::View()->css,$style);
-            } else {
-                Remus::View()->css_link = array_merge(Remus::View()->css,$style);
-            }
-        }
-        if ($link == FALSE) {
-            Remus::View()->css[] = $style;
-        } else {
-            Remus::View()->css_link[] = $style;
-        }
+        $style = strtoarray($style);
+        if ($link)
+            array_push(Remus::View()->css_link,$style);
+        else
+            array_push(Remus::View()->css,$style);
         return $this;
     }
+
+    /*
+     * Добавление строк в тег <head>
+     *
+     * @param string $string
+     */
     public function addToHead($string){
-        if(is_array($string)){
-            $string = implode('', $string);
-        }
-        Remus::View()->head_string.= $string;
+        Remus::View()->head_string.= implode('', strtoarray($string));
         return $this;
     }
+
+    /*
+     * Добавление строк перед тегом </body>
+     *
+     * @param string $string
+     */
     public function addToEnd($string){
-        if(is_array($string)){
-            $string = implode('', $string);
-        }
-        Remus::View()->end_string.= $string;
+        Remus::View()->end_string.= implode('', strtoarray($string));
         return $this;
     }
     
@@ -250,18 +256,25 @@ class View {
     /**
      * Рендеринг страницы
      */
-    public function render($view_core = NULL){
-        
-        $this->generateHead();
-        $this->getBuffer();
-        
-        if(empty($view_core)){
-            if(CheckFlag('VIEW_CORE')){
-                $view_core = VIEW_CORE;
-            } else {
-                return $this->buffer;
+    public function render($prerender = null, $view_core = NULL){
+
+        if($prerender !== false){
+            $this->generateHead();
+            $this->getBuffer();
+
+            if(empty($view_core)){
+                if(CheckFlag('VIEW_CORE')){
+                    $view_core = VIEW_CORE;
+                } else {
+                    return $this->buffer;
+                }
             }
-        }    
+        }
+
+
+        if($prerender === true){
+            return $this->buffer;
+        }
             
         $view_file = DIR_CORE.'view_core'._DS.$view_core.'.php';
 

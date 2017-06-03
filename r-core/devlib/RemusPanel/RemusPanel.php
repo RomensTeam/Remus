@@ -21,14 +21,14 @@ class RemusPanel {
     
     public static $urlPath = false;
     
-    public  static $_data = array(
-        'constants' => array(),
-        'files' => array(),
-        'var_app' => array(),
-        'query' => array(),
-        'var' => array(),
-        'log' => array()
-    );
+    public  static $_data = [
+        'constants' => [],
+        'files'     => [],
+        'var_app'   => [],
+        'query'     => [],
+        'var'       => [],
+        'log'       => []
+    ];
 
     public function __construct($theme = null){
         if(lang('remuspanel_head') != null){
@@ -78,7 +78,6 @@ class RemusPanel {
             self::$_data['log'][] = array($message->getMessage(),'danger',$data,  get_class($message));
             return true;
         }
-        
         self::$_data['log'][] = array($message,$type,$data,$call);
     }
     
@@ -130,12 +129,12 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         }
         
         echo '<div class="container navbar-fixed-bottom fixed-bottom" id="remus_panel">
-            <div class="card panel panel-default">
-            <div class="panel_head panel-heading">
-            <h3  class="panel-title card-title" style="font-size:1.5em;">'.$head[0].' <small>'.$head[1].'</small> 
-                <div class="btn-group pull-right">
-                <span class=" btn btn-info" onclick="$(\'#remus_panel .panel-body\').toggle();">_</span>
-                <span class="btn btn-primary" onclick="$(\'#remus_panel\').text(\'\')">X</span>
+            <div class="card panel panel-default" style="margin: 0;">
+            <div class="panel_head pb-0 panel-heading card-header">
+            <h3  class="panel-title card-title m-0" style="font-size:1.5em;">'.$head[0].' <small>'.$head[1].'</small> 
+                <div class="btn-group pb-2 float-right pull-right">
+                    <span class=" btn btn-info" onclick="$(\'#remus_panel .panel-body\').toggle();">_</span>
+                    <span class="btn btn-primary" onclick="$(\'#remus_panel\').text(\'\')">X</span>
                 </div>
             </h3>
             </div>
@@ -188,9 +187,7 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
         $result = '<table class="table table-condensed"><tbody>';
         
         $data = get_user_constants();
-        
-        error_reporting(E_ALL);
-        
+
         foreach ($data as $key => $value) {
             
             if(isset($settings[$key])){
@@ -262,25 +259,34 @@ class RemusPanelStandartStyle implements RemusPanelStyleInterface {
     }
     
     public static function varRender() {
-        $result = '<table class="table"><tbody>';
-        
-        $result .= '<tr class="table-info"><th colspan="2">SESSION ['.  count($_SESSION).']</th></tr>';
-        foreach ($_SESSION as $key => $value) {
-            $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+        $result = '';
+
+        if(isset($_SESSION)){
+            $result .= '<tr class="table-info"><th colspan="2">SESSION ['.  count($_SESSION).']</th></tr>';
+            foreach ($_SESSION as $key => $value) {
+                $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+            }
         }
-        $result .= '<tr class="table-warning"><th colspan="2">POST ['.  count($_POST).']</th></tr>';
-        foreach ($_POST as $key => $value) {
-            $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+        if(isset($_POST)){
+            $result .= '<tr class="table-warning"><th colspan="2">POST ['.  count($_POST).']</th></tr>';
+            foreach ($_POST as $key => $value) {
+                $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+            }
         }
-        $result .= '<tr class="table-success"><th colspan="2">GET ['.  count($_GET).']</th></tr>';
-        foreach ($_GET as $key => $value) {
-            $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+        if(isset($_GET)){
+            $result .= '<tr class="table-success"><th colspan="2">GET ['.  count($_GET).']</th></tr>';
+            foreach ($_GET as $key => $value) {
+                $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+            }
         }
-        
-        
-        $result .= '</tbody></table>';
-        
-        return $result;
+        if(isset($_FILES)){
+            $result .= '<tr class="table-primary"><th colspan="2">FILES ['.  count($_FILES).']</th></tr>';
+            foreach ($_FILES as $key => $value) {
+                $result .= '<tr><th>'.$key.'</th><td>'.  self::types($value).'</td></tr>';
+            }
+        }
+
+        return '<table class="table"><tbody>'.$result.'</tbody></table>';
     }
     
     public static function queryRender($query) {
