@@ -51,6 +51,7 @@ function getLib($className)
         }
         require $fileName;
 }
+
 if(COMPOSER){
     require DIR.'vendor/autoload.php';  
 } else {  
@@ -190,7 +191,7 @@ function _quoter($string) {
 /**
  * Преобразовыввает строку в шаблон 
  */
-function pattern($name=null, $block = false){
+function pattern($name = null, $block = false){
     return Remus::Model()->pattern($name, $block);
 }
 
@@ -207,13 +208,12 @@ function lang($name){
 /**
  * Короткий доступ к фразам приложения
  */
-/**
- * Короткий доступ к фразам приложения
- */
 function app_lang($name){
-    $name = strtolower($name);
-    if(isset(Lang::$lang[$name])){
-        return Lang::$lang[$name];
+    if(M()->app_lang instanceof Lang){
+        $name = strtolower($name);
+        if(isset(Lang::$lang[$name])){
+            return Lang::$lang[$name];
+        }
     }
     return NULL;
 }
