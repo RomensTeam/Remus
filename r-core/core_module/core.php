@@ -9,20 +9,12 @@ class Core {
     
     public function __construct() 
     {
-
         ob_start();
-
         $this->test_on();
-
-        self::load_modules();
-
+        $this->load_modules();
         $this->test_off();
-
-
-       $this->loadModules();
-
-       $this->run_app();
-
+        $this->loadModules();
+        $this->run_app();
     }
     
     private function run_app()
@@ -30,18 +22,22 @@ class Core {
        # Запускаем контроллер
         new Remus();
        
-        if(REMUSPANEL){
+        if(REMUSPANEL)
             new RemusPanel();
+
+        try{
+            # Подключаем начальный файл приложения
+            include_once DIR_APP.'_start.php';
+            # Подключаем настройки приложения
+            include_once DIR_APP.'config.php';
+            # Определяем парметр вызова
+            Core::router();
+            # Подключаем конечный файл приложения при необходимости
+            Core::end_app();
+        } catch (Throwable $e){
+            exception_handler($e);
+            exit();
         }
-        
-        # Подключаем начальный файл приложения
-        include_once DIR_APP.'_start.php';
-        # Подключаем настройки приложения
-        include_once DIR_APP.'config.php';
-        # Определяем парметр вызова
-        Core::router();
-        # Подключаем конечный файл приложения при необходимости
-        Core::end_app();
     }
     
     private function loadModules()

@@ -139,13 +139,13 @@ class Remus {
         if(AJAX and isset($app['settings']['ajax'])){
             $app = $app['settings']['ajax'];
             ob_clean();
-            $AppController  = new $Controller($name_module,'ajax');
+            $AppController  = new $Controller($name_module, $app['settings']);
             $AppController->{$app['method']}();
             def('TEST_MODE_OFF',FALSE);
             exit;
         } else {
             if (class_exists($Controller, true)) {
-                $AppController  = new $Controller($name_module);
+                $AppController  = new $Controller($name_module, $app['settings']);
             } else {
                 throw new RemusException(lang('not_user_controller'));
             }

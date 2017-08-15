@@ -139,10 +139,9 @@ class Input {
     private $FormChecker;
     private $Name;
 
-    public function __construct(FormChecker $FormChecker,$name) {
+    public function __construct(FormChecker $FormChecker, $name) {
         $this->FormChecker = $FormChecker;
         $this->Name = $name;
-        return $this;
     }
     
     public function minimum($min) {

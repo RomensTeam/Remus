@@ -89,11 +89,15 @@ class Model implements ModelInterface {
         }
         
         extract($settings);
-        
-        self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass);
+
+        try {
+            self::$PDO = new PDO("mysql:host=$host;dbname=$base", $login, $pass);
+        } catch (PDOException $e) {
+            throw new RemusException($e->getMessage());
+        }
         
         if(REMUSPANEL){
-            $trace = debug_backtrace(); 
+            $trace = debug_backtrace(1,2);
             $sql = 'Открыто соединение с БД `<b>'.$host.'@'.$login.'</b>` к БД: `'.$base.'`.';
             if(!empty($comment))
                 { $sql .= '<br>'.$comment;}
@@ -107,28 +111,11 @@ class Model implements ModelInterface {
     }
     
     private function open_json($path){
-        if(file_exists($path)){
-            $lang_json_data = (string) file_get_contents($path);
-            if(strlen($lang_json_data) > 0){
-                $lang_data = json_decode($lang_json_data, TRUE);
-                if(is_array($lang_data)){
-                    return $lang_data;
-                }
-            }
-        }
+        return open_json($path);
     }
         
     private function load_settings($path) {
-        if(file_exists($path)){
-            $ext = explode('.', $path);
-            $ext = strtolower(array_pop($ext));
-            
-            if($ext == 'json'){
-                return $this->open_json($path);
-            } else {
-                return connect($path);
-            }
-        }
+        return load_settings($path);
     }
     
     public function __toString(){
